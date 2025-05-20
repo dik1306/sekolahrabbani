@@ -1,0 +1,601 @@
+/* FILEPATH: /C:/laragon/www/websekolahrabbani/resources/css/app.css */
+
+/* Global styles */
+body {
+    font-family: 'Nunito', sans-serif;
+    line-height: 1.5;
+}
+
+
+.dynamic {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+}
+
+/* Header styles */
+header {
+    /* width: 1200px; */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+/* Navigation styles */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-link {
+    color: black !important;
+}
+
+.nav-link.active {
+    font-weight: 700;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav li {
+    margin-left: 1rem;
+}
+
+nav a {
+    /* color: #940b92;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 0.25rem; */
+}
+
+nav a:hover {
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(0.25turn, #5653ed, #db00ff);
+    border-image-slice: 1;
+    /* width: 100%; */
+}
+
+/* Main content styles */
+.container {
+    padding: 1rem;
+}
+
+main {
+    background-color: none;
+    position: relative;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2px;
+    text-align: center;
+}
+
+.centered {
+    position: absolute;
+    top: 14%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-shadow: 4px 4px #624F8F;
+
+  }
+
+.form-control {
+    border-radius: 1rem !important;
+    border-color: #624F8F !important;
+}
+
+.form-control-login {
+    border-color: white !important;
+}
+
+.input-group {
+    border: 2px solid #624F8F;
+    border-radius: 1rem ;
+}
+
+.input-group-text {
+    background-color: white !important;
+    margin-left: 0.4rem;
+    border: none !important;
+}
+
+.carousel {
+    position: relative;
+}
+
+.carousel-item {
+    position: relative;
+}
+
+
+#header-carousel {
+  position: relative;
+}
+
+.carousel-caption {
+    color: black;
+    right: 58%;
+    text-align: center;
+    left: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: initial;
+  font-size: 75px;
+  text-shadow: 4px 4px #624F8F;
+}
+
+.carousel-inner {
+    position: relative;
+}
+
+.banner {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    filter: brightness(0.4);
+    position: relative;
+}
+
+.banner-2 {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 50%;
+    filter: brightness(0.4);
+    position: relative;
+}
+
+
+.cloud-1 {
+    position: absolute;
+    top: 14%;
+    z-index: 1000;
+    width: 100%;
+    animation:
+    4s linear 0s infinite alternate toright;
+    
+}
+
+.cloud-2 {
+    position: absolute;
+    top: 14%;
+    z-index: 1000;
+    width: 100%;
+    
+}
+
+.cloud-3 {
+    position: absolute;
+    top: 16%;
+    z-index: 1000;
+    width: 100%;
+    animation:
+    4s linear 0s infinite alternate toright;
+}
+
+.cloud-4 {
+    position: absolute;
+    top: 16%;
+    z-index: 1000;
+    width: 100%; 
+}
+
+.cloud-hms {
+    position: absolute;
+    top: 21%;
+    z-index: 1000;
+    width: 100%;
+    animation:
+    4s linear 0s infinite alternate toright;
+}
+
+.cloud-hms2 {
+    position: absolute;
+    top: 21%;
+    z-index: 1000;
+    width: 100%; 
+}
+
+.cloud-pmnh {
+    position: absolute;
+    top: 35%;
+    z-index: 1000;
+    width: 100%;
+    animation:
+    4s linear 0s infinite alternate toright;
+}
+
+.cloud-pmnhn {
+    position: absolute;
+    top: 35%;
+    z-index: 1000;
+    width: 100%; 
+}
+
+
+@media only screen and (max-width: 600px) {
+    .cloud-1 {
+        position: absolute;
+        top: 1.9%;
+        z-index: 1000;
+        width: 100%;
+    }
+
+    .cloud-2 {
+        position: absolute;
+        top: 1.9%;
+        z-index: 1000;
+        width: 100%;
+    }
+
+    .cloud-3 {
+        position: absolute;
+        top: 5%;
+        z-index: 1000;
+        width: 100%;
+    }
+
+    .cloud-4 {
+        position: absolute;
+        top: 5%;
+        z-index: 1000;
+        width: 100%;
+    }
+
+    .cloud-hms {
+        position: absolute;
+        top: 5.8%;
+        z-index: 1000;
+        width: 100%;
+    }
+
+    .cloud-hms2 {
+        position: absolute;
+        top: 5.8%;
+        z-index: 1000;
+        width: 100%;
+    }
+
+    .centered {
+        position: absolute;
+        top: 4%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-shadow: 4px 4px #624F8F;
+    }
+
+    .rocket-profile {
+        position: absolute !important;
+        left: 15%; 
+        top: 22% !important;
+    }
+
+    .banner {
+        width: 100%;
+        max-height: 250px;
+        max-width: 100%;
+        filter: brightness(0.4);
+        position: relative;
+    }
+  }
+
+.bg-jenjang {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin-top: 1rem;
+}
+
+.bg-kb {
+    background-color: #FCB415;
+    width: 100%;
+    height: 100%;
+}
+
+.bg-sd {
+    background-color: #704996;
+    width: 100%;
+    height: 100%;
+}
+
+.bg-tk {
+    background-color: #EB3C97;
+    width: 100%;
+    height: 100%;
+}
+
+.bg-smp {
+    background-color: #3152A4;
+    width: 100%;
+    height: 100%;
+}
+
+
+.jenjang-program {
+    background-image: linear-gradient(#FFF, #EEDDFF);
+}
+
+.star-1 {
+    position: absolute;
+    left: 25%;
+    top: 49%;
+}
+
+.star-2 {
+    position: absolute;
+    right: 25%;
+    top: 49%;
+}
+
+.star-3 {
+    position: absolute;
+    right: 10%;
+    top: 49%;
+}
+
+.star-4 {
+    position: absolute;
+    left: 12%;
+    top: 49%;
+}
+
+.star-1-profile {
+    position: absolute;
+    left: 25%;
+    top: 30%;
+}
+
+.star-2-profile {
+    position: absolute;
+    right: 25%;
+    top: 30%;
+}
+
+.star-3-profile {
+    position: absolute;
+    right: 10%;
+    top: 30%;
+}
+
+.star-4-profile {
+    position: absolute;
+    left: 12%;
+    top: 30%;
+}
+
+.star-5 {
+    position: absolute;
+    left: 20%;
+    bottom: 18%;
+}
+
+.star-5-profile {
+    position: absolute;
+    left: 20%;
+    bottom: 11%;
+}
+
+.rocket {
+    position: absolute;
+    left: 15%;
+    top: 49%;
+}
+
+.ufo {
+    position: absolute;
+    right: 15%;
+    top: 49%;
+}
+
+.rocket-profile {
+    position: absolute;
+    left: 15%;
+    top: 28%;
+}
+
+.ufo-profile {
+    position: absolute;
+    right: 15%;
+    top: 28%;
+}
+
+.panah-profile {
+    position: absolute;
+    right: 20%;
+    top: 21%;
+}
+
+.plane {
+    position: absolute;
+    left: 8%;
+}
+
+.puzzle {
+    position: absolute;
+    left: 45%;
+}
+
+.lamp {
+    position: absolute;
+    right: 8%;
+    top: -5%;
+}
+
+.bumi {
+    position: absolute;
+    left: 20%;
+    bottom: 29%;
+}
+
+.komet {
+    position: absolute;
+    right: 14%;
+    bottom: 23%;
+}
+
+.planet {
+    position: absolute;
+    right: 21%;
+    bottom: 18%;
+}
+
+.planet-profile {
+    position: absolute;
+    right: 21%;
+    bottom: 11%;
+}
+
+.perahu {
+    position: absolute;
+    left: 21%;
+    bottom: 2%;
+}
+
+.ufo-2 {
+    position: absolute;
+    right: 21%;
+    bottom: 3%;
+}
+
+.card-program {
+  max-height: 250px;
+  overflow-y: auto;
+  border-radius: 2rem !important;
+}
+
+.card-jenjang {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.kegiatan {
+    position: relative;
+}
+
+.btn-primary {
+    background-color: #EB3C97 !important;
+    border: none !important;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem !important;
+    cursor: pointer;
+}
+
+.btn-blue {
+    background-color: #3152A4 !important;
+    color: #FFF !important;
+    border: none !important;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem !important;
+    cursor: pointer;
+}
+
+.fasilitas {
+    background-image: linear-gradient( #EEDDFF, #FFF);
+}
+
+.bg-fasilitas {
+    background-color: #006193 !important;
+    padding: 1rem;
+    color: white !important;
+    border-top-left-radius: 3rem !important;
+    border-bottom-right-radius: 3rem !important;
+}
+
+.bg-logo {
+    background-color: #FFF;
+    padding: 1rem;
+    border-radius: 4rem;
+}
+
+.img-fasilitas {
+    position: absolute;
+    bottom: 5%;
+    width: 15%;
+    left: 10%;
+}
+
+.footer {
+    background-image: url('../images/cloud-bottom.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* background-position-y: bottom; */
+}
+
+.karir {
+    background-image: linear-gradient( #FFF, #704996);
+    min-height: 100vh;
+}
+
+.foto-profile {
+    border: 1px solid black;
+    height: 120px;
+    width: 90px;
+}
+
+.bg-svg {
+    position: absolute;
+    top: 0;
+    left: auto;
+    right: 0;
+}
+
+.select2 + .select2-container .select2-selection {
+    border-radius: 1rem;
+    border-color: #624F8F !important;
+    width: 100%;
+
+  }
+  
+  /* Slideshow container */
+  .slideshow-container {
+    max-width: 1000px;
+    position: relative;
+    margin: auto;
+  }
+
+  .dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+  }
+  
+
+  /* Fading animation */
+  .fade {
+    animation-name: fade;
+    animation-duration: 3s;
+  }
+  
+  @keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+  }
+
+  @media only screen and (max-width: 300px) {
+    .text {font-size: 11px}
+  }
+
+@keyframes toright {
+    from {
+      transform: translateX(1vw);
+    }
+    to {
+      transform: translateX(-1vw);
+    }
+  }
