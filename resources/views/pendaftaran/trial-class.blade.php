@@ -117,7 +117,7 @@
                 $('#form_jenjang').show();
 
                 $.ajax({
-                    url: "{{route('get_jenjang')}}",
+                    url: "{{route('get_jenjang_trial')}}",
                     type: 'POST',
                     data: {
                         id_lokasi: id_lokasi,
@@ -125,10 +125,10 @@
                     },
                     success: function (result) {
                         $('#jenjang').html('<option value="" disabled selected>-- Pilih Jenjang --</option>');
-                        $.each(result.jenjang, function (key, item) {
-                            // console.log(item.jenjang.value);
+                        $.each(result.data, function (key, item) {
+                            let tingkat = item.tingkat.toUpperCase();
                             $("#jenjang").append('<option value="' + item
-                                .jenjang.value + '">' + item.jenjang.nama_jenjang + '</option>');
+                                .jenjang + '">' + tingkat + '</option>');
                         });
                     }
                 });

@@ -24,6 +24,7 @@ use App\Models\Provinsi;
 use App\Models\TahunAjaranAktif;
 use App\Models\TrialClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PendaftaranController extends Controller
 {
@@ -54,6 +55,57 @@ class PendaftaranController extends Controller
         $data['jenjang'] = JenjangSekolah::get_jenjang($request->id_lokasi);
 
         return response()->json($data);
+
+    }
+
+    public function get_jenjang_trial(Request $request) {
+
+        $lokasi = $request->id_lokasi;
+
+        $tahun_ajaran_aktif = TahunAjaranAktif::where('status_tampil', 1)->orderby('id', 'desc')->first();
+        $tahun_ajaran = $tahun_ajaran_aktif->id;
+
+        // $cek_kuota = KuotaPPDB::where('id_tahun_ajaran', $tahun_ajaran)->where('lokasi', $lokasi)->get();
+        $cek_kuota =  JenjangSekolah::select('mj.value', 'mj.nama_jenjang', 'k.tingkat', 'k.kuota', 'k.siswa_lama',  DB::raw('(k.kuota - k.siswa_lama) as sisa_kuota'))
+                                    ->leftJoin('m_jenjang as mj', 'mj.id', 'm_jenjang_per_sekolah.jenjang_id')
+                                     ->leftJoin('tbl_kuota_psb as k', function($join)
+                                    { $join->on('k.lokasi', '=', 'm_jenjang_per_sekolah.kode_sekolah') 
+                                        ->on('k.jenjang', '=', 'mj.value'); 
+                                    })
+                                    ->where('k.id_tahun_ajaran', $tahun_ajaran)
+                                    ->where('kode_sekolah', $lokasi)
+                                    ->get();
+
+        $result = [];
+        foreach ($cek_kuota as $item) {
+            $kuota = $item->sisa_kuota;
+            $jenjang = $item->value;
+            $tingkat = $item->tingkat;
+ 
+            $count_pendaftar = Pendaftaran::where('tahun_ajaran', $tahun_ajaran)->where('lokasi', $lokasi)
+                                        ->where('tingkat', $tingkat)->where('jenjang', $jenjang)
+                                        ->where('status_pembayaran', 1)
+                                        ->where('status_daftar', '!=', 5)
+                                        ->count();
+                                        
+
+            if ($count_pendaftar < $kuota) {
+
+                $result[] = [
+                    'jenjang' => $jenjang,
+                    'nama_jenjang' => $item->nama_jenjang,
+                    'tingkat' => $tingkat,
+                    'kuota' => $kuota,
+                    'pendaftar' => $count_pendaftar
+                ];
+
+            }   
+        }
+        return response()->json([
+               'message' => 'sukses',
+               'data' => $result
+           ]);      
+
     }
 
     public function get_kelas(Request $request) {

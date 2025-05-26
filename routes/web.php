@@ -344,6 +344,7 @@ Route::prefix('pendaftaran')->group(function () {
     Route::put('/formulir/update/{id}', [PendaftaranController::class, 'update'])->name('form.update.id');
     // Route::get('/formulir/update/{find}', [PendaftaranController::class, 'get_profile_by_no_regist'])->name('form.edit');
     Route::post('/get-jenjang', [PendaftaranController::class, 'get_jenjang'])->name('get_jenjang');
+    Route::post('/get-jenjang-trial', [PendaftaranController::class, 'get_jenjang_trial'])->name('get_jenjang_trial');
     Route::post('/get-kelas', [PendaftaranController::class, 'get_kelas'])->name('get_kelas');
     Route::post('/get-kelas-smp', [PendaftaranController::class, 'get_kelas_smp'])->name('get_kelas_smp');
     Route::post('/get-kota', [PendaftaranController::class, 'get_kota'])->name('get_kota');
