@@ -12,7 +12,7 @@
         <div class="row mx-auto">
             <div class="col-md">
                 <h6 class="mt-1" style="color: #ED145B">Pendaftaran Trial Class</h6>
-                <h4 class="mb-3">Data Calon Siswa 2</h4>
+                <h4 class="mb-3">Data Calon Siswa</h4>
                 <form action="{{route('store.trial.class')}}"  method="POST" id="form_daftar_trial_class">
                     @csrf
 
