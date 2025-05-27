@@ -128,7 +128,7 @@
                         $.each(result.data, function (key, item) {
                             let tingkat = item.tingkat.toUpperCase();
                             $("#jenjang").append('<option value="' + item
-                                .jenjang + '">' + tingkat + '</option>');
+                                .tingkat + '">' + tingkat + '</option>');
                         });
                     }
                 });
