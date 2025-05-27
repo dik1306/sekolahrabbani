@@ -137,9 +137,6 @@ Route::group(['middleware' =>['auth', 'admin']], function () {
 
         Route::get('visitors', [VisitorController::class, 'index'])->name('visitor.index');
 
-
-
-
     });
 });
 
