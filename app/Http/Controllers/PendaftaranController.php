@@ -682,7 +682,9 @@ Hormat Kami,
             'tahun_ajaran' => $th_ajaran_now
         ]);
 
-        $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $lokasi)->where('id_jenjang', $jenjang_id)->first();
+        $get_jenjang = KuotaPPDB::where('tingkat', $jenjang_id)->first();
+        $jenjang = $get_jenjang->jenjang;
+        $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $lokasi)->where('id_jenjang', $jenjang)->first();
         $no_admins = $contact_person->telp;
         $message_trial = 'Pendaftaran trial class telah berhasil dengan nama "'.$nama_anak.'" nomor wa ortu "'.$no_wa.'". ';
         $message_ortu = "*Terima Kasih atas Pendaftarannya!*
