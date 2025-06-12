@@ -92,7 +92,7 @@
                     selanjutnya</li>
             </ol>
         </div>
-
+        
         <div class="bottom-navigate mt-3" style="background-color: #f5f5f5">
             <div class="d-flex" >
                 <input type="checkbox" id="checklist-sk" name="checklist-sk" class="mx-1" onclick="oncheck()" >
