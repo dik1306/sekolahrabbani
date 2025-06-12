@@ -83,7 +83,13 @@
                 <li>Setelah Pembayaran, Order tidak bisa cancel dan refund</li>
                 <li>Tidak bisa ganti size</li>
                 <li>Tidak bisa ganti No. Punggung dan Nama Punggung <i>(khusus futsal dan basket) </i></li>
-                <li>Waktu Pre Order paling lambat 14 Hari Kerja</li>
+                <li>Penerimaan jersey oleh orangtua :
+
+                    <br>- jika memesan di pekan ke-1 dan 2, maka akan diterima di pekan ke-2 bulan
+                    selanjutnya
+
+                    <br>- jika memesan di pekan ke-3 dan 4, maka akan diterima di pekan ke-2  2 bulan
+                    selanjutnya</li>
             </ol>
         </div>
 
