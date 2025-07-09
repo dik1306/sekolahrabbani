@@ -278,6 +278,7 @@ class PendaftaranController extends Controller
 
         // send ke qlp
         $this->send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar);
+        $this->send_pendaftaran_baru($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar);
 
         $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $lokasi)->where('id_jenjang', $jenjang)->first();
         $no_admin = $contact_person->telp;
@@ -587,6 +588,16 @@ Hormat Kami,
             $merengek, $mandi_sendiri, $bab_bak_sendiri, $habis_waktu, $kelebihan_ananda,
             $welcome_ceremony, $quranic_parenting, $temu_wali_kelas, $hafalan_rumah, $wirausaha, $komunikasi, $biaya_pendidikan
             );
+            $this->update_pendaftaran_baru($id, $nik, $alamat, $provinsi, $kota, $kecamatan, $kelurahan, $agama, $anak_ke, $jumlah_saudara, $npsn,
+            $asal_sekolah, $tinggi_badan, $berat_badan, $gol_darah, $riwayat_penyakit, $kec_asal_sekolah, $hafalan, $email_ayah, $email_ibu, $status_tinggal, 
+            $tempat_lahir_ibu, $tgl_lahir_ibu, $pekerjaan_ibu, $penghasilan_ibu, $pendidikan_ibu, 
+            $tempat_lahir_ayah, $tgl_lahir_ayah, $pekerjaan_ayah, $penghasilan_ayah, $pendidikan_ayah, 
+            $tempat_lahir_wali, $tgl_lahir_wali, $pekerjaan_wali, $pendidikan_wali, $nama_wali, $hubungan_wali, $bhs_digunakan, $nama_panggilan,
+            $hijayah, $alphabet, $suka_menulis, $suka_gambar, $suka_hafalan, $memiliki_hafalan, $bergaul, $prakarya, $mengungkapkan, 
+            $sholat_fardhu, $berbicara_baik, $baju_sendiri, $simpan_sepatu, $buang_sampah, $ekspresi_marah, $malu_salah, $ketergantungan, 
+            $merengek, $mandi_sendiri, $bab_bak_sendiri, $habis_waktu, $kelebihan_ananda,
+            $welcome_ceremony, $quranic_parenting, $temu_wali_kelas, $hafalan_rumah, $wirausaha, $komunikasi, $biaya_pendidikan
+            );
     
             return redirect()->route('pendaftaran')->with('success', 'Data berhasil diupdate');
         } catch (\Throwable $th) {
@@ -702,6 +713,7 @@ Sekolah Rabbani";
 
          // send ke qlp
          $this->send_trial_class($nama_anak, $tgl_lahir, $no_wa, $lokasi, $jenjang_id, $asal_sekolah, $th_ajaran_now);
+         $this->send_trial_class_baru($nama_anak, $tgl_lahir, $no_wa, $lokasi, $jenjang_id, $asal_sekolah, $th_ajaran_now);
 
         if ($add_trial) {
             $this->send_notif($message_trial, $no_admins); 
@@ -716,6 +728,51 @@ Sekolah Rabbani";
     {
         return view('pendaftaran.trial-success');
     }
+
+    function send_pendaftaran_baru($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $info_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar){
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/simpan_pendaftaran_baru.php',
+		  CURLOPT_RETURNTRANSFER => 1,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'POST',
+		  // CURLOPT_SSL_VERIFYPEER => false,
+		  // CURLOPT_SSL_VERIFYHOST => false,
+		  CURLOPT_POSTFIELDS => array(
+		  	'id_anak' => $id_anak,
+		  	'id_ibu' => $id_anak,
+		  	'id_ayah' => $id_anak,
+		  	'nama_lengkap' => $nama_lengkap,
+		  	'jenis_kelamin' => $jenis_kelamin,
+		  	'tempat_lahir' => $tempat_lahir,
+		  	'tgl_lahir' => $tgl_lahir,
+		  	'lokasi' => $lokasi,
+		  	'kelas' => $kelas,
+            'jenjang' => $jenjang,
+			'tingkat' => $tingkat,
+			'no_hp_ayah' => $no_hp_ayah,
+			'nama_ayah' => $nama_ayah,
+			'nama_ibu' => $nama_ibu,
+			'no_hp_ibu' => $no_hp_ibu,
+			'info_ppdb' => $info_ppdb,
+			'tahun_ajaran' => $tahun_ajaran,
+			'asal_sekolah' => $asal_sekolah,
+			'status_daftar' => $status_daftar
+            )
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    // return ($response);
+	}
 
 
     function send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $info_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar){
@@ -867,6 +924,145 @@ Sekolah Rabbani";
 		curl_close($curl);
 	    return ($response);
 	}
+
+    function update_pendaftaran_baru($id, $nik, $alamat, $provinsi, $kota, $kecamatan, $kelurahan, $agama, $anak_ke, $jumlah_saudara, $npsn,
+    $asal_sekolah, $tinggi_badan, $berat_badan, $gol_darah, $riwayat_penyakit, $kec_asal_sekolah, $hafalan, $email_ayah, $email_ibu, $status_tinggal, 
+    $tempat_lahir_ibu, $tgl_lahir_ibu, $pekerjaan_ibu, $penghasilan_ibu, $pendidikan_ibu, 
+    $tempat_lahir_ayah, $tgl_lahir_ayah, $pekerjaan_ayah, $penghasilan_ayah, $pendidikan_ayah, 
+    $tempat_lahir_wali, $tgl_lahir_wali, $pekerjaan_wali, $pendidikan_wali, $nama_wali, $hubungan_wali, $bhs_digunakan, $nama_panggilan,
+    $hijayah, $alphabet, $suka_menulis, $suka_gambar, $suka_hafalan, $memiliki_hafalan, $bergaul, $prakarya, $mengungkapkan, 
+    $sholat_fardhu, $berbicara_baik, $baju_sendiri, $simpan_sepatu, $buang_sampah, $ekspresi_marah, $malu_salah, $ketergantungan, 
+    $merengek, $mandi_sendiri, $bab_bak_sendiri, $habis_waktu, $kelebihan_ananda,
+    $welcome_ceremony, $quranic_parenting, $temu_wali_kelas, $hafalan_rumah, $wirausaha, $komunikasi, $biaya_pendidikan)
+    {
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/update_pendaftaran_baru.php',
+		  CURLOPT_RETURNTRANSFER => 1,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'POST',
+		  // CURLOPT_SSL_VERIFYPEER => false,
+		  // CURLOPT_SSL_VERIFYHOST => false,
+		  CURLOPT_POSTFIELDS => array(
+		  	'id_anak' => $id,
+		  	'id_ibu' => $id,
+		  	'id_ayah' => $id,
+		    'no_nik' => $nik,
+            'alamat' => $alamat,
+            'provinsi' => $provinsi,
+            'kota' => $kota,
+            'kecamatan' => $kecamatan,
+            'kelurahan' => $kelurahan,
+            'agama' => $agama,
+            'anak_ke' => $anak_ke,
+            'jml_sdr' => $jumlah_saudara,
+            'npsn' => $npsn,
+            'tinggi_badan' => $tinggi_badan,
+            'berat_badan' => $berat_badan,
+            'gol_darah' => $gol_darah,
+            'riwayat_penyakit' => $riwayat_penyakit,
+            'hafalan' => $hafalan,
+            'kec_asal_sekolah' => $kec_asal_sekolah,
+            'email_ibu' => $email_ibu,
+            'email_ayah' => $email_ayah,
+            'status_tinggal' => $status_tinggal,
+            'tptlahir_ibu' => $tempat_lahir_ibu,
+            'tgllahir_ibu' => $tgl_lahir_ibu,
+            'pekerjaan_ibu' => $pekerjaan_ibu,
+            'penghasilan_ibu' => $penghasilan_ibu,
+            'pendidikan_ibu' => $pendidikan_ibu,
+            'tptlahir_ayah' => $tempat_lahir_ayah,
+            'tgllahir_ayah' => $tgl_lahir_ayah,
+            'pekerjaan_ayah' => $pekerjaan_ayah,
+            'penghasilan_ayah' => $penghasilan_ayah,
+            'pendidikan_ayah' => $pendidikan_ayah,
+            'nama_wali' => $nama_wali,
+            'tptlahir_wali' => $tempat_lahir_wali,
+            'tgllahir_wali' => $tgl_lahir_wali,
+            'pekerjaan_wali' => $pekerjaan_wali,
+            'pendidikan_wali' => $pendidikan_wali,
+            'hubungan_wali' => $hubungan_wali,
+            'bhs_digunakan' => $bhs_digunakan,
+            'asal_sekolah' => $asal_sekolah,
+            'nama_panggilan' => $nama_panggilan,
+            'mengenal_hijaiyah' => $hijayah,
+            'mengenal_alphabet' => $alphabet,
+            'suka_menulis' => $suka_menulis,
+            'suka_menggambar' => $suka_gambar,
+            'hafalan_alquran' => $suka_hafalan,
+            'memiliki_hafalan' => $memiliki_hafalan,
+            'senang_bergaul' => $bergaul,
+            'membuat_prakarya' => $prakarya,
+            'ungkapan_keinginan' => $mengungkapkan,
+            'mengikuti_sholat' => $sholat_fardhu,
+            'berbicara_baik' => $berbicara_baik,
+            'memakai_baju_sendiri' => $baju_sendiri,
+            'menyimpan_sepatu' => $simpan_sepatu,
+            'membuang_sampah' => $buang_sampah,
+            'mengekspresikan' => $ekspresi_marah,
+            'melakukan_kesalahan' => $malu_salah,
+            'ketergantungan' => $ketergantungan,
+            'keinginan' => $merengek,
+            'mampu_mandi' => $mandi_sendiri,
+            'mampu_sendiri' => $bab_bak_sendiri,
+            'menghabiskan_waktu' => $habis_waktu,
+            'kelebihan_ananda' => $kelebihan_ananda,
+            'orientasi_peserta_didik' => $welcome_ceremony,
+            'bersedia_mengikuti_qp' => $quranic_parenting,
+            'mengikuti_pertemuan_rutin' => $temu_wali_kelas,
+            'menemani_ananda' => $hafalan_rumah,
+            'kewirausahaan_ananda' => $wirausaha,
+            'kemampuan_komunikasi_aktif_ananda' => $komunikasi,
+            'pembiayaan_pendidikan' => $biaya_pendidikan,
+            )
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    return ($response);
+	}
+
+    function send_trial_class_baru($nama_anak, $tgl_lahir, $no_wa, $lokasi, $jenjang, $asal_sekolah, $th_ajaran_now )
+    {
+        $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/simpan_trial_class.php',
+		  CURLOPT_RETURNTRANSFER => 1,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'POST',
+		  // CURLOPT_SSL_VERIFYPEER => false,
+		  // CURLOPT_SSL_VERIFYHOST => false,
+		  CURLOPT_POSTFIELDS => array(
+		  	'nama_anak' => $nama_anak,
+		  	'tgl_lahir' => $tgl_lahir,
+		  	'no_wa' => $no_wa,
+		  	'lokasi' => $lokasi,
+		  	'jenjang_id' => $jenjang,
+			'asal_sekolah' => $asal_sekolah,
+			'tahun_ajaran' => $th_ajaran_now
+            )
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    // return ($response)
+    }
 
     function send_trial_class($nama_anak, $tgl_lahir, $no_wa, $lokasi, $jenjang, $asal_sekolah, $th_ajaran_now )
     {
