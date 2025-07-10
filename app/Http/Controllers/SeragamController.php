@@ -481,6 +481,7 @@ class SeragamController extends Controller
         ]);
 
         $this->send_wishlist($produk_id, $user_id, $quantity, $ukuran, $jenis, $nis, $no_hp, $kode_produk);
+        $this->send_wishlist_baru($produk_id, $user_id, $quantity, $ukuran, $jenis, $nis, $no_hp, $kode_produk);
 
     
         return response()->json($add_wishlist_detail);
@@ -713,6 +714,8 @@ class SeragamController extends Controller
                 $harga_akhir_format = number_format($harga_akhir);
 
                 $this->send_pesan_seragam_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $produk_id, $jenis_produk, $kode_produk, $ukuran, $quantity, $harga_awal, $diskon/100 * $harga_awal, $diskon, $hpp, $ppn);
+                $this->send_pesan_seragam_detail_baru($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $produk_id, $jenis_produk, $kode_produk, $ukuran, $quantity, $harga_awal, $diskon/100 * $harga_awal, $diskon, $hpp, $ppn);
+                
                 $this->update_cart_status($user_id, $kode_produk);
             }
 
@@ -728,6 +731,7 @@ class SeragamController extends Controller
 
 
             $this->send_pesan_seragam($no_pesanan, $nama_pemesan, $no_hp);
+            $this->send_pesan_seragam_baru($no_pesanan, $nama_pemesan, $no_hp);
 
             // Set your Merchant Server Key
             \Midtrans\Config::$serverKey = config('midtrans.serverKey');
@@ -782,7 +786,11 @@ class SeragamController extends Controller
                 'p_diskon' => $diskon_persen_now
             ]);
             $this->send_pesan_seragam($no_pesanan, $nama_pemesan, $no_hp);
+            $this->send_pesan_seragam_baru($no_pesanan, $nama_pemesan, $no_hp);
+
+
             $this->send_pesan_seragam_detail($no_pesanan, $nama_siswa_now, $sekolah_id_now, $nama_kelas_now, $produk_id_now, $jenis_produk_now, $kode_produk_now, $ukuran_now, $quantity_now, $harga_awal_now, $diskon_now, $diskon_persen_now, $hpp_now, $ppn_now);
+            $this->send_pesan_seragam_detail_baru($no_pesanan, $nama_siswa_now, $sekolah_id_now, $nama_kelas_now, $produk_id_now, $jenis_produk_now, $kode_produk_now, $ukuran_now, $quantity_now, $harga_awal_now, $diskon_now, $diskon_persen_now, $hpp_now, $ppn_now);
 
                 // Set your Merchant Server Key
             \Midtrans\Config::$serverKey = config('midtrans.serverKey');
@@ -1553,6 +1561,40 @@ class SeragamController extends Controller
 		curl_close($curl);
 	    // return ($response);
 	}
+    
+    function send_wishlist_baru($produk_id, $user_id, $quantity, $ukuran, $jenis, $nis, $no_hp, $kode_produk){
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/simpan_wishlist.php',
+		  CURLOPT_RETURNTRANSFER => 1,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'POST',
+		  // CURLOPT_SSL_VERIFYPEER => false,
+		  // CURLOPT_SSL_VERIFYHOST => false,
+		  CURLOPT_POSTFIELDS => array(
+		  	'produk_id' => $produk_id,
+		  	'user_id' => $user_id,
+		  	'quantity' => $quantity,
+		  	'ukuran' => $ukuran,
+		  	'nis' => $nis,
+		  	'jenis' => $jenis,
+		  	'kode_produk' => $kode_produk,
+		  	'no_hp' => $no_hp
+            )
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    // return ($response);
+	}
 
     function send_pesan_seragam($no_pesanan, $nama_pemesan, $no_hp){
 	    $curl = curl_init();
@@ -1582,11 +1624,79 @@ class SeragamController extends Controller
 	    // return ($response);
 	}
 
+    function send_pesan_seragam_baru($no_pesanan, $nama_pemesan, $no_hp){
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/simpan_pesan_seragam.php',
+		  CURLOPT_RETURNTRANSFER => 1,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'POST',
+		  // CURLOPT_SSL_VERIFYPEER => false,
+		  // CURLOPT_SSL_VERIFYHOST => false,
+		  CURLOPT_POSTFIELDS => array(
+		  	'no_pesanan' => $no_pesanan,
+		  	'nama_pemesan' => $nama_pemesan,
+		  	'no_hp' => $no_hp)
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    // return ($response);
+	}
+
     function send_pesan_seragam_detail($no_pesanan, $nama_siswa, $lokasi_sekolah, $nama_kelas, $produk_id, $jenis_produk_id, $kode_produk, $ukuran, $quantity, $harga, $diskon, $diskon_persen, $hpp, $ppn){
 	    $curl = curl_init();
 
 		curl_setopt_array($curl, array(
 		  CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_regist/simpan_pesan_seragam_detail.php',
+		  CURLOPT_RETURNTRANSFER => 1,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'POST',
+		  // CURLOPT_SSL_VERIFYPEER => false,
+		  // CURLOPT_SSL_VERIFYHOST => false,
+		  CURLOPT_POSTFIELDS => array(
+		  	'no_pesanan' => $no_pesanan,
+		  	'nama_siswa' => $nama_siswa,
+		  	'lokasi_sekolah' => $lokasi_sekolah,
+		  	'nama_kelas' => $nama_kelas,
+		  	'produk_id' => $produk_id,
+		  	'jenis_produk_id' => $jenis_produk_id,
+		  	'kode_produk' => $kode_produk,
+		  	'ukuran' => $ukuran,
+		  	'quantity' => $quantity,
+		  	'harga' => $harga,
+		  	'diskon' => $diskon,
+		  	'diskon_persen' => $diskon_persen,
+		  	'hpp' => $hpp,
+		  	'ppn' => $ppn 
+            )
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    // return ($response);
+	}
+    
+    function send_pesan_seragam_detail_baru($no_pesanan, $nama_siswa, $lokasi_sekolah, $nama_kelas, $produk_id, $jenis_produk_id, $kode_produk, $ukuran, $quantity, $harga, $diskon, $diskon_persen, $hpp, $ppn){
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/simpan_pesan_seragam_detail.php',
 		  CURLOPT_RETURNTRANSFER => 1,
 		  CURLOPT_ENCODING => '',
 		  CURLOPT_MAXREDIRS => 10,
@@ -1653,6 +1763,38 @@ class SeragamController extends Controller
             // return ($response);
         }
     }
+    
+    function update_status_seragam_baru($status, $mtd_pembayaran, $no_pesanan)
+    {
+        {
+            $curl = curl_init();
+    
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/update_pesan_seragam.php',
+              CURLOPT_RETURNTRANSFER => 1,
+              CURLOPT_ENCODING => '',
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => true,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => 'POST',
+              // CURLOPT_SSL_VERIFYPEER => false,
+              // CURLOPT_SSL_VERIFYHOST => false,
+              CURLOPT_POSTFIELDS => array(
+                'status' => $status,
+                'mtd_pembayaran' => $mtd_pembayaran,
+                'no_pesanan' => $no_pesanan,
+                )
+    
+            ));
+    
+            $response = curl_exec($curl);
+    
+            // echo $response;
+            curl_close($curl);
+            // return ($response);
+        }
+    }
 
     function update_status_merchandise($status, $mtd_pembayaran, $no_pesanan)
     {
@@ -1686,6 +1828,38 @@ class SeragamController extends Controller
         }
     }
 
+    function update_status_merchandise_baru($status, $mtd_pembayaran, $no_pesanan)
+    {
+        {
+            $curl = curl_init();
+    
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/update_pesan_merchandise.php',
+              CURLOPT_RETURNTRANSFER => 1,
+              CURLOPT_ENCODING => '',
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => true,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => 'POST',
+              // CURLOPT_SSL_VERIFYPEER => false,
+              // CURLOPT_SSL_VERIFYHOST => false,
+              CURLOPT_POSTFIELDS => array(
+                'status' => $status,
+                'mtd_pembayaran' => $mtd_pembayaran,
+                'no_pesanan' => $no_pesanan,
+                )
+    
+            ));
+    
+            $response = curl_exec($curl);
+    
+            // echo $response;
+            curl_close($curl);
+            // return ($response);
+        }
+    }
+
     function update_status_jersey($status, $mtd_pembayaran, $no_pesanan)
     {
         {
@@ -1693,6 +1867,38 @@ class SeragamController extends Controller
     
             curl_setopt_array($curl, array(
               CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_regist/update_pesan_jersey.php',
+              CURLOPT_RETURNTRANSFER => 1,
+              CURLOPT_ENCODING => '',
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => true,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => 'POST',
+              // CURLOPT_SSL_VERIFYPEER => false,
+              // CURLOPT_SSL_VERIFYHOST => false,
+              CURLOPT_POSTFIELDS => array(
+                'status' => $status,
+                'mtd_pembayaran' => $mtd_pembayaran,
+                'no_pesanan' => $no_pesanan,
+                )
+    
+            ));
+    
+            $response = curl_exec($curl);
+    
+            // echo $response;
+            curl_close($curl);
+            // return ($response);
+        }
+    }
+
+    function update_status_jersey_baru($status, $mtd_pembayaran, $no_pesanan)
+    {
+        {
+            $curl = curl_init();
+    
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/update_pesan_jersey.php',
               CURLOPT_RETURNTRANSFER => 1,
               CURLOPT_ENCODING => '',
               CURLOPT_MAXREDIRS => 10,

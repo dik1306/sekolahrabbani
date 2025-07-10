@@ -557,6 +557,7 @@ class JerseyController extends Controller
                 $harga_akhir = $total_harga - $total_diskon;
 
                 $this->send_pesan_jersey_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga_awal, $diskon, $hpp);
+                $this->send_pesan_jersey_detail_baru($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga_awal, $diskon, $hpp);
                 $this->update_cart_status($user_id, $jersey_id);
             }
 
@@ -570,6 +571,7 @@ class JerseyController extends Controller
             ]);
 
             $this->send_pesan_jersey($no_pesanan, $nama_pemesan, $no_hp);
+            $this->send_pesan_jersey_baru($no_pesanan, $nama_pemesan, $no_hp);
 
                 // Set your Merchant Server Key
                 \Midtrans\Config::$serverKey = config('midtrans.serverKey');
@@ -638,7 +640,10 @@ class JerseyController extends Controller
             ]);
 
             $this->send_pesan_jersey($no_pesanan, $nama_pemesan, $no_hp);
+            $this->send_pesan_jersey_baru($no_pesanan, $nama_pemesan, $no_hp);
+
             $this->send_pesan_jersey_detail($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now);
+            $this->send_pesan_jersey_detail_baru($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now);
 
                // Set your Merchant Server Key
                \Midtrans\Config::$serverKey = config('midtrans.serverKey');
@@ -920,11 +925,75 @@ class JerseyController extends Controller
 	    // return ($response);
 	}
 
+    function send_pesan_jersey_baru($no_pesanan, $nama_pemesan, $no_hp){
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/simpan_pesan_jersey.php',
+		  CURLOPT_RETURNTRANSFER => 1,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'POST',
+		  // CURLOPT_SSL_VERIFYPEER => false,
+		  // CURLOPT_SSL_VERIFYHOST => false,
+		  CURLOPT_POSTFIELDS => array(
+		  	'no_pesanan' => $no_pesanan,
+		  	'nama_pemesan' => $nama_pemesan,
+		  	'no_hp' => $no_hp)
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    // return ($response);
+	}
+
     function send_pesan_jersey_detail($no_pesanan, $nama_siswa, $lokasi_sekolah, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga, $diskon, $hpp){
 	    $curl = curl_init();
 
 		curl_setopt_array($curl, array(
 		  CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_regist/simpan_pesan_jersey_detail.php',
+		  CURLOPT_RETURNTRANSFER => 1,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'POST',
+		  // CURLOPT_SSL_VERIFYPEER => false,
+		  // CURLOPT_SSL_VERIFYHOST => false,
+		  CURLOPT_POSTFIELDS => array(
+		  	'no_pesanan' => $no_pesanan,
+		  	'nama_siswa' => $nama_siswa,
+		  	'lokasi_sekolah' => $lokasi_sekolah,
+		  	'nama_kelas' => $nama_kelas,
+		  	'jersey_id' => $jersey_id,
+		  	'ukuran' => $ukuran,
+		  	'quantity' => $quantity,
+		  	'harga' => $harga,
+		  	'diskon' => $diskon,
+		  	'hpp' => $hpp,
+            )
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    // return ($response);
+	}
+
+    function send_pesan_jersey_detail_baru($no_pesanan, $nama_siswa, $lokasi_sekolah, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga, $diskon, $hpp){
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/simpan_pesan_jersey_detail.php',
 		  CURLOPT_RETURNTRANSFER => 1,
 		  CURLOPT_ENCODING => '',
 		  CURLOPT_MAXREDIRS => 10,

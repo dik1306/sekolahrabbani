@@ -771,6 +771,7 @@ class PalestineDayController extends Controller
                 $harga_akhir_format = number_format($harga_akhir);
 
                 $this->send_pesan_merchandise_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $merchandise_id, $warna, $template, $kategori, $desgin, $ukuran, $quantity, $harga, $diskon, $harga_pokok);
+                $this->send_pesan_merchandise_detail_baru($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $merchandise_id, $warna, $template, $kategori, $desgin, $ukuran, $quantity, $harga, $diskon, $harga_pokok);
                 $this->update_cart_status($user_id, $merchandise_id);
             }
 
@@ -784,6 +785,7 @@ class PalestineDayController extends Controller
             ]);
 
             $this->send_pesan_merchandise($no_pesanan, $nama_pemesan, $no_hp);
+            $this->send_pesan_merchandise_baru($no_pesanan, $nama_pemesan, $no_hp);
 
                 // Set your Merchant Server Key
                 \Midtrans\Config::$serverKey = config('midtrans.serverKey');
@@ -839,7 +841,11 @@ class PalestineDayController extends Controller
             ]);
 
             $this->send_pesan_merchandise($no_pesanan, $nama_pemesan, $no_hp);
+            $this->send_pesan_merchandise_baru($no_pesanan, $nama_pemesan, $no_hp);
+
+
             $this->send_pesan_merchandise_detail($no_pesanan, $nama_siswa_now, $sekolah_id_now, $kelas_now, $merchandise_id_now, $warna_now, $template_now, $kategori_now, $design_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now);
+            $this->send_pesan_merchandise_detail_baru($no_pesanan, $nama_siswa_now, $sekolah_id_now, $kelas_now, $merchandise_id_now, $warna_now, $template_now, $kategori_now, $design_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now);
 
                // Set your Merchant Server Key
                \Midtrans\Config::$serverKey = config('midtrans.serverKey');
@@ -1044,11 +1050,79 @@ class PalestineDayController extends Controller
 	    // return ($response);
 	}
 
+    function send_pesan_merchandise_baru($no_pesanan, $nama_pemesan, $no_hp){
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/simpan_pesan_merchandise.php',
+		  CURLOPT_RETURNTRANSFER => 1,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'POST',
+		  // CURLOPT_SSL_VERIFYPEER => false,
+		  // CURLOPT_SSL_VERIFYHOST => false,
+		  CURLOPT_POSTFIELDS => array(
+		  	'no_pesanan' => $no_pesanan,
+		  	'nama_pemesan' => $nama_pemesan,
+		  	'no_hp' => $no_hp)
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    // return ($response);
+	}
+
     function send_pesan_merchandise_detail($no_pesanan, $nama_siswa, $lokasi_sekolah, $nama_kelas, $merchandise_id, $warna_id, $template_id, $kategori_id, $design_id, $ukuran, $quantity, $harga, $diskon, $hpp){
 	    $curl = curl_init();
 
 		curl_setopt_array($curl, array(
 		  CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_regist/simpan_pesan_merchandise_detail.php',
+		  CURLOPT_RETURNTRANSFER => 1,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'POST',
+		  // CURLOPT_SSL_VERIFYPEER => false,
+		  // CURLOPT_SSL_VERIFYHOST => false,
+		  CURLOPT_POSTFIELDS => array(
+		  	'no_pesanan' => $no_pesanan,
+		  	'nama_siswa' => $nama_siswa,
+		  	'lokasi_sekolah' => $lokasi_sekolah,
+		  	'nama_kelas' => $nama_kelas,
+		  	'merchandise_id' => $merchandise_id,
+		  	'warna_id' => $warna_id,
+		  	'template_id' => $template_id,
+		  	'kategori_id' => $kategori_id,
+		  	'design_id' => $design_id,
+		  	'ukuran' => $ukuran,
+		  	'quantity' => $quantity,
+		  	'harga' => $harga,
+		  	'diskon' => $diskon,
+		  	'hpp' => $hpp,
+            )
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    // return ($response);
+	}
+
+    function send_pesan_merchandise_detail_baru($no_pesanan, $nama_siswa, $lokasi_sekolah, $nama_kelas, $merchandise_id, $warna_id, $template_id, $kategori_id, $design_id, $ukuran, $quantity, $harga, $diskon, $hpp){
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/simpan_pesan_merchandise_detail.php',
 		  CURLOPT_RETURNTRANSFER => 1,
 		  CURLOPT_ENCODING => '',
 		  CURLOPT_MAXREDIRS => 10,
