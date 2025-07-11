@@ -72,7 +72,7 @@
                                     <span for="kota" class="form-label">Kabupaten/Kota</span>
                                     <select id="kota" name="kota" class="select form-control form-control-sm px-3" onchange="getKecamatan()" required>
                                         @if ($get_profile->kota == null)
-                                            <option value="" disabled selected>-- Pilih Kota--</option>
+                                            <option disabled selected>-- Pilih Kota--</option>
                                         @else
                                             @foreach ($kota as $item)
                                                 <option value="{{ $item->id }}" {{($get_profile->kota == $item->id) ? 'selected' : ''}} >{{ $item->kabupaten_kota }}</option>
@@ -141,6 +141,7 @@
                                     <span for="berat_badan" class="form-label">Berat Badan (kg)</span>
                                     <input type="number" name="berat_badan" class="form-control form-control-sm px-3" id="berat_badan" value="{{$get_profile->berat_badan}}"  placeholder="xx" required>
                                 </div>
+                                
 
                                 <div class="mb-3">
                                     <span for="bhs_digunakan" class="form-label">Bahasa yang Digunakan</span>
@@ -210,7 +211,7 @@
                             <div class="tab-pane fade" id="nav-data-ibu" role="tabpanel" aria-labelledby="nav-data-ibu-tab" tabindex="0">
                                 <div class="my-3">
                                     <span for="nama_ibu" class="form-label">Nama Lengkap Ibu</span>
-                                    <input type="text" name="nama_ibu" class="form-control form-control-sm px-3" id="nama_ibu" placeholder="Nama Ibu"  value="{{$get_profile_ibu != null ? $get_profile_ibu->nama : ''}}" required>
+                                    <input type="text" name="nama_ibu" class="form-control form-control-sm px-3" id="nama_ibu" placeholder="Nama Ibu"  value="{{$get_profile_ibu != null ? $get_profile_ibu->nama : ''}}" readonly>
                                 </div>
 
                                 <div class="mb-3">
@@ -379,10 +380,10 @@
                                     <span for="hubungan_wali" class="form-label">Hubungan Wali dan Peserta Didik</span>
                                     <select id="hubungan_wali" name="hubungan_wali" class="select form-control form-control-sm px-3">
                                         <option value="" disabled selected>-- Pilih Hubungan Wali --</option>
-                                        <option value="kakek/nenek" >Kakek / Nenek</option>
-                                        <option value="paman/bibi" >Paman / Bibi</option>
-                                        <option value="kakak" >Kakak</option>
-                                        <option value="lainnya" >Lainnya</option>
+                                        <option value="kakek/nenek" {{ (isset($get_profile_wali) && $get_profile_wali->hubungan_wali == 'kakek/nenek') ? 'selected' : '' }}>Kakek / Nenek</option>
+                                        <option value="paman/bibi" {{ (isset($get_profile_wali) && $get_profile_wali->hubungan_wali == 'paman/bibi') ? 'selected' : '' }}>Paman / Bibi</option>
+                                        <option value="kakak" {{ (isset($get_profile_wali) && $get_profile_wali->hubungan_wali == 'kakak') ? 'selected' : '' }}>Kakak</option>
+                                        <option value="lainnya" {{ (isset($get_profile_wali) && $get_profile_wali->hubungan_wali == 'lainnya') ? 'selected' : '' }}>Lainnya</option>
                                     </select>
                                 </div>
 
@@ -400,13 +401,25 @@
                                             </td>
                                             <td>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="{{$item->name}}" id="{{$item->name}}_ya" value="ya" {{$get_kuesioner_anak->{$item->aliases} == 'ya' ? 'checked' : ''}}>
+                                                    <input class="form-check-input" 
+                                                            type="radio" 
+                                                            name="{{$item->name}}" 
+                                                            id="{{$item->name}}_ya" 
+                                                            value="ya"
+                                                            data-kuesioner="kuesioner_{{ $item->id }}"
+                                                            {{$get_kuesioner_anak->{$item->aliases} == 'ya' ? 'checked' : ''}}>
                                                     <label class="form-check-label" for="{{$item->name}}_ya">Iya</label>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="{{$item->name}}" id="{{$item->name}}_tidak" value="tidak" {{$get_kuesioner_anak->{$item->aliases} == 'tidak' ? 'checked' : ''}}>
+                                                    <input class="form-check-input" 
+                                                            type="radio" 
+                                                            name="{{$item->name}}" 
+                                                            id="{{$item->name}}_tidak" 
+                                                            value="tidak" 
+                                                            data-kuesioner="kuesioner_{{ $item->id }}"
+                                                            {{$get_kuesioner_anak->{$item->aliases} == 'tidak' ? 'checked' : ''}}>
                                                     <label class="form-check-label" for="{{$item->name}}_tidak">Tidak</label>
                                                 </div>
                                             </td>
@@ -465,48 +478,106 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
     <script>
-         $(document).ready(function() {
-            $("#btn-submit").click(function() {
-                event.preventDefault();
-                var form = document.getElementById('update_data_pendaftaran');
-                var data = new FormData(form);
-                var provinsi = $('#provinsi').val();
-                var kota = $('#kota').val();
-                var kecamatan = $('#kecamatan').val();
-                var kelurahan = $('#kelurahan').val();
-                var pekerjaan_ibu = $('#pekerjaan_ibu').val();
-                var pekerjaan_ayah = $('#pekerjaan_ayah').val();
+        $(document).ready(function () {
+        $('#btn-submit').click(function (e) {
+            e.preventDefault();
 
-                if (provinsi == null ) {
-                    alert('Mohon cek kembali inputan provinsi, Pastikan Semua Data Sudah Terisi' )
-                } else if( kota == null ) {
-                    alert('Mohon cek kembali inputan kota, Pastikan Semua Data Sudah Terisi' )
-                } else if ( kecamatan == null) {
-                    alert('Mohon cek kembali inputan kota, Pastikan Semua Data Sudah Terisi' )
-                } else if (kelurahan == null) {
-                    alert('Mohon cek kembali inputan kelurahan, Pastikan Semua Data Sudah Terisi' )
-                } else if (pekerjaan_ayah == null) {
-                    alert('Mohon cek kembali inputan pekerjaan ayah, Pastikan Semua Data Sudah Terisi' )
-                } else if (pekerjaan_ibu == null) {
-                    alert('Mohon cek kembali inputan pekerjaan ibu, Pastikan Semua Data Sudah Terisi' )
-                } else {
-                    for (var [key, value] of data) {
-                        if (value == "" || value == null) {
-                            alert("Mohon cek kembali bagian " + key +", Pastikan Semua Data Sudah Terisi")
-                            return false;
-                        } 
-                    }
-                    // disable button
-                    $(this).prop("disabled", true);
-                    // add spinner to button
-                    $(this).html(
-                        `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
-                    );
-                    $("#update_data_pendaftaran").submit();
-                }
+            // Ambil semua inputan penting
+            var form = document.getElementById('update_data_pendaftaran');
+            var data = new FormData(form);
 
+            var provinsi = $('#provinsi').val();
+            var kota = $('#kota').val();
+            var kecamatan = $('#kecamatan').val();
+            var kelurahan = $('#kelurahan').val();
+            var status_tinggal = $('#status_tinggal').val();
+            var bhs_digunakan = $('#bhs_digunakan').val();
+            var kec_asal_sekolah = $('#kec_asal_sekolah').val();
+            var gol_darah = $('#gol_darah').val();
+
+            var pekerjaan_ibu = $('#pekerjaan_ibu').val();
+            var penghasilan_ibu = $('#penghasilan_ibu').val();
+            var pendidikan_ibu = $('#pendidikan_ibu').val();
+
+            var pekerjaan_ayah = $('#pekerjaan_ayah').val();
+            var penghasilan_ayah = $('#penghasilan_ayah').val();
+            var pendidikan_ayah = $('#pendidikan_ayah').val();
+
+            var pekerjaan_wali = $('#pekerjaan_wali').val();
+            var pendidikan_wali = $('#pendidikan_wali').val();
+            var hubungan_wali = $('#hubungan_wali').val();
+
+            var berat_badan = parseFloat($('#berat_badan').val()) || 0;
+            var tinggi_badan = parseFloat($('#tinggi_badan').val()) || 0;
+            var hafalan = parseFloat($('#hafalan').val()) || 0;
+
+            // Validasi input satu-satu
+            if (!provinsi) return alert('Mohon cek kembali inputan provinsi, Pastikan Semua Data Sudah Terisi');
+            if (!kota) return alert('Mohon cek kembali inputan kota, Pastikan Semua Data Sudah Terisi');
+            if (!kecamatan) return alert('Mohon cek kembali inputan kecamatan, Pastikan Semua Data Sudah Terisi');
+            if (!kelurahan) return alert('Mohon cek kembali inputan kelurahan, Pastikan Semua Data Sudah Terisi');
+            if (!status_tinggal) return alert('Mohon cek kembali inputan status tinggal, Pastikan Semua Data Sudah Terisi');
+            if (!bhs_digunakan) return alert('Mohon cek kembali inputan bahasa yang digunakan, Pastikan Semua Data Sudah Terisi');
+            if (!kec_asal_sekolah) return alert('Mohon cek kembali inputan kecamatan asal sekolah, Pastikan Semua Data Sudah Terisi');
+            if (!gol_darah) return alert('Mohon cek kembali inputan golongan darah, Pastikan Semua Data Sudah Terisi');
+            if (!pekerjaan_ibu) return alert('Mohon cek kembali inputan pekerjaan ibu, Pastikan Semua Data Sudah Terisi');
+            if (!penghasilan_ibu) return alert('Mohon cek kembali inputan penghasilan ibu, Pastikan Semua Data Sudah Terisi');
+            if (!pendidikan_ibu) return alert('Mohon cek kembali inputan pendidikan ibu, Pastikan Semua Data Sudah Terisi');
+            if (!pekerjaan_ayah) return alert('Mohon cek kembali inputan pekerjaan ayah, Pastikan Semua Data Sudah Terisi');
+            if (!penghasilan_ayah) return alert('Mohon cek kembali inputan penghasilan ayah, Pastikan Semua Data Sudah Terisi');
+            if (!pendidikan_ayah) return alert('Mohon cek kembali inputan pendidikan ayah, Pastikan Semua Data Sudah Terisi');
+            if (!pekerjaan_wali) return alert('Mohon cek kembali inputan pekerjaan wali, Pastikan Semua Data Sudah Terisi');
+            if (!pendidikan_wali) return alert('Mohon cek kembali inputan pendidikan wali, Pastikan Semua Data Sudah Terisi');
+            if (!hubungan_wali) return alert('Mohon cek kembali inputan hubungan wali, Pastikan Semua Data Sudah Terisi');
+
+            // Validasi berat badan, tinggi badan, hafalan
+            if (tinggi_badan < 50 || tinggi_badan > 300) {
+                return alert('Silakan isi tinggi badan anak dengan angka yang sebenarnya');
+            }
+
+            if (berat_badan < 15 || berat_badan > 150) {
+                return alert('Silakan isi berat badan anak dengan angka yang sebenarnya');
+            }
+            if (hafalan < 0) return alert('Jumlah hafalan tidak boleh kurang dari 0');
+
+            // Validasi kuesioner anak
+            let unanswered = [];
+            let kuesionerSet = new Set();
+
+            $('#nav-data-kuesioner-anak input[type="radio"]').each(function () {
+                const key = $(this).data('kuesioner');
+                if (key) kuesionerSet.add(key);
             });
+
+            kuesionerSet.forEach(function (key) {
+                const radios = $(`input[data-kuesioner="${key}"]`);
+                const name = radios.first().attr('name');
+                if (!$(`input[name="${name}"]:checked`).val()) {
+                    unanswered.push(key);
+                }
+            });
+
+            if (unanswered.length > 0) {
+                alert('Mohon isi semua pertanyaan kuesioner berikut:\n' + unanswered.join(', '));
+                return;
+            }
+
+            // Validasi isi semua FormData (opsional)
+            for (var [key, value] of data) {
+                if (value === "" || value === null) {
+                    alert("Mohon cek kembali bagian " + key + ", Pastikan Semua Data Sudah Terisi");
+                    return;
+                }
+            }
+
+            // Semua valid, submit form
+            $(this).prop("disabled", true);
+            $(this).html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+            );
+            $("#update_data_pendaftaran").submit();
         });
+    });
 
         $(document).ready(function() {
             $('#kec_asal_sekolah').select2();
