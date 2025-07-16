@@ -535,7 +535,7 @@
                 return alert('Silakan isi tinggi badan anak dengan angka yang sebenarnya');
             }
 
-            if (berat_badan < 15 || berat_badan > 150) {
+            if (berat_badan < 0 || berat_badan > 150) {
                 return alert('Silakan isi berat badan anak dengan angka yang sebenarnya');
             }
             if (hafalan < 0) return alert('Jumlah hafalan tidak boleh kurang dari 0');
