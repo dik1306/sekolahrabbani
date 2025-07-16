@@ -531,7 +531,7 @@
             if (!hubungan_wali) return alert('Mohon cek kembali inputan hubungan wali, Pastikan Semua Data Sudah Terisi');
 
             // Validasi berat badan, tinggi badan, hafalan
-            if (tinggi_badan < 50 || tinggi_badan > 300) {
+            if (tinggi_badan < 0 || tinggi_badan > 300) {
                 return alert('Silakan isi tinggi badan anak dengan angka yang sebenarnya');
             }
 
