@@ -47,9 +47,15 @@ class JerseyController extends Controller
                         ->where('t_cart_jersey.user_id', $user_id)
                         ->where('t_cart_jersey.status_cart', 0)
                         ->get();
+
+        if ($user_id == '2035') {
+            return view('ortu.jersey.closed', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
+                        'jersey_basket', 'jersey_memanah'));
+        } else {
+            return view('ortu.jersey.index', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
+                        'jersey_basket', 'jersey_memanah'));
+        }
         
-        return view('ortu.jersey.closed', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
-                    'jersey_basket', 'jersey_memanah'));
     }
 
     /**
@@ -271,8 +277,12 @@ class JerseyController extends Controller
                         ->where('t_cart_jersey.status_cart', 0)
                         ->get();
 
+        $jersey_images = JerseyImage::where('jersey_id', $id)->get();
+
+        $jersey_size_chart = JerseyImage::where('jersey_id', $id)->where('isSizeChart',true)->get();
+
         return view('ortu.jersey.detail', compact('produk', 'profile', 'ukuran', 'cart_detail', 'role_id', 'ukuran_futsal_sd',
-                    'ukuran_basket_sd_l', 'ukuran_badminton_sd_p', 'ukuran_badminton_sd_l', 'ukuran_memanah_sd_p', 'ukuran_memanah_sd_l'));
+                    'ukuran_basket_sd_l', 'ukuran_badminton_sd_p', 'ukuran_badminton_sd_l', 'ukuran_memanah_sd_p', 'ukuran_memanah_sd_l', 'jersey_images', 'jersey_size_chart'));
     }
 
     public function add_to_cart(Request $request)
