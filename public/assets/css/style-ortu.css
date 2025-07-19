@@ -52,6 +52,15 @@ nav a:hover {
     padding: 1rem;
 }
 
+.btn-size-chart {
+    background-color: #FCB415 !important; /* warna kuning senada */
+    border: none !important;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem !important;
+    cursor: pointer;
+    color: #FFF !important; /* ungu gelap untuk teks */
+}
+
 main {
     background-color: none;
     position: relative;
