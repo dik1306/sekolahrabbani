@@ -255,13 +255,11 @@ class JerseyController extends Controller
 
         public function detail_jersey(Request $request, $id)
         {
-            // dd($request, $id);
             $user_id = auth()->user()->id;
             $no_hp = auth()->user()->no_hp;
             $produk = Jersey::find($id);
             $role_id = auth()->user()->id_role;
 
-            // dd($user_id, $no_hp, $produk, $role_id);
 
             $ukuran = UkuranSeragam::whereNotIn('ukuran_seragam', ['ALL', '4XL', '5XL'])->orderby('urutan', 'asc')->get();
             $ukuran_futsal_sd = UkuranSeragam::whereIn('ukuran_seragam', ['M', 'L', 'XL', 'XXL'])->get();
@@ -287,7 +285,7 @@ class JerseyController extends Controller
 
             return view('ortu.jersey.detail', compact('produk', 'profile', 'ukuran', 'cart_detail', 'role_id', 'ukuran_futsal_sd',
                         'ukuran_basket_sd_l', 'ukuran_badminton_sd_p', 'ukuran_badminton_sd_l', 'ukuran_memanah_sd_p', 'ukuran_memanah_sd_l', 'jersey_images', 'jersey_size_chart'));
-            // return 'tes sampai sini';
+           
         }
 
     public function add_to_cart(Request $request)
