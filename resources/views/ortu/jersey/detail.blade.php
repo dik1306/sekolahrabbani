@@ -4,20 +4,44 @@
     @include('ortu.jersey.top-navigate')
     <div id="image-carousel" class="carousel slide px-0">
         <div class="carousel-indicators">
-            @for ($i = 0; $i < count($jersey_images); $i++)
-                <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="{{ $i }}"
-                    class="@if($i == 0) active @endif" aria-current="true" aria-label="Slide {{ $i+1 }}"></button>
-            @endfor
+            <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+            <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
+            <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="6" aria-label="Slide 7"></button>
         </div>
-                  
         <div class="carousel-inner">
-            @foreach($jersey_images as $idx => $img)
-                <div class="carousel-item @if($idx == 0) active @endif">
-                    <img class="img-detail-card" src="{{asset('storage/'.$img->image_url) }}" alt="{{ $img }}">
-                </div>
-            @endforeach
+            <div class="carousel-item active">
+                <img class="img-detail-card" src="{{ asset('storage/'.$produk->image_1) }}" alt="{{$produk->image_1}}">
+            </div>
 
-           
+            <div class="carousel-item">
+                <img class="img-detail-card" src="{{ asset('storage/'.$produk->image_2) }}" alt="{{$produk->image_2}}">
+            </div>
+
+            <div class="carousel-item">
+                <img class="img-detail-card" src="{{ asset('storage/'.$produk->image_3) }}" alt="{{$produk->image_3}}">
+            </div>
+
+            <div class="carousel-item">
+                <img class="img-detail-card" src="{{ asset('storage/'.$produk->image_4) }}" alt="{{$produk->image_4}}">
+            </div>
+
+            <div class="carousel-item">
+                <img class="img-detail-card" src="{{ asset('storage/'.$produk->image_5) }}" alt="{{$produk->image_5}}">
+            </div>
+
+            <div class="carousel-item">
+                <img class="img-detail-card" src="{{ asset('storage/'.$produk->image_6) }}" alt="{{$produk->image_6}}">
+            </div>
+
+            @if ($produk->ekskul_id != 5)
+                <div class="carousel-item">
+                    <img class="img-detail-card" src="{{ asset('storage/'.$produk->image_7) }}" alt="{{$produk->image_7}}">
+                </div>
+            @endif
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel"
             data-bs-slide="prev">
@@ -33,96 +57,33 @@
 
     <div class="container">
         <div class="produk-detail">
-            <input type="hidden" id="produk_id" value="{{ $produk->id }}">
-
-            <!-- Row (produk-title + button) -->
-            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
-                <!-- Column: produk-title -->
-                <div class="produk-title">
-                    <h5 class="card-title mb-0">{{ $produk->nama_jersey }}</h5>
-                    @if ($produk->ekskul_id == '5')
-                        <p class="mb-1 price-diskon-detail"><b> Rp. {{ number_format($produk->harga_awal - ($produk->persen_diskon/100 * $produk->harga_awal)) }}/kaos </b></p>
-                    @else
-                        <p class="mb-1 price-diskon-detail"><b> Rp. {{ number_format($produk->harga_awal - ($produk->persen_diskon/100 * $produk->harga_awal)) }}/set </b></p>
-                    @endif
-                    <p class="mb-0" style="font-size: 16px">Discount 
-                        <span class="bg-danger py-1 px-2">{{ $produk->persen_diskon }}%</span>
-                        <span class="mx-2 text-muted"><s>Rp. {{ number_format($produk->harga_awal) }}</s></span>
-                    </p>
-                </div>
-
-                <!-- Button: Size Chart -->
-                <div>
-                    <a href="#" class="btn btn-size-chart px-3" data-bs-toggle="modal" data-bs-target="#size_chart_ex">
-                        <i class="fa-solid fa-shirt"></i> Size Chart
-                    </a>
-                </div>
+            <input type="hidden" id="produk_id" value="{{$produk->id}}">
+            <div class="produk-title">
+                <h5 class="card-title mb-0">{{$produk->nama_jersey}}</h5>
+                @if ($produk->ekskul_id == '5')
+                    <p class="mb-1 price-diskon-detail" ><b> Rp. {{number_format($produk->harga_awal - ($produk->persen_diskon/100 * $produk->harga_awal))}}/kaos </b> </p>
+                @else
+                    <p class="mb-1 price-diskon-detail" ><b> Rp. {{number_format($produk->harga_awal - ($produk->persen_diskon/100 * $produk->harga_awal))}}/set </b> </p>
+                @endif
+                <p class="mb-0" style="font-size: 16px"> Discount 
+                    <span class="bg-danger py-1 px-2"> {{($produk->persen_diskon)}}% </span>
+                    <span class="mx-2" style="color: gray"> <s> Rp. {{number_format($produk->harga_awal)}} </s> </span>
+                </p>
             </div>
 
-            <!-- Deskripsi Produk -->
             <div class="produk-deskripsi mt-4">
-                <h6 style="color: #3152A4"><b>Deskripsi Produk</b></h6>
-                <p style="font-size: 14px">{{ $produk->deskripsi }}</p>
-            </div>
+                <h6 style="color:  #3152A4"><b> Deskripsi Produk </b> </h6>
+                <p style="font-size: 14px"> {{$produk->deskripsi}} </p>
+            </div> 
         </div>
     </div>
-
 
     <div class="bottom-navigate sticky-bottom">
         <div class="d-flex" style="justify-content: end">
-            <a href="#" class="btn btn-primary mx-2 px-3" data-bs-toggle="modal" data-bs-target="#pre_order_jersey" > <i class="fa-solid fa-plus"></i> Keranjang </a>
-
+            <a href="#" class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#pre_order_jersey" > <i class="fa-solid fa-plus"></i> Keranjang </a>
             <a href="#" class="btn btn-purple mx-2 px-3" data-bs-toggle="modal" data-bs-target="#pre_order_jersey" > Pre Order </a>
         </div>
     </div>
-
-    <!-- Modal Size Chart -->
-    <style>
-        .modal-size-custom {
-            max-width: 600px; /* Atau gunakan 80%, 90vw, dsb sesuai kebutuhan */
-            width: 100%;
-        }
-    </style>
-<div class="modal fade" id="size_chart_ex" tabindex="-1" aria-labelledby="carouselModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title" id="carouselModalLabel">Size Chart {{$produk->nama_jersey}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-            </div>
-
-            <div class="modal-body">
-                <div id="image-carousel-size" class="carousel slide px-0">
-                    <div class="carousel-indicators">
-                        @for ($i = 0; $i < count($jersey_size_chart); $i++)
-                            <button type="button" data-bs-target="#image-carousel-size" data-bs-slide-to="{{ $i }}"
-                                class="@if($i == 0) active @endif" aria-current="true" aria-label="Slide {{ $i+1 }}"></button>
-                        @endfor
-                    </div>
-
-                    <div class="carousel-inner">
-                        @foreach($jersey_size_chart as $idx => $img)
-                            <div class="carousel-item @if($idx == 0) active @endif">
-                                <img class="img-fluid w-100" src="{{asset('storage/'. $img->image_url)}}" alt="Gambar {{ $idx + 1 }}">
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel-size" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Sebelumnya</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#image-carousel-size" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Berikutnya</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
     <div class="modal fade" id="pre_order_jersey" tabindex="-1" role="dialog" aria-labelledby="po" aria-hidden="true">
