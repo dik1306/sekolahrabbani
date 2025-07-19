@@ -12,6 +12,7 @@ use App\Models\JenisKategori;
 use App\Models\JenisSeragam;
 use App\Models\Jenjang;
 use App\Models\LokasiSub;
+use App\Models\ProdukSeragamImage;
 use App\Models\MenuMobile;
 use App\Models\OrderDetailMerchandise;
 use App\Models\OrderDetailSeragam;
@@ -255,7 +256,10 @@ class SeragamController extends Controller
                     ->where('tss.qty', '>', 0)
                     ->get();
 
-        return view('ortu.seragam.detail', compact('produk', 'cart_detail', 'profile', 'jenis_produk', 'ukuran_seragam'));
+        $seragam_images = ProdukSeragamImage::where('produk_seragam_id', $id)->where('isUsed', true)->get();
+        $size_chart_images = ProdukSeragamImage::where('produk_seragam_id', $id)->where('isSizeChart', true)->where('isUsed', true)->get();
+
+        return view('ortu.seragam.detail', compact('produk', 'cart_detail', 'profile', 'jenis_produk', 'ukuran_seragam', 'seragam_images' ,'size_chart_images'));
     }
 
     public function cart(Request $request)
