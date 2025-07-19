@@ -254,6 +254,7 @@ class JerseyController extends Controller
 
     public function detail_jersey(Request $request, $id)
     {
+        dd($request, $id);
         $user_id = auth()->user()->id;
         $no_hp = auth()->user()->no_hp;
         $produk = Jersey::find($id);
