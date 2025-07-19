@@ -49,10 +49,10 @@ class JerseyController extends Controller
                         ->get();
 
         if ($user_id == 2035) {
-            return view('ortu.jersey.closed', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
+            return view('ortu.jersey.index', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
                         'jersey_basket', 'jersey_memanah'));
         } else {
-            return view('ortu.jersey.index', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
+            return view('ortu.jersey.closed', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
                         'jersey_basket', 'jersey_memanah'));
         }
         
