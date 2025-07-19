@@ -260,6 +260,8 @@ class JerseyController extends Controller
             $produk = Jersey::find($id);
             $role_id = auth()->user()->id_role;
 
+            dd($user_id, $no_hp, $produk, $role_id);
+
             $ukuran = UkuranSeragam::whereNotIn('ukuran_seragam', ['ALL', '4XL', '5XL'])->orderby('urutan', 'asc')->get();
             $ukuran_futsal_sd = UkuranSeragam::whereIn('ukuran_seragam', ['M', 'L', 'XL', 'XXL'])->get();
             $ukuran_basket_sd_l = UkuranSeragam::whereIn('ukuran_seragam', ['L', 'XL'])->get();
@@ -270,19 +272,19 @@ class JerseyController extends Controller
             
             $profile = Profile::get_user_profile_byphone($no_hp);
 
-            // $cart_detail = CartJersey::select('t_cart_jersey.quantity', 't_cart_jersey.id', 't_cart_jersey.jersey_id', 't_cart_jersey.is_selected', 
-            //                 'mus.ukuran_seragam', 'mj.nama_jersey', 'mj.harga_awal', 'mj.persen_diskon', 'mj.image_1', 'mj.image_2')
-            //                 ->leftJoin('m_jersey as mj', 'mj.id', 't_cart_jersey.jersey_id')
-            //                 ->leftJoin('m_ukuran_seragam as mus', 'mus.id', 't_cart_jersey.ukuran_id')
-            //                 ->where('t_cart_jersey.user_id', $user_id)
-            //                 ->where('t_cart_jersey.status_cart', 0)
-            //                 ->get();
+            $cart_detail = CartJersey::select('t_cart_jersey.quantity', 't_cart_jersey.id', 't_cart_jersey.jersey_id', 't_cart_jersey.is_selected', 
+                            'mus.ukuran_seragam', 'mj.nama_jersey', 'mj.harga_awal', 'mj.persen_diskon', 'mj.image_1', 'mj.image_2')
+                            ->leftJoin('m_jersey as mj', 'mj.id', 't_cart_jersey.jersey_id')
+                            ->leftJoin('m_ukuran_seragam as mus', 'mus.id', 't_cart_jersey.ukuran_id')
+                            ->where('t_cart_jersey.user_id', $user_id)
+                            ->where('t_cart_jersey.status_cart', 0)
+                            ->get();
 
             $jersey_images = JerseyImage::where('jersey_id', $id)->get();
 
             $jersey_size_chart = JerseyImage::where('jersey_id', $id)->where('isSizeChart',true)->get();
 
-            return view('ortu.jersey.detail', compact('produk', 'profile', 'ukuran', 'cart_detail', 'ukuran_futsal_sd',
+            return view('ortu.jersey.detail', compact('produk', 'profile', 'ukuran', 'cart_detail', 'role_id', 'ukuran_futsal_sd',
                         'ukuran_basket_sd_l', 'ukuran_badminton_sd_p', 'ukuran_badminton_sd_l', 'ukuran_memanah_sd_p', 'ukuran_memanah_sd_l', 'jersey_images', 'jersey_size_chart'));
             // return 'tes sampai sini';
         }
