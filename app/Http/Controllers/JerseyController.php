@@ -260,7 +260,7 @@ class JerseyController extends Controller
             $produk = Jersey::find($id);
             $role_id = auth()->user()->id_role;
 
-            dd($user_id, $no_hp, $produk, $role_id);
+            // dd($user_id, $no_hp, $produk, $role_id);
 
             $ukuran = UkuranSeragam::whereNotIn('ukuran_seragam', ['ALL', '4XL', '5XL'])->orderby('urutan', 'asc')->get();
             $ukuran_futsal_sd = UkuranSeragam::whereIn('ukuran_seragam', ['M', 'L', 'XL', 'XXL'])->get();
