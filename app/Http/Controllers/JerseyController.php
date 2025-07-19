@@ -48,7 +48,7 @@ class JerseyController extends Controller
                         ->where('t_cart_jersey.status_cart', 0)
                         ->get();
 
-        if ($user_id == '2035') {
+        if ($user_id == 2035) {
             return view('ortu.jersey.closed', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
                         'jersey_basket', 'jersey_memanah'));
         } else {
