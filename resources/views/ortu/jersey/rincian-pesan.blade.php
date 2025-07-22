@@ -95,34 +95,25 @@
             // Mendapatkan snap_token dari $order->snap_token
             const snapToken = '{{ $order->snap_token }}';
 
-            // Menangani klik tombol bayar
-            document.getElementById('pay-button').onclick = function() {
+            // Menampilkan form Snap pembayaran langsung ketika halaman dimuat
+            window.onload = function() {
                 // Menggunakan Snap.js untuk memulai transaksi pembayaran
                 snap.pay(snapToken, {
                     onSuccess: function(result) {
-                        // Jika pembayaran berhasil
-                        console.log(result);
-                        alert("Pembayaran berhasil!");
-                        // Anda bisa memperbarui status pembayaran di backend
+                        window.location.href = '{{route('checkout.success')}}'
                     },
                     onPending: function(result) {
-                        // Jika pembayaran pending
-                        console.log(result);
-                        alert("Pembayaran sedang diproses.");
+                        // Pembayaran masih pending - Lakukan tindakan yang diperlukan
                     },
                     onError: function(result) {
-                        // Jika terjadi kesalahan
-                        console.log(result);
-                        alert("Terjadi kesalahan, silakan coba lagi.");
+                        // Jika terjadi kesalahan - Lakukan tindakan jika terjadi kesalahan
                     }
                 });
 
-                // Menampilkan area pembayaran setelah tombol diklik
+                // Menampilkan area pembayaran setelah halaman dimuat
                 document.getElementById('payment-area').style.display = 'block';
             };
         </script>
-
-
 
         <div class="d-flex mt-3" style="justify-content: space-between; font-size: 14px">
             <span> No Pesanan </span>
