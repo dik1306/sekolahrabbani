@@ -90,7 +90,7 @@
         </div>
 
         <!-- Modal Dialog Box -->
-        <div id="paymentModal" class="modal" style="display:none;">
+        {{-- <div id="paymentModal" class="modal" style="display:none;">
             <div class="modal-content">
                 <span id="closeModal" class="close">&times;</span>
                 <h2 id="modalTitle"></h2>
@@ -99,7 +99,7 @@
                     <!-- Dynamic actions will be added here -->
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Script untuk Snap.js -->
         <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
@@ -114,16 +114,16 @@
                 snap.pay(snapToken, {
                     onSuccess: function(result) {
                         // Tampilkan modal untuk pembayaran berhasil
-                        showModal('Pembayaran Berhasil', 'Terima kasih, pembayaran Anda telah berhasil diproses!', 'success');
+                        // showModal('Pembayaran Berhasil', 'Terima kasih, pembayaran Anda telah berhasil diproses!', 'success');
                         window.location.href = '{{route('checkout.success')}}';
                     },
                     onPending: function(result) {
                         // Tampilkan modal untuk pembayaran yang masih pending
-                        showModal('Pembayaran Pending', 'Transaksi ini belum dilakukan pembayaran, silakan lihat detailnya.', 'warning');
+                        // showModal('Pembayaran Pending', 'Transaksi ini belum dilakukan pembayaran, silakan lihat detailnya.', 'warning');
                     },
                     onError: function(result) {
                         // Tampilkan modal untuk kesalahan pembayaran
-                        showModal('Pembayaran Gagal', 'Terjadi kesalahan saat memproses pembayaran, silakan coba lagi.', 'error');
+                        // showModal('Pembayaran Gagal', 'Terjadi kesalahan saat memproses pembayaran, silakan coba lagi.', 'error');
                     }
                 });
 
