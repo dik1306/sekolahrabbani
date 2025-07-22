@@ -89,30 +89,94 @@
             <div id="snap-container"></div> <!-- Form pembayaran Midtrans Snap -->
         </div>
 
+        <!-- Modal Dialog Box -->
+        <div id="paymentModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <h2 id="modalTitle"></h2>
+                <p id="modalMessage"></p>
+                <div id="modalActions">
+                    <!-- Dynamic actions will be added here -->
+                </div>
+            </div>
+        </div>
+
         <!-- Script untuk Snap.js -->
         <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+
         <script type="text/javascript">
             // Mendapatkan snap_token dari $order->snap_token
             const snapToken = '{{ $order->snap_token }}';
 
-            // Menampilkan form Snap pembayaran langsung ketika halaman dimuat
-            window.onload = function() {
+            // Menangani klik tombol bayar
+            document.getElementById('pay-button').onclick = function() {
                 // Menggunakan Snap.js untuk memulai transaksi pembayaran
                 snap.pay(snapToken, {
                     onSuccess: function(result) {
-                        window.location.href = '{{route('checkout.success')}}'
+                        // Tampilkan modal untuk pembayaran berhasil
+                        showModal('Pembayaran Berhasil', 'Terima kasih, pembayaran Anda telah berhasil diproses!', 'success');
+                        window.location.href = '{{route('checkout.success')}}';
                     },
                     onPending: function(result) {
-                        // Menampilkan area pembayaran setelah halaman dimuat
-                        document.getElementById('payment-area').style.display = 'block';
+                        // Tampilkan modal untuk pembayaran yang masih pending
+                        showModal('Pembayaran Pending', 'Transaksi ini belum dilakukan pembayaran, silakan lihat detailnya.', 'warning');
                     },
                     onError: function(result) {
-                        // Jika terjadi kesalahan - Lakukan tindakan jika terjadi kesalahan
+                        // Tampilkan modal untuk kesalahan pembayaran
+                        showModal('Pembayaran Gagal', 'Terjadi kesalahan saat memproses pembayaran, silakan coba lagi.', 'error');
                     }
                 });
 
+                // Menampilkan area pembayaran setelah tombol diklik
+                document.getElementById('payment-area').style.display = 'block';
             };
+
+            // Function to show the modal
+            function showModal(title, message, type) {
+                const modal = document.getElementById('paymentModal');
+                const modalTitle = document.getElementById('modalTitle');
+                const modalMessage = document.getElementById('modalMessage');
+                const modalActions = document.getElementById('modalActions');
+                
+                // Set title and message
+                modalTitle.innerText = title;
+                modalMessage.innerText = message;
+
+                // Change modal style based on the type
+                if (type === 'success') {
+                    modal.style.backgroundColor = '#d4edda';
+                    modalTitle.style.color = '#155724';
+                } else if (type === 'warning') {
+                    modal.style.backgroundColor = '#fff3cd';
+                    modalTitle.style.color = '#856404';
+                } else if (type === 'error') {
+                    modal.style.backgroundColor = '#f8d7da';
+                    modalTitle.style.color = '#721c24';
+                }
+
+                // Add button for closing modal
+                modalActions.innerHTML = '<button onclick="closeModal()" class="btn btn-secondary">Tutup</button>';
+
+                // Show modal
+                modal.style.display = 'block';
+            }
+
+            // Function to close modal
+            function closeModal() {
+                document.getElementById('paymentModal').style.display = 'none';
+            }
+
+            // Close the modal when the user clicks on the close button (×)
+            document.getElementById('closeModal').onclick = closeModal;
+
+            // Close the modal if the user clicks anywhere outside of the modal
+            window.onclick = function(event) {
+                if (event.target == document.getElementById('paymentModal')) {
+                    closeModal();
+                }
+            }
         </script>
+
 
         <div class="d-flex mt-3" style="justify-content: space-between; font-size: 14px">
             <span> No Pesanan </span>
