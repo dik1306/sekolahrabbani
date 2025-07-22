@@ -54,7 +54,7 @@
                 <div class="d-flex" style="justify-content: space-between; font-size: 14px">
                     <span> QRIS Pembayaran </span>
                     <span>
-                        <button id="pay-button" class="btn btn-primary btn-sm">Bayar QRIS</button>
+                        <button id="pay-button" class="btn btn-primary btn-sm"><i class="fa fa-qrcode" aria-hidden="true"></i> Lihat QRIS</button>
                     </span>
                 </div>
             @elseif(in_array($order->metode_pembayaran, ['gopay', 'shopeepay']))
@@ -62,14 +62,14 @@
                 <div class="d-flex" style="justify-content: space-between; font-size: 14px">
                     <span> E-Wallet Pembayaran </span>
                     <span>
-                        <button id="pay-button" class="btn btn-primary btn-sm">Bayar E-Wallet</button>
+                        <button id="pay-button" class="btn btn-primary btn-sm"><i class="fa fa-wallet" aria-hidden="true"></i> Bayar E-Wallet</button>
                     </span>
                 </div>
             @else
                 <!-- Untuk metode VA atau lainnya -->
                 <div class="d-flex" style="justify-content: space-between; font-size: 14px">
                     <span> No VA Pembayaran </span>
-                    <button id="pay-button" class="btn btn-primary btn-sm">Lihat VA</button>    
+                    <button id="pay-button" class="btn btn-primary btn-sm"><i class="fa fa-credit-card" aria-hidden="true"></i> Lihat VA</button>    
                 </div>
             @endif
 
@@ -89,18 +89,6 @@
             <div id="snap-container"></div> <!-- Form pembayaran Midtrans Snap -->
         </div>
 
-        <!-- Modal Dialog Box -->
-        {{-- <div id="paymentModal" class="modal" style="display:none;">
-            <div class="modal-content">
-                <span id="closeModal" class="close">&times;</span>
-                <h2 id="modalTitle"></h2>
-                <p id="modalMessage"></p>
-                <div id="modalActions">
-                    <!-- Dynamic actions will be added here -->
-                </div>
-            </div>
-        </div> --}}
-
         <!-- Script untuk Snap.js -->
         <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
 
@@ -114,7 +102,6 @@
                 snap.pay(snapToken, {
                     onSuccess: function(result) {
                         // Tampilkan modal untuk pembayaran berhasil
-                        // showModal('Pembayaran Berhasil', 'Terima kasih, pembayaran Anda telah berhasil diproses!', 'success');
                         window.location.href = '{{route('checkout.success')}}';
                     },
                     onPending: function(result) {
