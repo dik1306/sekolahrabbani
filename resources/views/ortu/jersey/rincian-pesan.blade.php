@@ -103,15 +103,14 @@
                         window.location.href = '{{route('checkout.success')}}'
                     },
                     onPending: function(result) {
-                        // Pembayaran masih pending - Lakukan tindakan yang diperlukan
+                        // Menampilkan area pembayaran setelah halaman dimuat
+                        document.getElementById('payment-area').style.display = 'block';
                     },
                     onError: function(result) {
                         // Jika terjadi kesalahan - Lakukan tindakan jika terjadi kesalahan
                     }
                 });
 
-                // Menampilkan area pembayaran setelah halaman dimuat
-                document.getElementById('payment-area').style.display = 'block';
             };
         </script>
 
