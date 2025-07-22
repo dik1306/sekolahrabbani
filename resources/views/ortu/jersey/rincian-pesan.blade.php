@@ -48,17 +48,81 @@
             <span> {{ strtoupper($order->metode_pembayaran) }} </span>
         </div>
 
-        @if($order->status == 'pending' && $order->metode_pembayaran != 'shopeepay' && $order->metode_pembayaran != 'gopay' )
-            <div class="d-flex" style="justify-content: space-between; font-size: 14px">
-                <span> No VA Pembayaran </span>
-                <span id="va_number">{{$order->va_number}} <i class="fa solid fa-copy" onclick="copy_number()" title="salin"> </i> </span>
-            </div>
+        @if($order->status == 'pending')
+            @if($order->metode_pembayaran == 'qris')
+                <!-- Untuk metode QRIS -->
+                <div class="d-flex" style="justify-content: space-between; font-size: 14px">
+                    <span> QRIS Pembayaran </span>
+                    <span>
+                        <button id="pay-button" class="btn btn-primary btn-sm">Bayar QRIS</button>
+                    </span>
+                </div>
+            @elseif(in_array($order->metode_pembayaran, ['gopay', 'shopeepay']))
+                <!-- Untuk metode E-wallet seperti GoPay atau ShopeePay -->
+                <div class="d-flex" style="justify-content: space-between; font-size: 14px">
+                    <span> E-Wallet Pembayaran </span>
+                    <span>
+                        <button id="pay-button" class="btn btn-primary btn-sm">Bayar E-Wallet</button>
+                    </span>
+                </div>
+            @else
+                <!-- Untuk metode VA atau lainnya -->
+                <div class="d-flex" style="justify-content: space-between; font-size: 14px">
+                    <span> No VA Pembayaran </span>
+                    <button id="pay-button" class="btn btn-primary btn-sm">Lihat VA</button>    
+                </div>
+            @endif
+
             <div class="d-flex" style="justify-content: space-between; font-size: 14px">
                 <span> Batas Pembayaran </span>
-                <span class="text-danger" style="font-weight: bold" id="batas_pembayaran" data-countdown = "{{ date('Y-m-d H:i:s', strtotime($order->expire_time))}}" >{{$order->expire_time}} </span>
+                <span class="text-danger" style="font-weight: bold" id="batas_pembayaran" data-countdown="{{ date('Y-m-d H:i:s', strtotime($order->expire_time))}}">
+                    {{$order->expire_time}}
+                </span>
             </div>
         @endif
+
         <hr>
+
+        <!-- Tempat untuk menampilkan formulir pembayaran Snap -->
+        <div id="payment-area" style="display:none;">
+            <h5>Menunggu Pembayaran...</h5>
+            <div id="snap-container"></div> <!-- Form pembayaran Midtrans Snap -->
+        </div>
+
+        <!-- Script untuk Snap.js -->
+        <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+        <script type="text/javascript">
+            // Mendapatkan snap_token dari $order->snap_token
+            const snapToken = '{{ $order->snap_token }}';
+
+            // Menangani klik tombol bayar
+            document.getElementById('pay-button').onclick = function() {
+                // Menggunakan Snap.js untuk memulai transaksi pembayaran
+                snap.pay(snapToken, {
+                    onSuccess: function(result) {
+                        // Jika pembayaran berhasil
+                        console.log(result);
+                        alert("Pembayaran berhasil!");
+                        // Anda bisa memperbarui status pembayaran di backend
+                    },
+                    onPending: function(result) {
+                        // Jika pembayaran pending
+                        console.log(result);
+                        alert("Pembayaran sedang diproses.");
+                    },
+                    onError: function(result) {
+                        // Jika terjadi kesalahan
+                        console.log(result);
+                        alert("Terjadi kesalahan, silakan coba lagi.");
+                    }
+                });
+
+                // Menampilkan area pembayaran setelah tombol diklik
+                document.getElementById('payment-area').style.display = 'block';
+            };
+        </script>
+
+
 
         <div class="d-flex mt-3" style="justify-content: space-between; font-size: 14px">
             <span> No Pesanan </span>

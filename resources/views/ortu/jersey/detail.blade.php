@@ -188,6 +188,35 @@
                                 <span class="mb-0 text-danger" style="font-size: 10px; display: none" id="valid_nama_punggung" > Isi Nama Punggung terlebih dahulu! </span>
 
                             </div>
+
+                            <script>
+                                // 1. Mencegah No Punggung diawali 0 dan hanya menerima angka
+                                const noPunggungInput = document.getElementById('no_punggung');
+                                noPunggungInput.addEventListener('input', function() {
+                                    // Hanya biarkan input angka dan jangan biarkan dimulai dengan '0'
+                                    let value = noPunggungInput.value;
+                                    
+                                    // Cek apakah nilai dimulai dengan angka 0
+                                    if (value.charAt(0) === '0') {
+                                        noPunggungInput.value = value.slice(1);  // Hapus angka 0 di awal
+                                    }
+                                    
+                                    // Pastikan hanya angka yang dapat dimasukkan
+                                    noPunggungInput.value = noPunggungInput.value.replace(/[^0-9]/g, '');  // Ganti semua karakter non-angka
+                                    // Batasi panjang input hanya 2 digit
+                                    if (noPunggungInput.value.length > 2) {
+                                        noPunggungInput.value = noPunggungInput.value.slice(0, 2);  // Ambil hanya 2 digit pertama
+                                    }
+                                });
+
+                                // 2. Auto kapitalisasi Nama Punggung
+                                const namaPunggungInput = document.getElementById('nama_punggung');
+                                namaPunggungInput.addEventListener('input', function() {
+                                    // Kapitalisasi seluruh input secara otomatis
+                                    let value = namaPunggungInput.value;
+                                    namaPunggungInput.value = value.toUpperCase();  // Ubah menjadi huruf kapital
+                                });
+                            </script>
                         @endif
 
 
@@ -196,70 +225,15 @@
                     <div class="produk-ukuran mt-3">
                         <h6 style="color: #3152A4"><b> Ukuran </b> </h6>
                         <div class="d-flex">
-                            @if ($produk->ekskul_id == '1' && $produk->jenjang_id == '4' || $produk->ekskul_id == '2' && $produk->jenjang_id == '4' && $produk->jenis_kelamin =='P')
-                                @foreach($ukuran_futsal_sd as $item)
-                                    <div class="button-ukuran">
-                                        <input class="form-check-input" type="radio" name="ukuran"  id="uk_{{$item->id}}" value="{{$item->id}}">
-                                        <label class="form-check-label" for="uk_{{$item->id}}">
-                                        <span>{{$item->ukuran_seragam}} </span>
-                                        </label>
-                                    </div>
-                                @endforeach
-                            @elseif ($produk->ekskul_id == '2' && $produk->jenjang_id == '4' && $produk->jenis_kelamin =='L')
-                                @foreach($ukuran_basket_sd_l as $item)
-                                    <div class="button-ukuran">
-                                        <input class="form-check-input" type="radio" name="ukuran"  id="uk_{{$item->id}}" value="{{$item->id}}">
-                                        <label class="form-check-label" for="uk_{{$item->id}}">
-                                        <span>{{$item->ukuran_seragam}} </span>
-                                        </label>
-                                    </div>
-                                @endforeach
-                            @elseif ($produk->ekskul_id == '3' && $produk->jenjang_id == '4' && $produk->jenis_kelamin =='P')
-                                @foreach($ukuran_badminton_sd_p as $item)
-                                    <div class="button-ukuran">
-                                        <input class="form-check-input" type="radio" name="ukuran"  id="uk_{{$item->id}}" value="{{$item->id}}">
-                                        <label class="form-check-label" for="uk_{{$item->id}}">
-                                        <span>{{$item->ukuran_seragam}} </span>
-                                        </label>
-                                    </div>
-                                @endforeach
-                            @elseif ($produk->ekskul_id == '3' && $produk->jenjang_id =='4' && $produk->jenis_kelamin == 'L')
-                                @foreach($ukuran_badminton_sd_l as $item)
-                                    <div class="button-ukuran">
-                                        <input class="form-check-input" type="radio" name="ukuran"  id="uk_{{$item->id}}" value="{{$item->id}}">
-                                        <label class="form-check-label" for="uk_{{$item->id}}">
-                                        <span>{{$item->ukuran_seragam}} </span>
-                                        </label>
-                                    </div>
-                             @endforeach
-                            @elseif ($produk->ekskul_id == '5' && $produk->jenjang_id == '4' && $produk->jenis_kelamin =='L')
-                                @foreach($ukuran_memanah_sd_l as $item)
-                                    <div class="button-ukuran">
-                                        <input class="form-check-input" type="radio" name="ukuran"  id="uk_{{$item->id}}" value="{{$item->id}}">
-                                        <label class="form-check-label" for="uk_{{$item->id}}">
-                                        <span>{{$item->ukuran_seragam}} </span>
-                                        </label>
-                                    </div>
-                                @endforeach
-                            @elseif ($produk->ekskul_id == '5' && $produk->jenjang_id == '4' && $produk->jenis_kelamin =='P')
-                                @foreach($ukuran_memanah_sd_p as $item)
-                                    <div class="button-ukuran">
-                                        <input class="form-check-input" type="radio" name="ukuran"  id="uk_{{$item->id}}" value="{{$item->id}}">
-                                        <label class="form-check-label" for="uk_{{$item->id}}">
-                                        <span>{{$item->ukuran_seragam}} </span>
-                                        </label>
-                                    </div>
-                                @endforeach
-                            @else 
+                            
                                 @foreach($ukuran as $item)
                                     <div class="button-ukuran">
                                         <input class="form-check-input" type="radio" name="ukuran"  id="uk_{{$item->id}}" value="{{$item->id}}">
                                         <label class="form-check-label" for="uk_{{$item->id}}">
-                                        <span>{{$item->ukuran_seragam}} </span>
+                                        <span>{{$item->ukuran_jersey}} </span>
                                         </label>
                                     </div>
                                 @endforeach
-                            @endif
                         </div>
                         <span class="mb-0 text-danger" style="font-size: 10px; display: none" id="valid_ukuran_{{$produk->id}}" > Pilih ukuran terlebih dahulu! </span>
                     </div>
@@ -286,7 +260,7 @@
                         <form action="{{route('pre_order.jersey')}}" method="POST" id="po_jersey">
                             @csrf
                             <input type="hidden" name="data" id="data" value="">
-                            <button type="button" class="btn btn-purple mx-2 px-3" onclick="pre_order('{{$produk->id}}')" > Pre Order (14 Hari) </button>
+                            <button type="button" class="btn btn-purple mx-2 px-3" onclick="pre_order('{{$produk->id}}')" > Pre Order </button>
                         </form>
                     </div>
                 </div>
