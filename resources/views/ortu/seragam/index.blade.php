@@ -1,6 +1,13 @@
 @extends ('ortu.layouts.app')
 
 @section('content')    
+    <style>
+        .card-title {
+            white-space: nowrap;        /* Mencegah teks menjadi baris baru */
+            overflow: hidden;           /* Menyembunyikan teks yang melampaui lebar elemen */
+            text-overflow: ellipsis;    /* Menambahkan elipsis (...) ketika teks terpotong */
+        }
+    </style>
     <div class="top-navigate sticky-top">
         <div class="d-flex" style="justify-content: stretch; width: 100%;">
             <a onclick="window.history.go(-1); return false;" class="mt-1" style="text-decoration: none; color: black">
@@ -52,7 +59,7 @@
                             <div class="card catalog mb-1">
                                 <img src="{{ asset('assets/images/'.$item->image) }}" class="card-img-top" alt="{{$item->image}}" style="max-height: 180px">
                                 <div class="card-body pt-1" style="padding-left: 0.8rem; padding-right: 0">
-                                    <h6 class="card-title mb-0">{{$item->nama_produk}}</h6>
+                                    <h6 class="card-title mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{$item->nama_produk}}</h6>
                                     <p class="mb-0 price-diskon" ><b> Rp. {{number_format($item->harga_awal * 80/100)}} </b> </p>
                                     <p class="mb-1 price-normal"><s> Rp. {{number_format($item->harga_awal)}} </s> </p>
                                     <p class="mb-0" style="font-size: 10px"> Disc. 
@@ -75,7 +82,7 @@
                             <div class="card catalog mb-1">
                                 <img src="{{ asset('assets/images/'.$item->image) }}" class="card-img-top" alt="{{$item->image}}" style="max-height: 180px">
                                 <div class="card-body pt-1" style="padding-left: 0.8rem; padding-right: 0">
-                                    <h6 class="card-title mb-0">{{$item->nama_produk}}</h6>
+                                    <h6 class="card-title mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{$item->nama_produk}}</h6>
                                     <p class="mb-0 price-diskon" ><b> Rp. {{number_format($item->harga_awal * 80/100)}} </b> </p>
                                     <p class="mb-1 price-normal"><s> Rp. {{number_format($item->harga_awal)}} </s> </p>
                                     <p class="mb-0" style="font-size: 10px"> Disc. 
@@ -97,8 +104,8 @@
                         <a href="{{route('seragam.detail', $item->id)}}" style="text-decoration: none">
                             <div class="card catalog mb-1">
                                 <img src="{{ asset('assets/images/'.$item->image) }}" class="card-img-top" alt="{{$item->image}}" style="max-height: 180px">
-                                <div class="card-body pt-1 px-2">
-                                    <h6 class="card-title mb-0">{{$item->nama_produk}}</h6>
+                                <div class="card-body pt-1" style="padding-left: 0.8rem; padding-right: 0">
+                                    <h6 class="card-title mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{$item->nama_produk}}</h6>
                                     <p class="mb-0 price-diskon" ><b> Rp. {{number_format($item->harga_awal * 80/100)}} </b> </p>
                                     <p class="mb-1 price-normal"><s> Rp. {{number_format($item->harga_awal)}} </s> </p>
                                     <p class="mb-0" style="font-size: 9px"> Disc. 
@@ -120,8 +127,8 @@
                         <a href="{{route('seragam.detail', $item->id)}}" style="text-decoration: none">
                             <div class="card catalog mb-1">
                                 <img src="{{ asset('assets/images/'.$item->image) }}" class="card-img-top" alt="{{$item->image}}" style="max-height: 180px">
-                                <div class="card-body pt-1 px-2">
-                                    <h6 class="card-title mb-0">{{$item->nama_produk}}</h6>
+                                <div class="card-body pt-1" style="padding-left: 0.8rem; padding-right: 0">
+                                    <h6 class="card-title mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{$item->nama_produk}}</h6>
                                     <p class="mb-0 price-diskon" ><b> Rp. {{number_format($item->harga_awal * 80/100)}} </b> </p>
                                     <p class="mb-1 price-normal"><s> Rp. {{number_format($item->harga_awal)}} </s> </p>
                                     <p class="mb-0" style="font-size: 9px"> Disc. 
