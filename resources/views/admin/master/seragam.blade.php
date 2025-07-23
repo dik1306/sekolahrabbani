@@ -58,7 +58,8 @@
                                 <th>Ukuran</th>
                                 <th>Kode Produk</th>
                                 <th>Harga</th>
-                                <th>Diskon</th>
+                                <th>Diskon (%)</th>
+                                <th>Harga Setelah Diskon</th>
                                 <th>Stok </th>
                                 @if ($id_role == 1)
                                     <th>Action</th>
@@ -75,6 +76,7 @@
                                     <td>{{$item->kode_produk}}</td>
                                     <td>Rp {{number_format($item->harga)}}</td>
                                     <td>{{$item->diskon}}</td>
+                                    <td>Rp. {{ number_format($item->harga - ($item->harga * $item->diskon / 100)) }}</td>
                                     <td>{{$item->qty}}</td>
                                     @if ($id_role == 1)
                                         <td class="d-flex">

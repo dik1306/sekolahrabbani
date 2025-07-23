@@ -22,10 +22,12 @@
                                 <th>No</th>
                                 <th>Nama jersey</th>
                                 <th>Jenjang</th>
-                                <th>Deskripsi</th>
+                                <th>Ukuran</th>
+                                <th>Kode Produk</th>
                                 <th>Harga</th>
                                 <th>Diskon (%)</th>
-                                <th>Aksi</th>
+                                <th>Harga Setelah Diskon</th>
+                                {{-- <th>Aksi</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -34,12 +36,14 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$item->nama_jersey}}</td>
                                     <td>{{$item->nama_jenjang}}</td>
-                                    <td>{{$item->deskripsi}}</td>
+                                    <td>{{$item->ukuran_jersey}}</td>
+                                    <td>{{$item->kode_produk}}</td>
                                     <td>Rp. {{number_format($item->harga_awal)}}</td>
                                     <td>{{$item->persen_diskon}}</td>
-                                    <td class="d-flex">
+                                    <td>Rp. {{ number_format($item->harga_awal - ($item->harga_awal * $item->persen_diskon / 100)) }}</td>
+                                    {{-- <td class="d-flex">
                                         <a href="#" class="btn btn-sm btn-warning" title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -134,12 +138,12 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="image_6" class="form-control-label">Image 6</label>
+                            <label for="image_6" class="form-control-label">Image 6 (Khusus SizeChart)</label>
                             <input type="file" class="form-control" name="image_6" id="image_6">
                         </div>
 
                         <div class="form-group">
-                            <label for="image_7" class="form-control-label">Image 7</label>
+                            <label for="image_7" class="form-control-label">Image 7 (Khusus SizeChart)</label>
                             <input type="file" class="form-control" name="image_7" id="image_7">
                         </div>
                     </div>

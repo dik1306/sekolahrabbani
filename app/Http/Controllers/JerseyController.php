@@ -86,66 +86,25 @@ class JerseyController extends Controller
             $jenjang = $request->jenjang;
             $harga = $request->harga;
             $diskon = $request->diskon;
-            $image_2 = $request->image_2;
 
-            $image_url_1 = null;
-            $path = 'jersey/' .$jenis_ekskul. '/'. $jenis_kelamin ;
-            if ($request->has('image_1')) {
-                $image_name_1 = $request->file('image_1')->getClientOriginalName();
-                $image_url_1 = $path . '/' . $image_name_1;
-                Storage::disk('public')->put($image_url_1, file_get_contents($request->file('image_1')->getRealPath()));
-            } else {
-                return redirect()->back()->with('error', 'Image 1 tidak boleh kosong');
+            $path = 'jersey/' .$jenis_ekskul. '/'. $jenis_kelamin;
+            $images = [];
+            $isSizeChart = false;
+
+            // Menginisialisasi image_url untuk setiap gambar
+            for ($i = 1; $i <= 7; $i++) {
+                $image_key = 'image_' . $i;
+                $image_url = null;
+                
+                if ($request->has($image_key)) {
+                    $image_name = $request->file($image_key)->getClientOriginalName();
+                    $image_url = $path . '/' . $image_name;
+                    Storage::disk('public')->put($image_url, file_get_contents($request->file($image_key)->getRealPath()));
+                    $images[$i] = $image_url;  // Menyimpan URL gambar sesuai index
+                }
             }
 
-            $image_url_2 = null;
-            $path = 'jersey/' .$jenis_ekskul. '/'. $jenis_kelamin ;
-            if ($request->has('image_2')) {
-                $image_name_2 = $request->file('image_2')->getClientOriginalName();
-                $image_url_2 = $path . '/' . $image_name_2;
-                Storage::disk('public')->put($image_url_2, file_get_contents($request->file('image_2')->getRealPath()));
-            }
-
-            $image_url_3 = null;
-            $path = 'jersey/' .$jenis_ekskul. '/'. $jenis_kelamin ;
-            if ($request->has('image_3')) {
-                $image_name_3 = $request->file('image_3')->getClientOriginalName();
-                $image_url_3 = $path . '/' . $image_name_3;
-                Storage::disk('public')->put($image_url_3, file_get_contents($request->file('image_3')->getRealPath()));
-            }
-
-            $image_url_4 = null;
-            $path = 'jersey/' .$jenis_ekskul. '/'. $jenis_kelamin ;
-            if ($request->has('image_4')) {
-                $image_name_4 = $request->file('image_4')->getClientOriginalName();
-                $image_url_4 = $path . '/' . $image_name_4;
-                Storage::disk('public')->put($image_url_4, file_get_contents($request->file('image_4')->getRealPath()));
-            }
-
-            $image_url_5 = null;
-            $path = 'jersey/' .$jenis_ekskul. '/'. $jenis_kelamin ;
-            if ($request->has('image_5')) {
-                $image_name_5 = $request->file('image_5')->getClientOriginalName();
-                $image_url_5 = $path . '/' . $image_name_5;
-                Storage::disk('public')->put($image_url_5, file_get_contents($request->file('image_5')->getRealPath()));
-            }
-
-            $image_url_6 = null;
-            $path = 'jersey/' .$jenis_ekskul. '/'. $jenis_kelamin ;
-            if ($request->has('image_6')) {
-                $image_name_6 = $request->file('image_6')->getClientOriginalName();
-                $image_url_6 = $path . '/' . $image_name_6;
-                Storage::disk('public')->put($image_url_6, file_get_contents($request->file('image_6')->getRealPath()));
-            }
-
-            $image_url_7 = null;
-            $path = 'jersey/' .$jenis_ekskul. '/'. $jenis_kelamin ;
-            if ($request->has('image_7')) {
-                $image_name_7 = $request->file('image_7')->getClientOriginalName();
-                $image_url_7 = $path . '/' . $image_name_7;
-                Storage::disk('public')->put($image_url_7, file_get_contents($request->file('image_7')->getRealPath()));
-            }
-
+            // Menambahkan data Jersey
             $add_jersey = Jersey::create([
                 'nama_jersey' => $nama_jersey,
                 'ekskul_id' => $jenis_ekskul,
@@ -155,19 +114,32 @@ class JerseyController extends Controller
                 'harga_awal' => $harga,
                 'persen_diskon' => $diskon,
                 'status' => 1,
-                'image_1' => $image_url_1,
-                'image_2' => $image_url_2,
-                'image_3' => $image_url_3,
-                'image_4' => $image_url_4,
-                'image_5' => $image_url_5,
-                'image_6' => $image_url_6,
-                'image_7' => $image_url_7,
+                'image_1' => isset($images[1]) ? $images[1] : null,
+                'image_2' => isset($images[2]) ? $images[2] : null,
+                'image_3' => isset($images[3]) ? $images[3] : null,
+                'image_4' => isset($images[4]) ? $images[4] : null,
+                'image_5' => isset($images[5]) ? $images[5] : null,
+                'image_6' => isset($images[6]) ? $images[6] : null,
+                'image_7' => isset($images[7]) ? $images[7] : null,
             ]);
 
-            return redirect()->back()->with('success', 'Berhasil tambah Jersey');
+            foreach ($images as $index => $image_url) {
+                if ($image_url) {
+                    $isSizeChart = ($index == 6 || $index == 7) ? true : false;
 
+                    // Menyimpan data ke tabel m_jersey_images
+                    $jerseyImage = JerseyImage::create([
+                        'jersey_id' => $add_jersey->id,
+                        'image_url' => $image_url,
+                        'isSizeChart' => $isSizeChart,
+                    ]); 
+                }
+            }
+
+            return redirect()->back()->with('success', 'Berhasil tambah Jersey');
         } catch (\Throwable $th) {
-            //throw $th;
+            // Tangani kesalahan jika terjadi
+            return redirect()->back()->with('error', 'Terjadi kesalahan, silakan coba lagi.');
         }
     }
 
@@ -218,9 +190,10 @@ class JerseyController extends Controller
 
     public function index_master()
     {
-        $jersey = Jersey::select('m_jersey.*', 'mjen.nama_jenjang')
-                        ->leftJoin('m_jenjang as mjen', 'mjen.value', 'm_jersey.jenjang_id')
-                        ->get();
+      $jersey = Jersey::select('m_jersey.nama_jersey', 'mjen.nama_jenjang', 'muj.kode_produk', 'muj.ukuran_jersey', 'm_jersey.harga_awal', 'm_jersey.persen_diskon')
+            ->leftJoin('m_jenjang as mjen', 'mjen.value', '=', 'm_jersey.jenjang_id')  // Menyambungkan m_jenjang ke m_jersey
+            ->join('m_ukuran_jersey as muj', 'muj.jersey_id', '=', 'm_jersey.id')  // Menyambungkan m_ukuran_jersey ke m_jersey
+            ->get();
 
         $jenis_ekskul = JenisEkskul::all();
         $jenjang = Jenjang::whereIn('id', ['3','4'])->get();
