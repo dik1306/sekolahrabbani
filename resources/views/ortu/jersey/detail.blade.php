@@ -13,7 +13,7 @@
         <div class="carousel-inner">
             @foreach($jersey_images as $idx => $img)
                 <div class="carousel-item @if($idx == 0) active @endif">
-                    <img class="img-detail-card" src="{{asset('storage/'.$img->image_url) }}" alt="{{ $img }}">
+                    <img class="img-detail-card" src="{{asset('storage/'.$img->image_url.'?v='.time()) }}" alt="{{ $img }}">
                 </div>
             @endforeach
 
@@ -104,7 +104,7 @@
                     <div class="carousel-inner">
                         @foreach($jersey_size_chart as $idx => $img)
                             <div class="carousel-item @if($idx == 0) active @endif">
-                                <img class="img-fluid w-100" src="{{asset('storage/'. $img->image_url)}}" alt="Gambar {{ $idx + 1 }}">
+                                <img class="img-fluid w-100" src="{{asset('storage/'. $img->image_url.'?v='.time())}}" alt="Gambar {{ $idx + 1 }}">
                             </div>
                         @endforeach
                     </div>
