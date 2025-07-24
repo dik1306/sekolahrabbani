@@ -61,12 +61,33 @@
                                     <i class="fas fa-plus-circle"></i>
                                 </button>
                             </div>
+
+                            <style>
+                                /* Menyembunyikan latar belakang dan border pada tombol dengan kelas btn-delete */
+                                .btn-delete {
+                                    background: none;  /* Menghilangkan latar belakang tombol */
+                                    border: none;      /* Menghilangkan border tombol */
+                                    padding: 0;        /* Menghilangkan padding tombol */
+                                }
+
+                                /* Memberikan warna merah pada ikon trash */
+                                .btn-delete i.fa-trash-can {
+                                    color: red;        /* Mengubah warna ikon menjadi merah */
+                                    font-size: 1.5rem; /* Ukuran ikon */
+                                }
+
+                                /* Mengubah warna ikon saat hover */
+                                .btn-delete:hover i.fa-trash-can {
+                                    color: darkred;    /* Mengubah warna ikon menjadi merah tua saat di-hover */
+                                }
+                            </style>
                             
                             <form action="{{route('jersey-cart.delete', $item->id)}}" method="post" style="margin-left:auto">
                                 @csrf @method('DELETE')
-                                <button type="submit" style="border: 1px solid #ccc; background-color: #f8f8f8; padding: 5px 10px;" title="delete">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>    
+                                <button type="submit" class="btn-delete" title="delete">
+                                    <i class="fa-solid fa-trash-can"></i>  <!-- Ikon trash dengan warna merah -->
+                                </button>
+
                             </form>
                         </div>
                     </div>
