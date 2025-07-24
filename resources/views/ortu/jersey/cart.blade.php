@@ -3,8 +3,8 @@
 @section('content')
     <div class="top-navigate sticky-top">
         <div class="d-flex" style="justify-content: stretch; width: 100%;">
-            <a onclick="window.history.go(-1); return false;" class="mt-1" style="text-decoration: none; color: black">
-                <i class="fa-solid fa-arrow-left fa-lg"></i>
+            <a onclick="window.location.href='{{ route('jersey.index') }}'; return false;" class="mt-1" style="text-decoration: none; color: black">
+                <i class="fa-solid fa-arrow-left"></i>
             </a>
             <h4 class="mx-3"> Keranjang </h4>
             <span class="total_cart px-3 pt-1" > {{$cart_detail->count()}} </span>
@@ -70,10 +70,10 @@
                                     padding: 0;        /* Menghilangkan padding tombol */
                                 }
 
-                                /* Memberikan warna merah pada ikon trash */
+                                /* Ikon trash menjadi lebih kecil */
                                 .btn-delete i.fa-trash-can {
                                     color: red;        /* Mengubah warna ikon menjadi merah */
-                                    font-size: 1.5rem; /* Ukuran ikon */
+                                    font-size: 1rem;   /* Mengurangi ukuran ikon */
                                 }
 
                                 /* Mengubah warna ikon saat hover */
