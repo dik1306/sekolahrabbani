@@ -3,8 +3,8 @@
 @section('content')
     <div class="top-navigate sticky-top">
         <div class="d-flex" style="justify-content: stretch; width: 100%;">
-            <a onclick="window.location.href='{{ route('jersey.index') }}'; return false;" class="mt-1" style="text-decoration: none; color: black">
-                <i class="fa-solid fa-arrow-left"></i>
+            <a onclick="window.history.go(-1); return false;" class="mt-1" style="text-decoration: none; color: black">
+                <i class="fa-solid fa-arrow-left fa-lg"></i>
             </a>
             <h4 class="mx-3"> Keranjang </h4>
             <span class="total_cart px-3 pt-1" > {{$cart_detail->count()}} </span>
@@ -64,7 +64,9 @@
                             
                             <form action="{{route('jersey-cart.delete', $item->id)}}" method="post" style="margin-left:auto">
                                 @csrf @method('DELETE')
-                                <button type="submit" style="border: none; background: none;" title="delete"><i class="fa-solid fa-trash-can"></i></button>
+                                <button type="submit" style="border: 1px solid #ccc; background-color: #f8f8f8; padding: 5px 10px;" title="delete">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>    
                             </form>
                         </div>
                     </div>
