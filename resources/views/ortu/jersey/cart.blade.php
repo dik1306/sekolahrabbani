@@ -3,8 +3,8 @@
 @section('content')
     <div class="top-navigate sticky-top">
         <div class="d-flex" style="justify-content: stretch; width: 100%;">
-            <a onclick="window.history.go(-1); return false;" class="mt-1" style="text-decoration: none; color: black">
-                <i class="fa-solid fa-arrow-left fa-lg"></i>
+            <a onclick="window.location.href='{{ route('jersey.index') }}'; return false;" class="mt-1" style="text-decoration: none; color: black">
+                <i class="fa-solid fa-arrow-left"></i>
             </a>
             <h4 class="mx-3"> Keranjang </h4>
             <span class="total_cart px-3 pt-1" > {{$cart_detail->count()}} </span>

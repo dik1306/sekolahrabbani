@@ -3,8 +3,8 @@
 @section('content')
     <div class="top-navigate sticky-top">
         <div class="d-flex" style="justify-content: stretch; width: 100%;">
-            <a onclick="window.history.go(-1); return false;" class="mt-1" style="text-decoration: none; color: black">
-                <i class="fa-solid fa-arrow-left fa-lg"></i>
+            <a onclick="window.location.href='{{ route('dashboard') }}'; return false;" class="mt-1" style="text-decoration: none; color: black">
+                <i class="fa-solid fa-arrow-left"></i>
             </a>
             <h4 class="mx-auto"> Profile </h4>
         </div>
