@@ -663,7 +663,8 @@ Hormat Kami,
         $lokasi = Lokasi::where('status', 1)->get();
         $jenjang_per_sekolah = JenjangSekolah::all();
 
-        return view('pendaftaran.trial-class', compact('lokasi', 'jenjang_per_sekolah'));
+        // return view('pendaftaran.trial-class', compact('lokasi', 'jenjang_per_sekolah'));
+        return view('pendaftaran.trial-class-close', compact('lokasi', 'jenjang_per_sekolah'));
     }
 
     public function store_trial_class(Request $request)
