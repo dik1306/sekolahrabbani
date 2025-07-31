@@ -27,10 +27,32 @@
                         <select name="tahun_ajaran" id="tahun_ajaran" class="form-control" required>
                             <option value="" disabled>-- Pilih Tahun Ajaran --</option>
                             @foreach ($tahun_ajaran as $item)
-                                <option value="{{ $item->id }}" selected > {{ $item->tahun_ajaran }}</option>
+                                <option value="{{ $item->id }}"
+                                    @if ($ppdb_now_id == $item->id) 
+                                        selected 
+                                    @endif
+                                >
+                                    {{ $item->tahun_ajaran }}
+                                </option>
                             @endforeach
                         </select>
+
+                        <!-- Input hidden untuk 'is_pindahan' jika tahun ajaran yang dipilih bukan yang terbaru -->
+                        <input type="hidden" name="is_pindahan" id="is_pindahan" value="0"> <!-- Default 0 -->
                     </div>
+                    <script>
+                        document.getElementById('tahun_ajaran').addEventListener('change', function() {
+                            var selectedValue = this.value;
+                            var ppdbNowId = "{{ $ppdb_now_id }}"; // ID Tahun Ajaran Terbaru
+
+                            // Jika tahun ajaran yang dipilih tidak sama dengan yang terbaru, set is_pindahan = 1
+                            if (selectedValue !== ppdbNowId) {
+                                document.getElementById('is_pindahan').value = '1';  // Set is_pindahan = 1 jika tidak sama
+                            } else {
+                                document.getElementById('is_pindahan').value = '0';  // Set is_pindahan = 0 jika sama
+                            }
+                        });
+                    </script>
 
                     <div class="form-group mt-3">
                         <label for="nama" class="form-label">Nama Lengkap</label>

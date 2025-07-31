@@ -25,6 +25,7 @@ use App\Models\TahunAjaranAktif;
 use App\Models\TrialClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class PendaftaranController extends Controller
 {
@@ -42,12 +43,26 @@ class PendaftaranController extends Controller
 
     public function form_pendaftaran()
     {
+        // Pengecekan apakah hari ini tanggal 1 Agustus
+        $today = Carbon::today();
+        if ($today->month == 8 && $today->day == 1) {
+            // Panggil fungsi updateStatusTampil hanya jika hari ini tanggal 1 Agustus
+            TahunAjaranAktif::updateStatusTampil();
+        }
+         // Mendapatkan Tahun Ajaran Terbaru berdasarkan tanggal mulai
+        $ppdb_now = TahunAjaranAktif::where('status', 1)
+                                    ->where('status_tampil', 1)
+                                    ->orderBy('mulai', 'desc')  // Mengurutkan berdasarkan tanggal mulai, yang terbaru dulu
+                                    ->select('id')
+                                    ->first();  // Mengambil satu record pertama (yang terbaru)
+        $ppdb_now_id = $ppdb_now->id;
+        // dd($ppdb_now_id);
+
         $lokasi = Lokasi::where('status', 1)->get();
         $jenjang_per_sekolah = JenjangSekolah::all();
         $tahun_ajaran = TahunAjaranAktif::where('status', 1)->where('status_tampil', 1)->orderBy('id', 'asc')->get();
-
         // dd($tahun_ajaran);
-        return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran'));
+        return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
     }
 
     public function get_jenjang(Request $request) {
@@ -211,7 +226,7 @@ class PendaftaranController extends Controller
         $asal_sekolah = $request->asal_sekolah;
         $now = date('YmdHis');
         $id_anak = "PPDB-$tingkat-$lokasi-$now";
-        $is_pindahan = 0;
+        $is_pindahan = $request->is_pindahan;
 
         // cek kuota
         $cek_kuota = KuotaPPDB::where('id_tahun_ajaran', $tahun_ajaran)->where('lokasi', $lokasi)
@@ -251,6 +266,7 @@ class PendaftaranController extends Controller
             'info_ppdb' => $sumber_ppdb,
             'jenis_pendidikan' => $jenis_pendidikan,
             'tahun_ajaran' => $tahun_ajaran,
+            'is_pindahan' => $is_pindahan,
             'asal_sekolah' => $asal_sekolah,
             'status_daftar' => $status_daftar
         ]);
@@ -301,7 +317,7 @@ Apabila ada pertanyaan silahkan hubungi Customer Service kami di nomor ".$no_adm
 
         $message_waiting_list = "Terimakasih *Ayah/Bunda $nama_lengkap* telah mendaftarkan Anandanya ke Sekolah Rabbani dengan No Registrasi adalah *$id_anak*. Kami sangat menghargai kepercayaan Ayah/Bunda kepada kami. 
 
-Kami akan segera menginformasikan kepada Ayah/Bunda mengenai proses selanjutnya. Jika ada pertanyaan atau kebutuhan informasi tambahan, jangan ragu untuk menghubungi kami melalui nomor ".$no_admin." 
+Kami akan segera menginformasikan ke    pada Ayah/Bunda mengenai proses selanjutnya. Jika ada pertanyaan atau kebutuhan informasi tambahan, jangan ragu untuk menghubungi kami melalui nomor ".$no_admin." 
 
 Hormat Kami,
 *Sekolah Rabbani.*";

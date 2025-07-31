@@ -40,6 +40,7 @@ class Pendaftaran extends Model
         'gol_darah',
         'hafalan',
         'tahun_ajaran',
+        'is_pindahan',
         'email_ayah',
         'email_ibu',
         'id_ibu',
