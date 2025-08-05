@@ -1220,7 +1220,7 @@ class SeragamController extends Controller
         return view('ortu.seragam.history', compact('order', 'menubar', 'order_merch', 'order_detail_merch', 'order_jersey'));
     }
 
-     public function rincian_pesanan (Request $request, $id) {
+     public function rincian_pesanan(Request $request, $id) {
         $user_id = auth()->user()->id;
 
         $order = OrderSeragam::where('no_pemesanan', $id)->first();
