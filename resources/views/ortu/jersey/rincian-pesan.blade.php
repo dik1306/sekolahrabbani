@@ -417,9 +417,7 @@
                 let tglTerimaOrtu = getLocalTime(); 
 
                 // Kirim AJAX request
-                fetch(`{{ route('terima.jersey', ['no_pemesanan' => '__no_pemesanan__', 'tgl_terima_ortu' => '__tgl_terima_ortu__']) }}`
-                    .replace('__no_pemesanan__', noPemesanan)
-                    .replace('__tgl_terima_ortu__', tglTerimaOrtu), {
+                fetch(`jersey/terima-jersey/${noPemesanan}/${tglTerimaOrtu}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
