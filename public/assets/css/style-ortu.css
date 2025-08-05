@@ -21,6 +21,231 @@ nav {
     align-items: center;
 }
 
+/* ========================STYLE rincian-pesan======================== */
+.tracking-container {
+                    font-size: 14px;
+                    padding: 10px;
+                    border-radius: 10px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    width: 100%;
+                    max-width: 500px;
+                    margin: 0 auto;
+                    position: relative;
+                }
+
+                .tracking-header {
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #333;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .toggle-button {
+                    background: none;
+                    border: none;
+                    font-size: 16px;
+                    cursor: pointer;
+                    color: #333;
+                    transition: transform 0.3s ease;
+                }
+
+                .toggle-button.collapsed {
+                    transform: rotate(-90deg);
+                }
+                
+
+                .tracking-content {
+                    display: block;
+                    transition: all 0.3s ease;
+                }
+
+                .tracking-content.collapsed {
+                    display: none;
+                }
+
+                .divider {
+                    border-top: 1px solid #ddd;
+                    margin: 10px 0;
+                }
+
+                .tracking-steps {
+                    display: flex;
+                    flex-direction: column;
+                    margin-top: 20px;
+                }
+
+                .tracking-step {
+                    display: flex;
+                    align-items: flex-start;
+                    margin-bottom: 20px;
+                    position: relative;
+                    padding-left: 30px;
+                }
+
+                .tracking-step:not(:last-child)::after {
+                    content: '';
+                    position: absolute;
+                    top: 18px;
+                    left: 9px;
+                    width: 2px;
+                    height: calc(100% - 4px);
+                    background: linear-gradient(to bottom, #ff4d4d 50%, #ddd 50%);
+                    z-index: 0;
+                }
+
+                .tracking-step.completed:not(:last-child)::after {
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                    max-height: 80%;
+                    margin-left: 28px;
+                    background: rgba(82, 161, 100, 0.425);
+                }
+
+                @keyframes moveDown {
+                    0% {
+                        transform: translateY(-70%);
+                        opacity: 0.4;
+                    }
+                    50% {
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translateY(60%);
+                        opacity: 0;
+                    }
+                }
+
+                .tracking-step.pending:not(:last-child)::after {
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                    margin-left: 28px;
+                    max-height: 80%;
+                    animation: moveDown 2s linear infinite;
+                    background: linear-gradient(to bottom, #ffecb2);
+                }
+
+                .step-indicator {
+                    position: relative;
+                    z-index: 0;
+                    margin-right: 15px;
+                }
+
+                .circle {
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    border: 2px solid #ddd;
+                    background-color: #fff;
+                    position: relative;
+                    z-index: 2;
+                }
+
+                .completed .circle {
+                    background-color: #28a745;
+                    border-color: #28a745;
+                }
+
+                .retur .circle {
+                    background-color: #f38b4f;
+                    border-color: #f38b4f;
+                }
+
+                .pending .circle {
+                    border-color: #ffc107;
+                }
+
+                .checkmark {
+                    color: #fff;
+                    font-size: 12px;
+                    font-weight: bold;
+                    display: none;
+                }
+
+                .completed .checkmark {
+                    display: block;
+                }
+
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+
+                .step-details {
+                    flex-grow: 1;
+                }
+                
+
+                .step-date {
+                    font-weight: bold;
+                    color: #333;
+                    display: inline-block;
+                }
+
+                .step-title {
+                    font-weight: bold;
+                    color: #410000;
+                    display: inline-block;
+                }
+
+                .pending .step-date {
+                    color: #ffc107;
+                    animation: pulse 2s ease-in-out infinite;
+                }
+                
+                .retur .step-date {
+                    color: #91522e;
+                    animation: pulse 2s ease-in-out infinite;
+                }
+
+                @keyframes pulse {
+                    0% { opacity: 1; }
+                    50% { opacity: 0.5; }
+                    100% { opacity: 1; }
+                }
+
+                .step-status {
+                    color: #777;
+                }
+
+                .completed .step-status {
+                    color: #28a745;
+                    font-weight: 500;
+                }
+
+                .retur .step-status {
+                    color: #f38b4f;
+                    font-weight: 500;
+                }
+
+                .pending .step-status {
+                    color: #ffc107;
+                    font-style: italic;
+                }
+
+                .receive-button {
+                    display: block;
+                    margin: 0 0 20px 45px;
+                    padding: 8px 16px;
+                    background-color: #28a745;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    transition: background-color 0.3s ease;
+                }
+
+                .receive-button:disabled {
+                    background-color: #ccc;
+                    cursor: not-allowed;
+                }
+
+                .receive-button:hover:not(:disabled) {
+                    background-color: #218838;
+                }
+/* ========================STYLE rincian-pesan======================== */
 
 
 .nav-link {

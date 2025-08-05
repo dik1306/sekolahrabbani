@@ -28,7 +28,16 @@ class OrderDetailSeragam extends Model
         'snap_token',
         'p_diskon',
         'hpp',
-        'ppn'
+        'ppn',
+        'status_do',
+        'tgl_do',
+        'status_order',
+        'status_terima_tu',
+        'tgl_terima_tu',
+        'status_distribusi_tu',
+        'tgl_distribusi_tu',
+        'tgl_terima_ortu',
+        'tgl_retur'
     ];
 
     public function order_seragam()

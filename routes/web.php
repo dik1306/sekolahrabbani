@@ -168,6 +168,9 @@ Route::group(['middleware' =>['auth']], function () {
 
     Route::get('download-invoice/{id}', [SeragamController::class, 'download'])->name('download.invoice');
 
+    
+    Route::post('/terima-seragam/{no_pemesanan}/{tgl_terima_ortu}', [SeragamController::class, 'terimaSeragam'])->name('terima.seragam');
+
     Route::get('wishlist', [SeragamController::class, 'wishlist'])->name('seragam.wishlist');
     Route::post('wishlist', [SeragamController::class, 'add_to_wishlist'])->name('wishlist_post');
     Route::delete('wishlist/{id}', [SeragamController::class, 'remove_wishlist'])->name('wishlist.delete');

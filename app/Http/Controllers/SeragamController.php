@@ -30,6 +30,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class SeragamController extends Controller
 {
@@ -1219,7 +1220,7 @@ class SeragamController extends Controller
         return view('ortu.seragam.history', compact('order', 'menubar', 'order_merch', 'order_detail_merch', 'order_jersey'));
     }
 
-    public function rincian_pesanan (Request $request, $id) {
+     public function rincian_pesanan (Request $request, $id) {
         $user_id = auth()->user()->id;
 
         $order = OrderSeragam::where('no_pemesanan', $id)->first();
@@ -1229,8 +1230,76 @@ class SeragamController extends Controller
                                             ->leftJoin('t_pesan_seragam as tps', 'tps.no_pemesanan', 't_pesan_seragam_detail.no_pemesanan')
                                             ->where('tps.no_pemesanan', $id)->get();
         
-                                            // dd($order_detail);
-        return view('ortu.seragam.rincian-pesan', compact( 'order', 'order_detail'));
+        $tglPesan = $order->created_at->format('Y-m-d');
+
+        $orderStatus = $order->status == 'success';
+        $tglUpdateBaru = Carbon::parse($tglPesan)->gte(Carbon::parse('2025-08-01'));
+        // dd($tglUpdateBaru);
+        
+
+        return view('ortu.seragam.rincian-pesan', compact( 'order', 'order_detail','tglUpdateBaru','orderStatus'));
+    }
+
+    public function terimaSeragam($no_pemesanan, $tgl_terima_ortu) { 
+        // Ambil ID pengguna yang sedang login
+        $user_id = auth()->user()->id;
+
+        // Cari order berdasarkan no_pemesanan dan user_id yang sesuai dengan yang login
+        $order = OrderSeragam::where('no_pemesanan', $no_pemesanan)
+                            ->where('user_id', $user_id)
+                            ->first();
+        
+        // Jika order ditemukan
+        if ($order) {
+            // Cari semua detail order berdasarkan no_pemesanan
+            $order_details = OrderDetailSeragam::where('no_pemesanan', $no_pemesanan)->get();
+            
+            // Pastikan ada detail pesanan
+            if ($order_details->isNotEmpty()) {
+                // Update tgl_terima_ortu untuk setiap detail order
+                foreach ($order_details as $order_detail) {
+                    $order_detail->tgl_terima_ortu = $tgl_terima_ortu;
+                    $order_detail->save();  // Simpan perubahan untuk setiap item
+                }
+
+                // Kirim permintaan cURL ke API eksternal
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_bisnis/update_pesanan_seragam_terima_tu.php',
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array(
+                        'no_pemesanan' => $no_pemesanan,
+                        'tgl_terima_ortu' => $tgl_terima_ortu
+                    )
+                ));
+
+                // Eksekusi cURL request dan ambil respons
+                $response = curl_exec($curl);
+
+                // Cek error jika ada
+                if(curl_errno($curl)) {
+                    curl_close($curl);
+                    return response()->json(['error' => 'Terjadi kesalahan pada koneksi server: ' . curl_error($curl)], 500);
+                }
+
+                // Tutup koneksi cURL
+                curl_close($curl);
+
+                // Mengembalikan respons sukses
+                return response()->json(['message' => 'Tanggal terima seragam berhasil diperbarui.']);
+            } else {
+                return response()->json(['error' => 'Detail pesanan tidak ditemukan.'], 404);
+            }
+        } else {
+            return response()->json(['error' => 'Order tidak ditemukan atau Anda tidak memiliki akses ke order ini.'], 404);
+        }
     }
 
     public function download(Request $request, $id) {
