@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class JerseyController extends Controller
 {
@@ -664,18 +665,90 @@ class JerseyController extends Controller
         $user_id = auth()->user()->id;
 
         $order = OrderJersey::where('no_pesanan', $id)->first();
-
         $order_detail = OrderDetailJersey::select('t_pesan_jersey_detail.nama_siswa', 't_pesan_jersey_detail.lokasi_sekolah', 'mj.persen_diskon',
                         't_pesan_jersey_detail.nama_kelas', 'mj.nama_jersey', 'mj.image_1', 'mj.harga_awal', 'mus.ukuran_seragam', 't_pesan_jersey_detail.harga', 
                         't_pesan_jersey_detail.persen_diskon', 't_pesan_jersey_detail.quantity', 't_pesan_jersey_detail.ukuran_id', 'mj.ekskul_id',
-                        't_pesan_jersey_detail.created_at', 'tpj.metode_pembayaran', 'tpj.no_pesanan', 't_pesan_jersey_detail.nama_punggung', 't_pesan_jersey_detail.no_punggung')
+                        't_pesan_jersey_detail.created_at', 'tpj.metode_pembayaran', 'tpj.no_pesanan', 't_pesan_jersey_detail.nama_punggung', 't_pesan_jersey_detail.no_punggung',
+                        't_pesan_jersey_detail.status_do', 't_pesan_jersey_detail.tgl_do', 't_pesan_jersey_detail.status_order', 't_pesan_jersey_detail.status_terima_tu',
+                        't_pesan_jersey_detail.tgl_terima_tu', 't_pesan_jersey_detail.status_distribusi_tu', 't_pesan_jersey_detail.tgl_distribusi_tu', 
+                        't_pesan_jersey_detail.tgl_terima_ortu', 't_pesan_jersey_detail.tgl_retur', )
                         ->leftJoin('t_pesan_jersey as tpj', 'tpj.no_pesanan', 't_pesan_jersey_detail.no_pesanan')
                         ->leftJoin('m_jersey as mj', 'mj.id', 't_pesan_jersey_detail.jersey_id')
                         ->leftJoin('m_ukuran_seragam as mus', 'mus.id', 't_pesan_jersey_detail.ukuran_id')
                         ->where('tpj.no_pesanan', $id)
                         ->get();
 
-        return view('ortu.jersey.rincian-pesan', compact( 'order', 'order_detail'));
+        $tglPesan = $order->created_at->format('Y-m-d');
+
+        $orderStatus = $order->status == 'success';
+        $tglUpdateBaru = Carbon::parse($tglPesan)->gte(Carbon::parse('2025-08-01'));
+        // dd($tglUpdateBaru);
+
+        return view('ortu.jersey.rincian-pesan', compact( 'order', 'order_detail', 'orderStatus', 'tglUpdateBaru'));
+    }
+
+    public function terimaJersey($no_pemesanan, $tgl_terima_ortu) { 
+        // Ambil ID pengguna yang sedang login
+        $user_id = auth()->user()->id;
+
+        // Cari order berdasarkan no_pemesanan dan user_id yang sesuai dengan yang login
+        $order = OrderJersey::where('no_pesanan', $no_pemesanan)
+                            ->where('user_id', $user_id)
+                            ->first();
+        
+        // Jika order ditemukan
+        if ($order) {
+            // Cari semua detail order berdasarkan no_pemesanan
+            $order_details = OrderDetailJersey::where('no_pesanan', $no_pemesanan)->get();
+            
+            // Pastikan ada detail pesanan
+            if ($order_details->isNotEmpty()) {
+                
+
+                // Kirim permintaan cURL ke API eksternal
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_bisnis/update_pesanan_seragam_terima_tu.php',
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array(
+                        'no_pemesanan' => $no_pemesanan,
+                        'tgl_terima_ortu' => $tgl_terima_ortu
+                    )
+                ));
+
+                // Eksekusi cURL request dan ambil respons
+                $response = curl_exec($curl);
+
+                // Cek error jika ada
+                if(curl_errno($curl)) {
+                    curl_close($curl);
+                    return response()->json(['error' => 'Terjadi kesalahan pada koneksi server: ' . curl_error($curl)], 500);
+                }
+
+                // Tutup koneksi cURL
+                curl_close($curl);
+
+                // Update tgl_terima_ortu untuk setiap detail order
+                foreach ($order_details as $order_detail) {
+                    $order_detail->tgl_terima_ortu = $tgl_terima_ortu;
+                    $order_detail->save();  // Simpan perubahan untuk setiap item
+                }
+
+                // Mengembalikan respons sukses
+                return response()->json(['message' => 'Tanggal terima seragam berhasil diperbarui.']);
+            } else {
+                return response()->json(['error' => 'Detail pesanan tidak ditemukan.'], 404);
+            }
+        } else {
+            return response()->json(['error' => 'Order tidak ditemukan atau Anda tidak memiliki akses ke order ini.'], 404);
+        }
     }
 
     public function list_order_jersey(Request $request) {

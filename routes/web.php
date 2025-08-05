@@ -237,7 +237,7 @@ Route::group(['middleware' =>['auth']], function () {
         Route::get('riwayat-transaksi/{id}', [JerseyController::class, 'rincian_pesanan'])->name('jersey.history.detail');
         Route::get('download-invoice/{id}', [JerseyController::class, 'download_invoice'])->name('invoice-jersey');
 
-
+        Route::post('/terima-jersey/{no_pemesanan}/{tgl_terima_ortu}', [JerseyController::class, 'terimaJersey'])->name('terima.jersey');
 
     });
 });

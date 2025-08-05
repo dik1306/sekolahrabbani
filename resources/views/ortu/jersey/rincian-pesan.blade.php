@@ -1,4 +1,7 @@
 @extends ('ortu.layouts.app')
+    
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.css" rel="stylesheet">
+
 
 @section('content')
     <div class="top-navigate sticky-top">
@@ -176,8 +179,195 @@
                 <span> {{$order->updated_at}} </span>
             </div>
         @endif
+        <hr>
 
+    @if($tglUpdateBaru && $orderStatus)
+    {{-- <div class="container">   --}}
+        <div class="tracking-container">
+            <div class="tracking-header">
+                            <h6>Detail Pengiriman Jersey</h6>
+                            <button class="toggle-button" onclick="toggleTracking()">▶</button>
+                        </div>
+                        <hr class="divider">
+                        <div class="tracking-content" id="trackingContent">
+                            <div class="tracking-steps">
+                                <!-- Poin 1: Tanggal Distribusi ke Sekolah -->
+                                @if($item->status_do == 1 && $item->status_order == 1 )
+                                    <div class="tracking-step completed">
+                                        <div class="step-indicator">
+                                            <div class="circle completed"></div>
+                                        </div>
+                                        <div class="step-details">
+                                            <span class="step-title">Status Delivery Order</span> <br>
+                                            <span class="step-date">{{ \Carbon\Carbon::parse($item->tgl_do)->locale('id')->isoFormat('dddd, D MMMM YYYY | HH:mm') }}</span>
+                                            <p class="step-status">Jersey telah terdistribusi ke sekolah</p>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="tracking-step pending">
+                                        <div class="step-indicator">
+                                            <div class="circle pending"></div>
+                                        </div>
+                                        <div class="step-details">
+                                            <span class="step-title">Status Delivery Order</span> <br>
+                                            <span class="step-date">Menunggu Distribusi...</span>
+                                            <p class="step-status">Jersey sedang disiapkan, mohon sabar menunggu</p>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <!-- Poin 2: Tanggal Terima Distribusi -->
+                                @if($item->status_terima_tu == 1)
+                                    <div class="tracking-step completed">
+                                        <div class="step-indicator">
+                                            <div class="circle completed"></div>
+                                        </div>
+                                        <div class="step-details">
+                                            <span class="step-title">Status Terima TU</span> <br>
+                                            <span class="step-date">{{ \Carbon\Carbon::parse($item->tgl_terima_tu)->locale('id')->isoFormat('dddd, D MMMM YYYY | HH:mm') }}</span>
+                                            <p class="step-status">Distribusi telah diterima oleh Tata Usaha</p>
+                                        </div>
+                                    </div>
+                                    
+                                @else
+                                    <div class="tracking-step pending">
+                                        <div class="step-indicator">
+                                            <div class="circle pending"></div>
+                                        </div>
+                                        <div class="step-details">
+                                            <span class="step-title">Status Terima TU</span> <br>
+                                            <span class="step-date">Menunggu Penerimaan...</span>
+                                            <p class="step-status">Tata Usaha belum menerima jersey, mohon ditunggu</p>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <!-- Poin 3: Tanggal Distribusi TU-->
+                                @if($item->status_distribusi_tu == 1)
+                                    <div class="tracking-step completed">
+                                        <div class="step-indicator">
+                                            <div class="circle completed"></div>
+                                        </div>
+                                        <div class="step-details">
+                                            <span class="step-title">Status Distribusi TU</span> <br>
+                                            <span class="step-date">{{ \Carbon\Carbon::parse($item->tgl_terima_tu)->locale('id')->isoFormat('dddd, D MMMM YYYY | HH:mm') }}</span>
+                                            <p class="step-status">Tata Usaha telah melakukan distribusi jersey</p>
+                                        </div>
+                                    </div>
+                                @else
+                                    @if($item->status_terima_tu == 1)
+                                        <div class="tracking-step pending">
+                                            <div class="step-indicator">
+                                                <div class="circle pending"></div>
+                                            </div>
+                                            <div class="step-details">
+                                                <span class="step-title">Status Distribusi TU</span> <br>
+                                                <span class="step-date">Distribusi sedang direncanakan TU</span>
+                                                <p class="step-status">Tata Usaha akan segera mendistribusikan jersey, mohon ditunggu</p>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="tracking-step pending">
+                                            <div class="step-indicator">
+                                                <div class="circle pending"></div>
+                                            </div>
+                                            <div class="step-details">
+                                                <span class="step-title">Status Distribusi TU</span> <br>
+                                                <span class="step-date">Menunggu Penerimaan...</span>
+                                                <p class="step-status">Tata Usaha belum bisa merencanakan distribusi</p>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endif
+
+                                <!-- Poin 4: Tanggal Terima oleh Orangtua -->
+                                @if($item->tgl_terima_ortu !== null)
+                                    <div class="tracking-step completed">
+                                        <div class="step-indicator">
+                                            <div class="circle completed"></div>
+                                        </div>
+                                        <div class="step-details">
+                                            <span class="step-title">Status Terima Ortu</span> <br>
+                                            <span class="step-date">{{ \Carbon\Carbon::parse($item->tgl_terima_ortu)->locale('id')->isoFormat('dddd, D MMMM YYYY | HH:mm') }}</span>
+                                            <p class="step-status step-status-ortu">Jersey telah diterima oleh orangtua ✔</p>
+                                        </div>
+                                    </div>
+                                @else
+                                    @if($item->status_distribusi_tu == 1)
+                                        <div class="tracking-step pending">
+                                            <div class="step-indicator">
+                                                <div class="circle pending"></div>
+                                            </div>
+                                            <div class="step-details">
+                                                <span class="step-title">Status Terima Ortu</span> <br>
+                                                <span class="step-date">Menuju Orangtua...</span>
+                                                <p class="step-status">Jersey sedang dalam proses kepada orangtua <br>
+                                                    Klik 'Terima Pesanan' ketika barang telah diterima
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="deliv-button">
+                                            <button class="receive-button" 
+                                                @if($item->status_distribusi_tu != 1) disabled @endif
+                                                data-no-pemesanan="{{ $item->no_pesanan }}">
+                                                Terima Pesanan
+                                            </button>
+                                        </div>
+                                    @elseif($item->status_terima_tu == 1)
+                                        <div class="tracking-step pending">
+                                            <div class="step-indicator">
+                                                <div class="circle pending"></div>
+                                            </div>
+                                            <div class="step-details">
+                                                <span class="step-title">Status Terima Ortu</span> <br>
+                                                <span class="step-date">Menunggu distribusi oleh TU</span>
+                                                <p class="step-status">Jersey dalam perencanaan distribusi oleh TU</p>
+                                            </div>
+                                        </div>
+                                        <div class="deliv-button">
+                                            <button class="receive-button" 
+                                                @if($item->status_distribusi_tu != 1) disabled @endif
+                                                data-no-pemesanan="{{ $item->no_pesanan }}">
+                                                Terima Pesanan
+                                            </button>
+                                        </div>
+                                        
+                                    @else
+                                        <div class="tracking-step pending">
+                                            <div class="step-indicator">
+                                                <div class="circle pending"></div>
+                                            </div>
+                                            <div class="step-details">
+                                                <span class="step-title">Status Terima Ortu</span> <br>
+                                                <span class="step-date">Menungguu Penerimaan TU...</span>
+                                                <p class="step-status">Jersey dalam perencanaan distribusi</p>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endif
+
+                                <!-- Poin 4: Tanggal Retur -->
+                                @if($item->tgl_retur !== null)
+                                    <div class="tracking-step retur">
+                                        <div class="step-indicator">
+                                            <div class="circle retur"></div>
+                                        </div>
+                                        <div class="step-details">
+                                            <span class="step-title">Status Retur</span> <br>
+                                            <span class="step-date">{{ \Carbon\Carbon::parse($item->tgl_retur)->locale('id')->isoFormat('dddd, D MMMM YYYY | HH:mm') }}</span>
+                                            <p class="step-status">Retur jersey telah dilakukan</p>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                {{-- </div> --}}
+            @endif
     </div>
+    
+            <br>
+            <br>
     
     @if($order->status == 'success')
         <a href="{{route('invoice-jersey', $order->no_pesanan)}}" target="_blank">
@@ -189,6 +379,99 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ asset('assets/js/jquery.countdown/jquery.countdown.min.js') }}"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.js"></script>
+    <script>
+        function toggleTracking() {
+            const content = document.getElementById('trackingContent');
+            const button = document.querySelector('.toggle-button');
+            content.classList.toggle('collapsed');
+            button.classList.toggle('collapsed');
+            button.textContent = content.classList.contains('collapsed') ? '▶' : '▶';
+        }
+    </script>
+
+    <script>
+       // Fungsi untuk mengambil waktu lokal perangkat dan mengonversinya ke format yang benar
+        function getLocalTime() {
+            // Ambil waktu lokal saat tombol diklik
+            let localTime = new Date();
+
+            // Format menjadi 'YYYY-MM-DD HH:mm:ss'
+            let formattedTime = localTime.getFullYear() + '-' 
+                                + String(localTime.getMonth() + 1).padStart(2, '0') + '-'
+                                + String(localTime.getDate()).padStart(2, '0') + ' '
+                                + String(localTime.getHours()).padStart(2, '0') + ':'
+                                + String(localTime.getMinutes()).padStart(2, '0') + ':'
+                                + String(localTime.getSeconds()).padStart(2, '0');
+
+            return formattedTime;
+        }
+
+        document.querySelectorAll('.receive-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Ambil no_pemesanan dari atribut data
+                let noPemesanan = this.getAttribute('data-no-pemesanan');
+                
+                // Ambil waktu lokal saat tombol diklik (WIB) dengan format 'YYYY-MM-DD HH:mm:ss'
+                let tglTerimaOrtu = getLocalTime(); 
+
+                // Kirim AJAX request
+                fetch(`{{ route('terima.jersey', ['no_pemesanan' => '__no_pemesanan__', 'tgl_terima_ortu' => '__tgl_terima_ortu__']) }}`
+                    .replace('__no_pemesanan__', noPemesanan)
+                    .replace('__tgl_terima_ortu__', tglTerimaOrtu), {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'  // Sertakan token CSRF untuk keamanan
+                        },
+                        body: JSON.stringify({
+                            no_pemesanan: noPemesanan,
+                            tgl_terima_ortu: tglTerimaOrtu
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            // Menampilkan pesan sukses dengan SweetAlert
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Jika sukses, refresh halaman
+                                location.reload();  // Refresh halaman
+                            });
+                        } else if (data.error) {
+                            // Menampilkan pesan error dengan SweetAlert
+                            Swal.fire({
+                                title: 'Terjadi Kesalahan!',
+                                text: data.error,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Jika error, refresh halaman atau lanjutkan dengan logika lainnya
+                                location.reload();  // Refresh halaman
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Terjadi Kesalahan!',
+                            text: 'Terjadi kesalahan saat memproses permintaan.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            // Jika error, refresh halaman
+                            location.reload();  // Refresh halaman
+                        });
+                    });
+            });
+        });
+    </script>
+
     <script>
           $('[data-countdown]').each(function() {
             var $this = $(this), finalDate = $(this).data('countdown');
