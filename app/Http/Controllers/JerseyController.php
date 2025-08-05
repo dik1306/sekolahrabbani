@@ -886,60 +886,191 @@ class JerseyController extends Controller
         return Excel::download(new SalesJerseyExport($start, $date_end_plus), $file_name);
     }
 
-    public function resume_order()
+    public function resume_order(Request $request)
     {
         $this_month = date('Y-m');
         $user_id = auth()->user()->id;
+        
+                
+        $sekolah_id = $request->sekolah ?? null;
+        $start = $request->date_start != '' ? $request->date_start : Carbon::now()->startOfMonth()->toDateString();
+        $date_end = $request->date_end != '' ? $request->date_end : Carbon::now()->toDateString();
+        $new_date_end = new DateTime($date_end);
+        $date_end_plus = $new_date_end->modify('+1 day')->format('Y-m-d');
 
-        $order_success = OrderDetailJersey::select(DB::raw('sum(t_pesan_jersey_detail.harga*t_pesan_jersey_detail.quantity) as grand_total'))
+        $sekolah = LokasiSub::select('id as id_sekolah', 'sublokasi')->where('status', 1)->get();
+        
+        $date_start = date($start);
+
+        if ($request->has('date_start') && $request->has('date_end') && $request->has('sekolah')) {
+            
+            $order_success = OrderDetailJersey::select(DB::raw('sum(t_pesan_jersey_detail.harga*t_pesan_jersey_detail.quantity) as grand_total'))
+                        ->leftJoin('t_pesan_jersey as tpj', 'tpj.no_pesanan', 't_pesan_jersey_detail.no_pesanan')
+                        ->where('tpj.status', 'success')
+                        ->whereBetween('tpj.tgl_bayar', [$date_start, $date_end_plus])
+                        ->where('t_pesan_jersey_detail.lokasi_sekolah', $sekolah_id)
+                        ->first();
+
+            $hpp = OrderJersey::select(DB::raw('SUM( (tpjd.hpp * tpjd.quantity) ) as total_hpp'))
+            ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
+            ->where('t_pesan_jersey.status', 'success')
+            ->whereBetween('t_pesan_jersey.tgl_bayar', [$date_start, $date_end_plus])
+            ->where('tpjd.lokasi_sekolah', $sekolah_id)
+            ->first();
+
+            $profit = $order_success->grand_total - $hpp->total_hpp;
+
+            $sales_per_month = OrderJersey::select(DB::raw('SUM( total_harga ) as sales_month'))
+                            ->where('status', 'success')
+                            ->where('tgl_bayar', 'LIKE', $this_month.'%')
+                            ->first();
+
+            $total_sales_by_produk = OrderJersey::select('mj.nama_jersey', 'tpjd.harga', DB::raw('sum(tpjd.quantity) as total_quantity'))
+                    ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
+                    ->leftJoin('m_jersey as mj', 'mj.id', 'tpjd.jersey_id')
+                    ->where('t_pesan_jersey.status', 'success')
+                    ->whereBetween('t_pesan_jersey.tgl_bayar', [$date_start, $date_end_plus])
+                    ->where('tpjd.lokasi_sekolah', $sekolah_id)
+                    ->groupby('tpjd.jersey_id')
+                    ->orderby('total_quantity', 'desc')
+                    ->get();
+
+            // dd($total_sales_by_produk);
+
+            $total_sales_by_ekskul = OrderJersey::select('mje.ekskul', DB::raw('sum(tpjd.quantity) as total_quantity'))
+                    ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
+                    ->leftJoin('m_jersey as mj', 'mj.id', 'tpjd.jersey_id')
+                    ->leftJoin('m_jenis_ekskul as mje', 'mj.ekskul_id', 'mje.id')
+                    ->where('t_pesan_jersey.status', 'success')
+                    ->whereBetween('t_pesan_jersey.tgl_bayar', [$date_start, $date_end_plus])
+                    ->where('tpjd.lokasi_sekolah', $sekolah_id)
+                    ->groupby('mje.id')
+                    ->orderby('total_quantity', 'desc')
+                    ->get();
+
+            $total_sales_by_school = OrderJersey::select('mls.sublokasi', DB::raw('count(tpsd.lokasi_sekolah) as total_item'))
+            ->leftJoin('t_pesan_jersey_detail as tpsd', 'tpsd.no_pesanan', 't_pesan_jersey.no_pesanan')
+            ->leftJoin('mst_lokasi_sub as mls', 'mls.id', 'tpsd.lokasi_sekolah')
+            ->where('t_pesan_jersey.status', 'success')
+            ->whereBetween('t_pesan_jersey.tgl_bayar', [$date_start, $date_end_plus])
+            ->where('tpsd.lokasi_sekolah', $sekolah_id)
+            ->groupby('tpsd.lokasi_sekolah')
+            ->orderby('total_item', 'desc')
+            ->get();
+
+            $total_item = OrderDetailJersey::select(DB::raw('sum(t_pesan_jersey_detail.quantity) as total_item'))
+            ->leftJoin('t_pesan_jersey as tpj', 'tpj.no_pesanan', 't_pesan_jersey_detail.no_pesanan')
+            ->where('tpj.status', 'success')
+            ->whereBetween('tpj.tgl_bayar', [$date_start, $date_end_plus])
+            ->where('t_pesan_jersey_detail.lokasi_sekolah', $sekolah_id)
+            ->first();
+        } else if ($start && $date_end_plus) {
+            
+            $order_success = OrderDetailJersey::select(DB::raw('sum(t_pesan_jersey_detail.harga*t_pesan_jersey_detail.quantity) as grand_total'))
+                        ->leftJoin('t_pesan_jersey as tpj', 'tpj.no_pesanan', 't_pesan_jersey_detail.no_pesanan')
+                        ->where('tpj.status', 'success')
+                        ->whereBetween('tpj.tgl_bayar', [$date_start, $date_end_plus])
+                        ->first();
+
+            $hpp = OrderJersey::select(DB::raw('SUM( (tpjd.hpp * tpjd.quantity) ) as total_hpp'))
+            ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
+            ->where('t_pesan_jersey.status', 'success')
+            ->whereBetween('t_pesan_jersey.tgl_bayar', [$date_start, $date_end_plus])
+            ->first();
+
+            $profit = $order_success->grand_total - $hpp->total_hpp;
+
+            $sales_per_month = OrderJersey::select(DB::raw('SUM( total_harga ) as sales_month'))
+                            ->where('status', 'success')
+                            ->where('tgl_bayar', 'LIKE', $this_month.'%')
+                            ->first();
+
+            $total_sales_by_produk = OrderJersey::select('mj.nama_jersey', 'tpjd.harga', DB::raw('sum(tpjd.quantity) as total_quantity'))
+                    ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
+                    ->leftJoin('m_jersey as mj', 'mj.id', 'tpjd.jersey_id')
+                    ->where('t_pesan_jersey.status', 'success')
+                    ->whereBetween('t_pesan_jersey.tgl_bayar', [$date_start, $date_end_plus])
+                    ->groupby('tpjd.jersey_id')
+                    ->orderby('total_quantity', 'desc')
+                    ->get();
+
+            // dd($total_sales_by_produk);
+
+            $total_sales_by_ekskul = OrderJersey::select('mje.ekskul', DB::raw('sum(tpjd.quantity) as total_quantity'))
+                    ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
+                    ->leftJoin('m_jersey as mj', 'mj.id', 'tpjd.jersey_id')
+                    ->leftJoin('m_jenis_ekskul as mje', 'mj.ekskul_id', 'mje.id')
+                    ->where('t_pesan_jersey.status', 'success')
+                    ->whereBetween('t_pesan_jersey.tgl_bayar', [$date_start, $date_end_plus])
+                    ->groupby('mje.id')
+                    ->orderby('total_quantity', 'desc')
+                    ->get();
+
+            $total_sales_by_school = OrderJersey::select('mls.sublokasi', DB::raw('count(tpsd.lokasi_sekolah) as total_item'))
+            ->leftJoin('t_pesan_jersey_detail as tpsd', 'tpsd.no_pesanan', 't_pesan_jersey.no_pesanan')
+            ->leftJoin('mst_lokasi_sub as mls', 'mls.id', 'tpsd.lokasi_sekolah')
+            ->where('t_pesan_jersey.status', 'success')
+            ->whereBetween('t_pesan_jersey.tgl_bayar', [$date_start, $date_end_plus])
+            ->groupby('tpsd.lokasi_sekolah')
+            ->orderby('total_item', 'desc')
+            ->get();
+
+            $total_item = OrderDetailJersey::select(DB::raw('sum(t_pesan_jersey_detail.quantity) as total_item'))
+            ->leftJoin('t_pesan_jersey as tpj', 'tpj.no_pesanan', 't_pesan_jersey_detail.no_pesanan')
+            ->where('tpj.status', 'success')
+            ->whereBetween('tpj.tgl_bayar', [$date_start, $date_end_plus])
+            ->first();
+        } else {
+            $order_success = OrderDetailJersey::select(DB::raw('sum(t_pesan_jersey_detail.harga*t_pesan_jersey_detail.quantity) as grand_total'))
                         ->leftJoin('t_pesan_jersey as tpj', 'tpj.no_pesanan', 't_pesan_jersey_detail.no_pesanan')
                         ->where('tpj.status', 'success')
                         ->first();
 
-        $hpp = OrderJersey::select(DB::raw('SUM( (tpjd.hpp * tpjd.quantity) ) as total_hpp'))
-        ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
-        ->where('t_pesan_jersey.status', 'success')
-        ->first();
+            $hpp = OrderJersey::select(DB::raw('SUM( (tpjd.hpp * tpjd.quantity) ) as total_hpp'))
+            ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
+            ->where('t_pesan_jersey.status', 'success')
+            ->first();
 
-        $profit = $order_success->grand_total - $hpp->total_hpp;
+            $profit = $order_success->grand_total - $hpp->total_hpp;
 
-        $sales_per_month = OrderJersey::select(DB::raw('SUM( total_harga ) as sales_month'))
-                        ->where('status', 'success')
-                        ->where('tgl_bayar', 'LIKE', $this_month.'%')
-                        ->first();
+            $sales_per_month = OrderJersey::select(DB::raw('SUM( total_harga ) as sales_month'))
+                            ->where('status', 'success')
+                            ->where('tgl_bayar', 'LIKE', $this_month.'%')
+                            ->first();
 
-        $total_sales_by_produk = OrderJersey::select('mj.nama_jersey', 'tpjd.harga', DB::raw('sum(tpjd.quantity) as total_quantity'))
-                ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
-                ->leftJoin('m_jersey as mj', 'mj.id', 'tpjd.jersey_id')
-                ->where('t_pesan_jersey.status', 'success')
-                ->groupby('tpjd.jersey_id')
-                ->orderby('total_quantity', 'desc')
-                ->get();
+            $total_sales_by_produk = OrderJersey::select('mj.nama_jersey', 'tpjd.harga', DB::raw('sum(tpjd.quantity) as total_quantity'))
+                    ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
+                    ->leftJoin('m_jersey as mj', 'mj.id', 'tpjd.jersey_id')
+                    ->where('t_pesan_jersey.status', 'success')
+                    ->groupby('tpjd.jersey_id')
+                    ->orderby('total_quantity', 'desc')
+                    ->get();
 
-        $total_sales_by_ekskul = OrderJersey::select('mje.ekskul', DB::raw('sum(tpjd.quantity) as total_quantity'))
-        ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
-        ->leftJoin('m_jersey as mj', 'mj.id', 'tpjd.jersey_id')
-        ->leftJoin('m_jenis_ekskul as mje', 'mj.ekskul_id', 'mje.id')
-        ->where('t_pesan_jersey.status', 'success')
-        ->groupby('mje.id')
-        ->orderby('total_quantity', 'desc')
-        ->get();
+            $total_sales_by_ekskul = OrderJersey::select('mje.ekskul', DB::raw('sum(tpjd.quantity) as total_quantity'))
+            ->leftJoin('t_pesan_jersey_detail as tpjd', 'tpjd.no_pesanan', 't_pesan_jersey.no_pesanan')
+            ->leftJoin('m_jersey as mj', 'mj.id', 'tpjd.jersey_id')
+            ->leftJoin('m_jenis_ekskul as mje', 'mj.ekskul_id', 'mje.id')
+            ->where('t_pesan_jersey.status', 'success')
+            ->groupby('mje.id')
+            ->orderby('total_quantity', 'desc')
+            ->get();
 
-        $total_sales_by_school = OrderJersey::select('mls.sublokasi', DB::raw('count(tpsd.lokasi_sekolah) as total_item'))
-        ->leftJoin('t_pesan_jersey_detail as tpsd', 'tpsd.no_pesanan', 't_pesan_jersey.no_pesanan')
-        ->leftJoin('mst_lokasi_sub as mls', 'mls.id', 'tpsd.lokasi_sekolah')
-        ->where('t_pesan_jersey.status', 'success')
-        ->groupby('tpsd.lokasi_sekolah')
-        ->orderby('total_item', 'desc')
-        ->get();
+            $total_sales_by_school = OrderJersey::select('mls.sublokasi', DB::raw('count(tpsd.lokasi_sekolah) as total_item'))
+            ->leftJoin('t_pesan_jersey_detail as tpsd', 'tpsd.no_pesanan', 't_pesan_jersey.no_pesanan')
+            ->leftJoin('mst_lokasi_sub as mls', 'mls.id', 'tpsd.lokasi_sekolah')
+            ->where('t_pesan_jersey.status', 'success')
+            ->groupby('tpsd.lokasi_sekolah')
+            ->orderby('total_item', 'desc')
+            ->get();
 
-        $total_item = OrderDetailJersey::select(DB::raw('sum(t_pesan_jersey_detail.quantity) as total_item'))
-        ->leftJoin('t_pesan_jersey as tpj', 'tpj.no_pesanan', 't_pesan_jersey_detail.no_pesanan')
-        ->where('tpj.status', 'success')
-        ->first();
+            $total_item = OrderDetailJersey::select(DB::raw('sum(t_pesan_jersey_detail.quantity) as total_item'))
+            ->leftJoin('t_pesan_jersey as tpj', 'tpj.no_pesanan', 't_pesan_jersey_detail.no_pesanan')
+            ->where('tpj.status', 'success')
+            ->first();
+        }
 
         return view('admin.laporan.resume-jersey', compact( 'order_success', 'hpp', 'profit', 'sales_per_month', 'total_sales_by_ekskul',
-        'total_sales_by_school', 'total_sales_by_produk', 'total_item', 'user_id'));
+        'total_sales_by_school', 'total_sales_by_produk', 'total_item', 'user_id', 'sekolah', 'sekolah_id', 'date_start', 'date_end'));
     }
 
     public function update_cart_status($user_id, $jersey_id) 

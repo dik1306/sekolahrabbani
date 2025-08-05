@@ -10,6 +10,53 @@
         </div>
     </div>
     <div class="container iq-container px-3">
+        <div class="card">
+            <div class="card-body">
+                <form action="{{route('resume_jersey')}}" method="GET" role="form" id="filter_tanggal" >  
+                    <div class="row g-3 align-items-center">
+
+                        <div class="col-auto">
+                            <label for="sekolah" class="col-auto form-control-label">Sekolah</label>
+                        </div>
+
+                        <div class="col-auto">
+                            <select name="sekolah" id="sekolah" class="col-auto select form-control form-control-sm" aria-label=".form-select-sm" >
+                                <option value="" disabled selected> --Pilih Sekolah-- </option>
+                                @foreach ($sekolah as $item)
+                                    <option value="{{ $item->id_sekolah }}" {{($item->id_sekolah == $sekolah_id) ? 'selected' : ''}} >{{ $item->sublokasi }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div class="col-3">
+                        </div>
+
+                        <div class="col-auto">
+                            <label class="col-form-label">Tanggal</label>
+                        </div>
+
+                        <div class="col-auto">
+                            <input type="date" id="date_start" name="date_start" value="{{$date_start}}" class="form-control">
+                        </div>
+
+                        <div class="col-auto">
+                            -
+                        </div>
+
+                        <div class="col-auto">
+                            <input type="date" id="date_end" name="date_end" value="{{$date_end}}" class="form-control">
+                        </div>
+                    
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary btn-sm">Tampilkan</button>
+                        <a href="{{route('resume_jersey')}}" class="btn btn-dim btn-outline-danger btn-sm mx-1">Reset</a>   
+                    </div>
+                </form> 
+            </div>
+        </div>
+        
         <div class="row">
             <div class="col-auto">
                 <div class="card">
