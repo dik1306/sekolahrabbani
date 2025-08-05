@@ -774,7 +774,8 @@ class JerseyController extends Controller
                             ->leftJoin('users as user', 't_pesan_jersey.user_id', 'user.id')
                             ->leftJoin('role as r', 'user.id_role', 'r.id')
                             ->where('tpjd.lokasi_sekolah', $sekolah_id)
-                            ->where('status', 'success');
+                            ->where('status', 'success')
+                            ->orderBy('t_pesan_jersey.updated_at', 'desc');
                          
             if ($start!= null && $date_end != null)
 
@@ -782,13 +783,15 @@ class JerseyController extends Controller
                                     ->leftJoin('users', 't_pesan_jersey.user_id', 'users.id')
                                     ->leftJoin('role', 'users.id_role', 'role.id')                        
                                     ->whereBetween('t_pesan_jersey.updated_at', [$date_start, $date_end_plus])
-                                    ->where('status', 'success');
+                                    ->where('status', 'success')
+                                    ->orderBy('t_pesan_jersey.updated_at', 'desc');
 
             if ($start == '' && $date_end == '')
             $list_order = $list_order->selectRaw('t_pesan_jersey.id, t_pesan_jersey.no_pesanan, nama_pemesan, total_harga, metode_pembayaran, status, t_pesan_jersey.updated_at, role.name as role_name')
                             ->leftJoin('users', 't_pesan_jersey.user_id', 'users.id')
                             ->leftJoin('role', 'users.id_role', 'role.id')
-                            ->where('status', 'success');
+                            ->where('status', 'success')
+                            ->orderBy('t_pesan_jersey.updated_at', 'desc');
 
             $list_order = $list_order->get();
 
