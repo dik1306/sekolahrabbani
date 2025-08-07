@@ -320,15 +320,16 @@ class UserController extends Controller
                         ->first();
 
             if ($user) {
-                $message = 
-                "Password anda adalah: 
+                $message = "
+                Password anda adalah: 
                 *$get_pass->pass_akun*
 
                 Silahkan masuk ke 
                 https://sekolahrabbani.sch.id/login
 
                 *Mohon untuk tidak menyebarkan password ini kepada siapapun.*
-                *Terima kasih.*";
+                *Terima kasih.*
+                ";
                 $no_wha = $request->no_hp;
 
                 $this->send_notif($message, $no_wha);
