@@ -29,6 +29,11 @@ class HomeController extends Controller
         return view('index', compact('jenjang', 'program', 'fasilitas'));
     }
 
+     public function privacy_policy()
+    {
+        return view('privacy_policy');
+    }
+
     public function jenjang(Request $request, $jenjang)
     {
         $jenjang_detail = Jenjang::jenjang_sekolah_sub_lokasi($jenjang);

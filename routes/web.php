@@ -353,6 +353,7 @@ Route::prefix('pendaftaran')->group(function () {
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/privacy_policy', [HomeController::class, 'privacy_policy'])->name('privacy_policy');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/jenjang/{jenjang}', [HomeController::class, 'jenjang'])->name('jenjang.sekolah');
 Route::get('/profile', [ProfileSekolahController::class, 'index'])->name('profile.sekolah');
