@@ -88,6 +88,7 @@ class SeragamController extends Controller
 
         $menubar = MenuMobile::where('is_footer', 1)->orderBy('no', 'asc')->get();
 
+        return view('ortu.seragam.closed', compact('lokasi', 'produk_seragam', 'jenjang', 'kategori_seragam', 'produk_seragam_tk', 'produk_seragam_sd', 'produk_seragam_smp', 'produk_seragam_kober', 'search_produk', 'cart_detail', 'menubar', 'wishlist'));
         return view('ortu.seragam.index', compact('lokasi', 'produk_seragam', 'jenjang', 'kategori_seragam', 'produk_seragam_tk', 'produk_seragam_sd', 'produk_seragam_smp', 'produk_seragam_kober', 'search_produk', 'cart_detail', 'menubar', 'wishlist'));
     }
 
