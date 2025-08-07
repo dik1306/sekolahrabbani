@@ -321,14 +321,14 @@ class UserController extends Controller
 
             if ($user) {
                 $message = "
-                Password anda adalah: 
-                *$get_pass->pass_akun*
+Password anda adalah: 
+*$get_pass->pass_akun*
 
-                Silahkan masuk ke 
-                https://sekolahrabbani.sch.id/login
+Silahkan masuk ke 
+https://sekolahrabbani.sch.id/login
 
-                *Mohon untuk tidak menyebarkan password ini kepada siapapun.*
-                *Terima kasih.*
+*Mohon untuk tidak menyebarkan password ini kepada siapapun.*
+*Terima kasih.*
                 ";
                 $no_wha = $request->no_hp;
 
