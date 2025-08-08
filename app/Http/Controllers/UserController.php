@@ -384,8 +384,9 @@ https://sekolahrabbani.sch.id/login
     }
     
     public function get_env_wa_test(Request $request) {
-        $token = config('services.wablas.token_wablas');
-        $secret = config('services.wablas.secret_wablas');
+       
+        $token =  config('wablas.token_wablas');
+        $secret = config('wablas.secret_wablas');
         dd($token, $secret);
     }
 
