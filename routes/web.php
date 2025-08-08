@@ -61,6 +61,9 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('/auth/google/callback', 'handleGoogleCallback');
 });
 
+
+Route::get('get_env_wa_test', [UserController::class, 'get_env_wa_test'])->name('get_env_wa_test');
+
 Route::group(['middleware' =>['auth', 'admin']], function () {
     Route::prefix('master')->group(function () {
         Route::get('list-user', [UserController::class, 'list_user'])->name('list-user');

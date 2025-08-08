@@ -382,6 +382,12 @@ https://sekolahrabbani.sch.id/login
     
         return ($result);
     }
+    
+    public function get_env_wa_test(Request $request) {
+        $token = env('TOKEN_WABLAS');
+        $secret = env('SECRET_WABLAS');
+        dd($token, $secret);
+    }
 
     public function send_notif_test(Request $request) {
         $message = $request->input('message');
