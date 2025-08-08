@@ -299,8 +299,8 @@ class KarirController extends Controller
 
     function send_notif($message,$no_wha){
         $curl = curl_init();
-        $token = env('TOKEN_WABLAS');
-        $secret = env('SECRET_WABLAS');
+        $token =  config('wablas.token_wablas');
+        $secret = config('wablas.secret_wablas');
         $auth = $token.'.'.$secret;
     
         $payload = [

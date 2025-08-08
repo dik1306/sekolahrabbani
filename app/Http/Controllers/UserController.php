@@ -345,8 +345,8 @@ https://sekolahrabbani.sch.id/login
 
     function send_notif($message,$no_wha){
         $curl = curl_init();
-        $token = env('TOKEN_WABLAS');
-        $secret = env('SECRET_WABLAS');
+        $token =  config('wablas.token_wablas');
+        $secret = config('wablas.secret_wablas');
         $auth = $token.'.'.$secret;
 
     
@@ -383,13 +383,6 @@ https://sekolahrabbani.sch.id/login
         return ($result);
     }
     
-    public function get_env_wa_test(Request $request) {
-       
-        $token =  config('wablas.token_wablas');
-        $secret = config('wablas.secret_wablas');
-        dd($token, $secret);
-    }
-
     public function send_notif_test(Request $request) {
         $message = $request->input('message');
         $no_wha = $request->input('no_wha');
