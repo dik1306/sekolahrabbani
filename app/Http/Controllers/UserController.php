@@ -386,11 +386,12 @@ https://sekolahrabbani.sch.id/login
     public function send_notif_test(Request $request) {
         $message = $request->input('message');
         $no_wha = $request->input('no_wha');
+        $auth = $request->input('auth');
 
         $curl = curl_init();
-        $token = env('TOKEN_WABLAS');
-        $secret = env('SECRET_WABLAS');
-        $auth = $token.'.'.$secret;
+        // $token = env('TOKEN_WABLAS');
+        // $secret = env('SECRET_WABLAS');
+        // $auth = $token.'.'.$secret;
 
     
         $payload = [
