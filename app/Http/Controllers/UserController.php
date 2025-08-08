@@ -396,9 +396,9 @@ https://sekolahrabbani.sch.id/login
         // $auth = $request->input('auth');
 
         $curl = curl_init();
-        $token = env('TOKEN_WABLAS');
-        $secret = env('SECRET_WABLAS');
-        // $auth = $token.'.'.$secret;
+        $token =  config('wablas.token_wablas');
+        $secret = config('wablas.secret_wablas');
+        $auth = $token.'.'.$secret;
 
     
         $payload = [
@@ -417,7 +417,7 @@ https://sekolahrabbani.sch.id/login
     
         curl_setopt($curl, CURLOPT_HTTPHEADER,
             array(
-                "Authorization: $token.$secret",
+                "Authorization: $auth",
                 "Content-Type: application/json"
             )
         );
