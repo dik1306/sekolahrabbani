@@ -36,4 +36,9 @@ return [
         'redirect' => 'http://localhost:8000/auth/google/callback',
     ],
 
+    'wablas' => [
+        'token_wablas' => env('TOKEN_WABLAS'),
+        'secret_wablas' => env('SECRET_WABLAS'),
+    ],
+
 ];
