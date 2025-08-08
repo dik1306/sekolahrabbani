@@ -383,6 +383,54 @@ https://sekolahrabbani.sch.id/login
         return ($result);
     }
 
+    public function send_notif_test(Request $request) {
+        $message = $request->input('message');
+        $no_wha = $request->input('no_wha');
+
+        $curl = curl_init();
+        $token = env('TOKEN_WABLAS');
+        $secret = env('SECRET_WABLAS');
+        $auth = $token.'.'.$secret;
+
+    
+        $payload = [
+            "data" => [
+                [
+                    'phone' => $no_wha,
+                    'message' => $message,
+                    // 'secret' => false, // or true
+                    // 'priority' => false,
+                    // 'retry' => false, // or true
+                    // 'isGroup' => false, // or true
+                ],
+                
+            ]
+        ];
+    
+        curl_setopt($curl, CURLOPT_HTTPHEADER,
+            array(
+                "Authorization: $auth",
+                "Content-Type: application/json"
+            )
+        );
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload) );
+        // curl_setopt($curl, CURLOPT_URL, "https://tx.wablas.com/api/v2/send-bulk/text");
+        curl_setopt($curl, CURLOPT_URL, "https://pati.wablas.com/api/v2/send-message");
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        // Return a JSON response
+        return response()->json([
+            'status' => 'success',  // Or 'failed' depending on the result of $result
+            'message' => $result
+        ]);
+    }
+
+
     function rand_pass($length) {
             $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return substr(str_shuffle($chars),0,$length);

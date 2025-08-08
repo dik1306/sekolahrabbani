@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/send-notification-page', function() {
         return view('auth.send_wa_test');
     });
-    Route::post('/send-notification', [UserController::class, 'send_notif']);
+    Route::post('/send-notification', [UserController::class, 'send_notif_test']);
 
 
 });

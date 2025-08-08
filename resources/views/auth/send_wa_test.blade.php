@@ -41,7 +41,12 @@
                     no_wha: no_wha
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 let responseMessage = document.getElementById('responseMessage');
                 if (data.status === 'success') {
@@ -55,5 +60,6 @@
                 document.getElementById('responseMessage').innerHTML = '<p style="color: red;">An error occurred. Please try again later.</p>';
             });
         });
+
     </script>
 @endsection
