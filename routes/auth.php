@@ -21,4 +21,10 @@ Route::middleware('auth')->group(function () {
     Route::post('signout', [UserController::class, 'logout'])->name('logout');
     Route::post('/karir/logout', [KarirController::class, 'logout'])->name('karir.logout');
 
+    Route::get('/send-notification-page', function() {
+        return view('auth.send_wa_test');
+    });
+    Route::post('/send-notification', [UserController::class, 'sendNotif']);
+
+
 });
