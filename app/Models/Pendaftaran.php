@@ -58,6 +58,7 @@ class Pendaftaran extends Model
         'expire_time',
         'tgl_bayar',
         'snap_token',
+        'order_id',
     ];
 
     public static function get_profile($id)

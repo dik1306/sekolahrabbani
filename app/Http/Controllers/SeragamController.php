@@ -901,7 +901,7 @@ class SeragamController extends Controller
         $order = OrderSeragam::where('no_pemesanan', $orderId)->first();
         $order_merch = OrderMerchandise::where('no_pesanan', $orderId)->first();
         $order_jersey = OrderJersey::where('no_pesanan', $orderId)->first();
-        $pendaftaran_siswa = Pendaftaran::where('id_anak', $orderId)->first();
+        $pendaftaran_siswa = Pendaftaran::where('order_id', $orderId)->first();
        
         if (!$order && !$order_merch && !$order_jersey && !$pendaftaran_siswa) {
             return response()->json(['message' => 'Order not found'], 404);
