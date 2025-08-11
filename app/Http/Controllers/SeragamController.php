@@ -20,6 +20,7 @@ use App\Models\OrderJersey;
 use App\Models\OrderMerchandise;
 use App\Models\OrderSeragam;
 use App\Models\ProdukSeragam;
+use App\Models\Pendaftaran;
 use App\Models\Profile;
 use App\Models\StokCard;
 use App\Models\StokSeragam;
@@ -1191,7 +1192,7 @@ class SeragamController extends Controller
                         'va_number' => $no_va,
                         'updated_at' => $request->settlement_time
                     ]);
-                    $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $orderId);
+                    // $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $orderId);
                     break;
                 case 'pending':
                     $pendaftaran_siswa->update([
@@ -1200,7 +1201,7 @@ class SeragamController extends Controller
                         'va_number' => $no_va,
                         'expire_time' => $request->expiry_time
                     ]);
-                    $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $orderId);
+                    // $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $orderId);
                     break;
                 case 'deny':
                     $pendaftaran_siswa->update([
@@ -1216,7 +1217,7 @@ class SeragamController extends Controller
                         'metode_pembayaran' => $mtd_pembayaran,
                         'va_number' => $no_va
                     ]);
-                    $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $orderId);
+                    // $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $orderId);
                     break;
                 case 'cancel':
                     $pendaftaran_siswa->update([
