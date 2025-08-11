@@ -1171,14 +1171,15 @@ class SeragamController extends Controller
                 case 'capture':
                     if ($request->payment_type == 'credit_card') {
                         if ($request->fraud_status == 'challenge') {
-                            $pendaftaran_siswa->update([
-                                'status_midtrans' => 'pending',
+                            Pendaftaran::where('order_id', $orderId)->update([
+                               'status_midtrans' => 'pending',
                                 'metode_pembayaran' => $mtd_pembayaran,
                                 'va_number' => $no_va
                             ]);
                         } else {
-                            $pendaftaran_siswa->update([
-                                'status_midtrans' => 'success',
+                            Pendaftaran::where('order_id', $orderId)->update([
+                               'status_midtrans' => 'success',
+                                'status_pembayaran' => 1,
                                 'metode_pembayaran' => $mtd_pembayaran,
                                 'va_number' => $no_va
                             ]);
@@ -1186,8 +1187,9 @@ class SeragamController extends Controller
                     }
                     break;
                 case 'settlement':
-                    $pendaftaran_siswa->update([
+                    Pendaftaran::where('order_id', $orderId)->update([
                         'status_midtrans' => 'success',
+                        'status_pembayaran' => 1,
                         'metode_pembayaran' => $mtd_pembayaran,
                         'va_number' => $no_va,
                         'updated_at' => $request->settlement_time
@@ -1195,7 +1197,7 @@ class SeragamController extends Controller
                     // $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $orderId);
                     break;
                 case 'pending':
-                    $pendaftaran_siswa->update([
+                    Pendaftaran::where('order_id', $orderId)->update([
                         'status_midtrans' => 'pending',
                         'metode_pembayaran' => $mtd_pembayaran,
                         'va_number' => $no_va,
@@ -1204,15 +1206,14 @@ class SeragamController extends Controller
                     // $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $orderId);
                     break;
                 case 'deny':
-                    $pendaftaran_siswa->update([
+                    Pendaftaran::where('order_id', $orderId)->update([
                         'status_midtrans' => 'failed',
                         'metode_pembayaran' => $mtd_pembayaran,
                         'va_number' => $no_va
                     ]);
-                   
                     break;
                 case 'expire':
-                    $pendaftaran_siswa->update([
+                    Pendaftaran::where('order_id', $orderId)->update([
                         'status_midtrans' => 'expired',
                         'metode_pembayaran' => $mtd_pembayaran,
                         'va_number' => $no_va
@@ -1220,14 +1221,14 @@ class SeragamController extends Controller
                     // $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $orderId);
                     break;
                 case 'cancel':
-                    $pendaftaran_siswa->update([
+                    Pendaftaran::where('order_id', $orderId)->update([
                         'status_midtrans' => 'canceled',
                         'metode_pembayaran' => $mtd_pembayaran,
                         'va_number' => $no_va
                     ]);
                     break;
                 default:
-                    $pendaftaran_siswa->update([
+                    Pendaftaran::where('order_id', $orderId)->update([
                         'status_midtrans' => 'unknown',
                     ]);
                     break;

@@ -9,9 +9,6 @@ class Pendaftaran extends Model
 {
     use HasFactory;
     protected $table = 'tbl_anak';
-    
-    // Tentukan kolom primary key
-    protected $primaryKey = 'id_anak';
 
     protected $fillable = [
         'id_anak',
