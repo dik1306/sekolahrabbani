@@ -23,6 +23,7 @@ class Pendaftaran extends Model
         'kelas',
         'tingkat',
         'info_ppdb',
+        'info_apakah_abk',
         'jenis_pendidikan',
         'asal_sekolah',
         'alamat',
@@ -49,7 +50,14 @@ class Pendaftaran extends Model
         'sd_sebelumnya',
         'npsn',
         'status_daftar',
-        'status_pembayaran'
+        'status_pembayaran',
+        'status_midtrans',
+        'total_harga',
+        'metode_pembayaran',
+        'va_number',
+        'expire_time',
+        'tgl_bayar',
+        'snap_token',
     ];
 
     public static function get_profile($id)

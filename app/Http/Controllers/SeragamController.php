@@ -900,14 +900,15 @@ class SeragamController extends Controller
         $order = OrderSeragam::where('no_pemesanan', $orderId)->first();
         $order_merch = OrderMerchandise::where('no_pesanan', $orderId)->first();
         $order_jersey = OrderJersey::where('no_pesanan', $orderId)->first();
+        $pendaftaran_siswa = Pendaftaran::where('id_anak', $orderId)->first();
        
-        if (!$order && !$order_merch && !$order_jersey) {
+        if (!$order && !$order_merch && !$order_jersey && !$pendaftaran_siswa) {
             return response()->json(['message' => 'Order not found'], 404);
         }
 
         $order_detail = OrderDetailSeragam::select('kode_produk', 'quantity')->where('no_pemesanan', $orderId)->get();
 
-        if ($order != null && $order_merch == null && $order_jersey == null) {
+        if ($order != null && $order_merch == null && $order_jersey == null && $pendaftaran_siswa == null) {
             switch ($transactionStatus) {
                 case 'capture':
                     if ($request->payment_type == 'credit_card') {
@@ -1027,7 +1028,7 @@ class SeragamController extends Controller
             }
     
             return response()->json(['message' => 'Callback received successfully']);
-        } else if ($order_jersey != null && $order == null  && $order_merch == null) {
+        } else if ($order_jersey != null && $order == null  && $order_merch == null && $pendaftaran_siswa == null) {
             switch ($transactionStatus) {
                 case 'capture':
                     if ($request->payment_type == 'credit_card') {
@@ -1096,7 +1097,7 @@ class SeragamController extends Controller
             }
     
             return response()->json(['message' => 'Callback received successfully']);
-        } else if ($order_merch != null && $order == null  && $order_jersey == null) {
+        } else if ($order_merch != null && $order == null  && $order_jersey == null && $pendaftaran_siswa == null) {
             switch ($transactionStatus) {
                 case 'capture':
                     if ($request->payment_type == 'credit_card') {
@@ -1159,6 +1160,74 @@ class SeragamController extends Controller
                 default:
                     $order_merch->update([
                         'status' => 'unknown',
+                    ]);
+                    break;
+            }
+    
+            return response()->json(['message' => 'Callback received successfully']);
+        } else if ($pendaftaran_siswa != null && $order == null  && $order_jersey == null && $order_merch == null) {
+            switch ($transactionStatus) {
+                case 'capture':
+                    if ($request->payment_type == 'credit_card') {
+                        if ($request->fraud_status == 'challenge') {
+                            $pendaftaran_siswa->update([
+                                'status_midtrans' => 'pending',
+                                'metode_pembayaran' => $mtd_pembayaran,
+                                'va_number' => $no_va
+                            ]);
+                        } else {
+                            $pendaftaran_siswa->update([
+                                'status_midtrans' => 'success',
+                                'metode_pembayaran' => $mtd_pembayaran,
+                                'va_number' => $no_va
+                            ]);
+                        }
+                    }
+                    break;
+                case 'settlement':
+                    $pendaftaran_siswa->update([
+                        'status_midtrans' => 'success',
+                        'metode_pembayaran' => $mtd_pembayaran,
+                        'va_number' => $no_va,
+                        'updated_at' => $request->settlement_time
+                    ]);
+                    $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $orderId);
+                    break;
+                case 'pending':
+                    $pendaftaran_siswa->update([
+                        'status_midtrans' => 'pending',
+                        'metode_pembayaran' => $mtd_pembayaran,
+                        'va_number' => $no_va,
+                        'expire_time' => $request->expiry_time
+                    ]);
+                    $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $orderId);
+                    break;
+                case 'deny':
+                    $pendaftaran_siswa->update([
+                        'status_midtrans' => 'failed',
+                        'metode_pembayaran' => $mtd_pembayaran,
+                        'va_number' => $no_va
+                    ]);
+                   
+                    break;
+                case 'expire':
+                    $pendaftaran_siswa->update([
+                        'status_midtrans' => 'expired',
+                        'metode_pembayaran' => $mtd_pembayaran,
+                        'va_number' => $no_va
+                    ]);
+                    $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $orderId);
+                    break;
+                case 'cancel':
+                    $pendaftaran_siswa->update([
+                        'status_midtrans' => 'canceled',
+                        'metode_pembayaran' => $mtd_pembayaran,
+                        'va_number' => $no_va
+                    ]);
+                    break;
+                default:
+                    $pendaftaran_siswa->update([
+                        'status_midtrans' => 'unknown',
                     ]);
                     break;
             }
