@@ -9,6 +9,9 @@ class Pendaftaran extends Model
 {
     use HasFactory;
     protected $table = 'tbl_anak';
+    
+    // Tentukan kolom primary key
+    protected $primaryKey = 'id_anak';
 
     protected $fillable = [
         'id_anak',
@@ -58,7 +61,7 @@ class Pendaftaran extends Model
         'expire_time',
         'tgl_bayar',
         'snap_token',
-        'order_id',
+        'order_id'
     ];
 
     public static function get_profile($id)
