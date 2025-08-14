@@ -462,6 +462,7 @@ class JerseyController extends Controller
                     ->leftJoin('mst_lokasi_sub as mls', 'mls.id', 'm_profile.sekolah_id')
                     ->leftJoin('users as u', 'u.no_hp', 'm_profile.no_hp_ibu')
                     ->where('u.id', $user_id)
+                    ->where('m_profile.nis', $nis)
                     ->first();
         
         return view('ortu.jersey.pembayaran', compact( 'jersey', 'quantity', 'order', 'profile', 'nis', 'ukuran', 'nama_punggung', 'no_punggung'));
