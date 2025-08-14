@@ -464,6 +464,8 @@ class JerseyController extends Controller
                     ->where('u.id', $user_id)
                     ->where('m_profile.nis', $nis)
                     ->first();
+
+        // dd($profile);
         
         return view('ortu.jersey.pembayaran', compact( 'jersey', 'quantity', 'order', 'profile', 'nis', 'ukuran', 'nama_punggung', 'no_punggung'));
 
