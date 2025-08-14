@@ -544,8 +544,8 @@ class JerseyController extends Controller
                 $total_diskon += $nilai_diskon;
                 $harga_akhir = $total_harga - $total_diskon;
 
-                $this->send_pesan_jersey_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga_awal, $diskon, $hpp);
-                $this->send_pesan_jersey_detail_baru($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga_awal, $diskon, $hpp);
+                $this->send_pesan_jersey_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga_awal, $diskon, $hpp, $no_punggung, $nama_punggung);
+                $this->send_pesan_jersey_detail_baru($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga_awal, $diskon, $hpp, $no_punggung, $nama_punggung);
                 $this->update_cart_status($user_id, $jersey_id);
             }
 
@@ -630,8 +630,8 @@ class JerseyController extends Controller
             $this->send_pesan_jersey($no_pesanan, $nama_pemesan, $no_hp);
             $this->send_pesan_jersey_baru($no_pesanan, $nama_pemesan, $no_hp);
 
-            $this->send_pesan_jersey_detail($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now);
-            $this->send_pesan_jersey_detail_baru($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now);
+            $this->send_pesan_jersey_detail($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now, $no_punggung_now, $nama_punggung_now);
+            $this->send_pesan_jersey_detail_baru($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now, $no_punggung_now, $nama_punggung_now);
 
                // Set your Merchant Server Key
                \Midtrans\Config::$serverKey = config('midtrans.serverKey');
@@ -1147,7 +1147,7 @@ class JerseyController extends Controller
 	    // return ($response);
 	}
 
-    function send_pesan_jersey_detail($no_pesanan, $nama_siswa, $lokasi_sekolah, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga, $diskon, $hpp){
+    function send_pesan_jersey_detail($no_pesanan, $nama_siswa, $lokasi_sekolah, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga, $diskon, $hpp, $no_punggung, $nama_punggung){
 	    $curl = curl_init();
 
 		curl_setopt_array($curl, array(
@@ -1171,7 +1171,9 @@ class JerseyController extends Controller
 		  	'quantity' => $quantity,
 		  	'harga' => $harga,
 		  	'diskon' => $diskon,
-		  	'hpp' => $hpp,
+		  	'hpp' => $hpp, 
+            'no_punggung' => $no_punggung, 
+            'nama_punggung' => $nama_punggung
             )
 
 		));
@@ -1183,7 +1185,7 @@ class JerseyController extends Controller
 	    // return ($response);
 	}
 
-    function send_pesan_jersey_detail_baru($no_pesanan, $nama_siswa, $lokasi_sekolah, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga, $diskon, $hpp){
+    function send_pesan_jersey_detail_baru($no_pesanan, $nama_siswa, $lokasi_sekolah, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga, $diskon, $hpp, $no_punggung, $nama_punggung){
 	    $curl = curl_init();
 
 		curl_setopt_array($curl, array(
@@ -1208,6 +1210,8 @@ class JerseyController extends Controller
 		  	'harga' => $harga,
 		  	'diskon' => $diskon,
 		  	'hpp' => $hpp,
+            'no_punggung' => $no_punggung, 
+            'nama_punggung' => $nama_punggung
             )
 
 		));
