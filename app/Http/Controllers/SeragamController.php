@@ -19,6 +19,7 @@ use App\Models\OrderDetailSeragam;
 use App\Models\OrderJersey;
 use App\Models\OrderMerchandise;
 use App\Models\OrderSeragam;
+use App\Models\ContactPerson;
 use App\Models\ProdukSeragam;
 use App\Models\Pendaftaran;
 use App\Models\Profile;
