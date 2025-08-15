@@ -1376,11 +1376,11 @@ class SeragamController extends Controller
                     // $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $orderId);
 
                     // TODO: HAPUS INI NANTI (INI TESTING)
-                    $data_anak = Pendaftaran::where('order_id', $orderId)->first();
-                    $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
-                    // $no_admin = $contact_person->telp;
-                    $contact_ccrs =  ContactPerson::where('id', '16')->first();
-                    $contact_ccrs =  $contact_ccrs->telp;
+                    // $data_anak = Pendaftaran::where('order_id', $orderId)->first();
+                    // $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
+                    // // $no_admin = $contact_person->telp;
+                    // $contact_ccrs =  ContactPerson::where('id', '16')->first();
+                    // $contact_ccrs =  $contact_ccrs->telp;
                     // $no_hp_ayah = $data_anak->no_hp_ayah;
                     // $no_hp_ibu = $data_anak->no_hp_ibu;
                     
@@ -1393,18 +1393,18 @@ class SeragamController extends Controller
                     $message_for_admin='
                     Telah diterima pembayaran biaya pendaftaran Pending:
 
-                    📌 No. Registrasi: '.$data_anak->id_anak.'
-                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+                    📌 No. Registrasi: Test
+                    👤 Nama Ananda: Test
+                    💳 Jumlah Bayar: Rp Test
 
                     Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
                     $message_for_admin_wl='
                     Telah diterima pembayaran biaya pendaftaran Pending:
 
-                    📌 No. Registrasi: '.$data_anak->id_anak.'
-                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+                    📌 No. Registrasi: Test
+                    👤 Nama Ananda: Test
+                    💳 Jumlah Bayar: Rp Test
 
                     Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
@@ -1412,15 +1412,15 @@ class SeragamController extends Controller
                     $message_ortu = "
                     ✅ Pembayaran Pendaftaran Pending
 
-                    Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+                    Terima kasih Ayah/Bunda Test 🙏
+                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp Test. untuk:
 
-                    📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-                    📌 Nama Ananda: .$data_anak->nama_lengkap.'
+                    📌 No. Registrasi / Pendaftaran: Test
+                    📌 Nama Ananda: Test
 
                     Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di Test.
 
                     Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
@@ -1431,15 +1431,15 @@ class SeragamController extends Controller
                     $message_waiting_list = "
                     ✅ Pembayaran Pendaftaran Pending
 
-                    Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+                    Terima kasih Ayah/Bunda Test 🙏
+                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp Test. untuk:
 
-                    📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-                    📌 Nama Ananda: .$data_anak->nama_lengkap.'
+                    📌 No. Registrasi / Pendaftaran: Test
+                    📌 Nama Ananda: Test
 
                     Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di Test.
 
                     Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
@@ -1473,11 +1473,11 @@ class SeragamController extends Controller
                     // $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $orderId);
 
                     // TODO: HAPUS INI NANTI (INI TESTING)
-                    $data_anak = Pendaftaran::where('order_id', $orderId)->first();
-                    $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
-                    // $no_admin = $contact_person->telp;
-                    $contact_ccrs =  ContactPerson::where('id', '16')->first();
-                    $contact_ccrs =  $contact_ccrs->telp;
+                    // $data_anak = Pendaftaran::where('order_id', $orderId)->first();
+                    // $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
+                    // // $no_admin = $contact_person->telp;
+                    // $contact_ccrs =  ContactPerson::where('id', '16')->first();
+                    // $contact_ccrs =  $contact_ccrs->telp;
                     // $no_hp_ayah = $data_anak->no_hp_ayah;
                     // $no_hp_ibu = $data_anak->no_hp_ibu;
                     
@@ -1490,18 +1490,18 @@ class SeragamController extends Controller
                     $message_for_admin='
                     Telah diterima pembayaran biaya pendaftaran Expire:
 
-                    📌 No. Registrasi: '.$data_anak->id_anak.'
-                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+                    📌 No. Registrasi: Test
+                    👤 Nama Ananda: Test
+                    💳 Jumlah Bayar: Rp TEst
 
                     Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
                     $message_for_admin_wl='
                     Telah diterima pembayaran biaya pendaftaran Expire:
 
-                    📌 No. Registrasi: '.$data_anak->id_anak.'
-                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+                    📌 No. Registrasi: Test
+                    👤 Nama Ananda: Test
+                    💳 Jumlah Bayar: Rp TEst
 
                     Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
@@ -1509,15 +1509,15 @@ class SeragamController extends Controller
                     $message_ortu = "
                     ✅ Pembayaran Pendaftaran Expire
 
-                    Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+                    Terima kasih Ayah/Bunda Test 🙏
+                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp Test. untuk:
 
-                    📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-                    📌 Nama Ananda: .$data_anak->nama_lengkap.'
+                    📌 No. Registrasi / Pendaftaran: Test
+                    📌 Nama Ananda: Test
 
                     Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di Test
 
                     Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
@@ -1528,15 +1528,15 @@ class SeragamController extends Controller
                     $message_waiting_list = "
                     ✅ Pembayaran Pendaftaran Expire
 
-                    Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+                    Terima kasih Ayah/Bunda Test 🙏
+                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp Test. untuk:
 
-                    📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-                    📌 Nama Ananda: .$data_anak->nama_lengkap.'
+                    📌 No. Registrasi / Pendaftaran: Test
+                    📌 Nama Ananda: Test
 
                     Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di Test
 
                     Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
