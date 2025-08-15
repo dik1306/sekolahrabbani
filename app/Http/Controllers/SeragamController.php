@@ -1262,13 +1262,13 @@ class SeragamController extends Controller
                             ";
                             
                             if ($data_anak->status_daftar == 3) {
-                                $this->send_notif($message_for_admin_wl, $no_admin);
-                                $this->send_notif($message_waiting_list, $no_hp_ayah);
-                                $this->send_notif($message_waiting_list, $no_hp_ibu);
+                                $this->send_notif_new($message_for_admin_wl, $no_admin);
+                                $this->send_notif_new($message_waiting_list, $no_hp_ayah);
+                                $this->send_notif_new($message_waiting_list, $no_hp_ibu);
                             } else {
-                                $this->send_notif($message_for_admin, $no_admin);
-                                $this->send_notif($message_ortu, $no_hp_ayah);
-                                $this->send_notif($message_ortu, $no_hp_ibu);
+                                $this->send_notif_new($message_for_admin, $no_admin);
+                                $this->send_notif_new($message_ortu, $no_hp_ayah);
+                                $this->send_notif_new($message_ortu, $no_hp_ibu);
                             }
                         }
                     }
@@ -1357,13 +1357,13 @@ class SeragamController extends Controller
                     ";
                     
                     if ($data_anak->status_daftar == 3) {
-                        $this->send_notif($message_for_admin_wl, $no_admin);
-                        $this->send_notif($message_waiting_list, $no_hp_ayah);
-                        $this->send_notif($message_waiting_list, $no_hp_ibu);
+                        $this->send_notif_new($message_for_admin_wl, $no_admin);
+                        $this->send_notif_new($message_waiting_list, $no_hp_ayah);
+                        $this->send_notif_new($message_waiting_list, $no_hp_ibu);
                     } else {
-                        $this->send_notif($message_for_admin, $no_admin);
-                        $this->send_notif($message_ortu, $no_hp_ayah);
-                        $this->send_notif($message_ortu, $no_hp_ibu);
+                        $this->send_notif_new($message_for_admin, $no_admin);
+                        $this->send_notif_new($message_ortu, $no_hp_ayah);
+                        $this->send_notif_new($message_ortu, $no_hp_ibu);
                     }
                     break;
                 case 'pending':
@@ -1448,13 +1448,13 @@ class SeragamController extends Controller
                     ";
                     
                     if ($data_anak->status_daftar == 3) {
-                        $this->send_notif($message_for_admin_wl, $no_admin);
-                        $this->send_notif($message_waiting_list, $no_hp_ayah);
-                        $this->send_notif($message_waiting_list, $no_hp_ibu);
+                        $this->send_notif_new($message_for_admin_wl, $no_admin);
+                        $this->send_notif_new($message_waiting_list, $no_hp_ayah);
+                        $this->send_notif_new($message_waiting_list, $no_hp_ibu);
                     } else {
-                        $this->send_notif($message_for_admin, $no_admin);
-                        $this->send_notif($message_ortu, $no_hp_ayah);
-                        $this->send_notif($message_ortu, $no_hp_ibu);
+                        $this->send_notif_new($message_for_admin, $no_admin);
+                        $this->send_notif_new($message_ortu, $no_hp_ayah);
+                        $this->send_notif_new($message_ortu, $no_hp_ibu);
                     }
                     break;
                 case 'deny':
@@ -1545,13 +1545,13 @@ class SeragamController extends Controller
                     ";
                     
                     if ($data_anak->status_daftar == 3) {
-                        $this->send_notif($message_for_admin_wl, $no_admin);
-                        $this->send_notif($message_waiting_list, $no_hp_ayah);
-                        $this->send_notif($message_waiting_list, $no_hp_ibu);
+                        $this->send_notif_new($message_for_admin_wl, $no_admin);
+                        $this->send_notif_new($message_waiting_list, $no_hp_ayah);
+                        $this->send_notif_new($message_waiting_list, $no_hp_ibu);
                     } else {
-                        $this->send_notif($message_for_admin, $no_admin);
-                        $this->send_notif($message_ortu, $no_hp_ayah);
-                        $this->send_notif($message_ortu, $no_hp_ibu);
+                        $this->send_notif_new($message_for_admin, $no_admin);
+                        $this->send_notif_new($message_ortu, $no_hp_ayah);
+                        $this->send_notif_new($message_ortu, $no_hp_ibu);
                     }
                     break;
                 case 'cancel':
