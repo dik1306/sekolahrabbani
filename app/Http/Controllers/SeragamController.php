@@ -1396,7 +1396,6 @@ class SeragamController extends Controller
                     📌 No. Registrasi: '.$data_anak->id_anak.'
                     👤 Nama Ananda: '.$data_anak->nama_lengkap.'
                     💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
                     Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
@@ -1406,7 +1405,6 @@ class SeragamController extends Controller
                     📌 No. Registrasi: '.$data_anak->id_anak.'
                     👤 Nama Ananda: '.$data_anak->nama_lengkap.'
                     💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
                     Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
@@ -1495,7 +1493,6 @@ class SeragamController extends Controller
                     📌 No. Registrasi: '.$data_anak->id_anak.'
                     👤 Nama Ananda: '.$data_anak->nama_lengkap.'
                     💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
                     Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
@@ -1505,7 +1502,6 @@ class SeragamController extends Controller
                     📌 No. Registrasi: '.$data_anak->id_anak.'
                     👤 Nama Ananda: '.$data_anak->nama_lengkap.'
                     💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
                     Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
