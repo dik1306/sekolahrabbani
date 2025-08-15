@@ -1189,6 +1189,7 @@ class SeragamController extends Controller
                             // $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $orderId);
 
                             $data_anak = Pendaftaran::where('order_id', $orderId)->first();
+                            // TODO: Tracing Error contact_person dan contact_ccrs
                             $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
                             // $no_admin = $contact_person->telp;
                             $contact_ccrs =  ContactPerson::where('id', '16')->first();
@@ -1284,6 +1285,7 @@ class SeragamController extends Controller
                     ]);
                     // $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $orderId);
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
+                    // TODO: Tracing Error contact_person dan contact_ccrs
                     $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
                     // $no_admin = $contact_person->telp;
                     $contact_ccrs =  ContactPerson::where('id', '16')->first();
@@ -1374,90 +1376,6 @@ class SeragamController extends Controller
                         'expire_time' => $request->expiry_time
                     ]);
                     // $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $orderId);
-
-                    // TODO: HAPUS INI NANTI (INI TESTING)
-                    $data_anak = Pendaftaran::where('order_id', $orderId)->first();
-                    // $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
-                    // // $no_admin = $contact_person->telp;
-                    // $contact_ccrs =  ContactPerson::where('id', '16')->first();
-                    // $contact_ccrs =  $contact_ccrs->telp;
-                    // $no_hp_ayah = $data_anak->no_hp_ayah;
-                    // $no_hp_ibu = $data_anak->no_hp_ibu;
-                    
-                    // TODO: HAPUS INI TESTING
-                    $no_admin = '+6285173044086';
-                    $no_hp_ayah = '+6285173044086';
-                    $no_hp_ibu = '+6285173044086';
-
-                    //send notif ke admin
-                    $message_for_admin='
-                    Telah diterima pembayaran biaya pendaftaran:
-
-                    📌 No. Registrasi: '.$data_anak->id_anak.'
-                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
-
-                    Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
-
-                    $message_for_admin_wl='
-                    Telah diterima pembayaran biaya pendaftaran:
-
-                    📌 No. Registrasi: '.$data_anak->id_anak.'
-                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
-
-                    Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
-
-                    //send notif ke ortu
-                    $message_ortu = "
-✅ Pembayaran Pendaftaran Berhasil
-
-Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
-
-📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-📌 Nama Ananda: .$data_anak->nama_lengkap.'
-
-Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
-
-📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di +62.
-
-Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
-
-Hormat kami,
-Sekolah Rabbani ✨
-                    ";
-
-                    $message_waiting_list = "
-✅ Pembayaran Pendaftaran Berhasil
-
-Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
-
-📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-📌 Nama Ananda: .$data_anak->nama_lengkap.'
-
-Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
-
-📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di +62.
-
-Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
-
-Hormat kami,
-Sekolah Rabbani ✨
-                    ";
-                    
-                    if ($data_anak->status_daftar == 3) {
-                        $this->send_notif_new($message_for_admin_wl, $no_admin);
-                        $this->send_notif_new($message_waiting_list, $no_hp_ayah);
-                        $this->send_notif_new($message_waiting_list, $no_hp_ibu);
-                    } else {
-                        $this->send_notif_new($message_for_admin, $no_admin);
-                        $this->send_notif_new($message_ortu, $no_hp_ayah);
-                        $this->send_notif_new($message_ortu, $no_hp_ibu);
-                    }
                     break;
                 case 'deny':
                     Pendaftaran::where('order_id', $orderId)->update([
@@ -1473,102 +1391,6 @@ Sekolah Rabbani ✨
                         'va_number' => $no_va
                     ]);
                     // $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $orderId);
-
-                    // TODO: HAPUS INI NANTI (INI TESTING)
-                    $data_anak = Pendaftaran::where('order_id', $orderId)->first();
-                    // $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
-                    // // $no_admin = $contact_person->telp;
-                    // $contact_ccrs =  ContactPerson::where('id', '16')->first();
-                    // $contact_ccrs =  $contact_ccrs->telp;
-                    // $no_hp_ayah = $data_anak->no_hp_ayah;
-                    // $no_hp_ibu = $data_anak->no_hp_ibu;
-                    
-                    // TODO: HAPUS INI TESTING
-                    $no_admin = '+6285173044086';
-                    $no_hp_ayah = '+6285173044086';
-                    $no_hp_ibu = '+6285173044086';
-
-                    //send notif ke admin
-                    $message_for_admin='
-                    Telah diterima pembayaran biaya pendaftaran Expire:
-
-                    📌 No. Registrasi: '.$data_anak->id_anak.'
-                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
-
-                    Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
-
-                    $message_for_admin_wl='
-                    Telah diterima pembayaran biaya pendaftaran Expire:
-
-                    📌 No. Registrasi: '.$data_anak->id_anak.'
-                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
-
-                    Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
-
-                    //send notif ke ortu
-                    $message_ortu = "
-✅ Pembayaran Pendaftaran Berhasil Expire
-
-Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
-
-📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-📌 Nama Ananda: .$data_anak->nama_lengkap.'
-
-Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
-
-📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di +62.
-
-Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
-
-Hormat kami,
-Sekolah Rabbani ✨
-                    ";
-
-                    $message_waiting_list = "
-✅ Pembayaran Pendaftaran Berhasil Expire
-
-Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
-
-📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-📌 Nama Ananda: .$data_anak->nama_lengkap.'
-
-Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
-
-📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di +62.
-
-Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
-
-Hormat kami,
-Sekolah Rabbani ✨
-                    ";
-                    
-                    if ($data_anak->status_daftar == 3) {
-                        $this->send_notif_new($message_for_admin_wl, $no_admin);
-                        $this->send_notif_new($message_waiting_list, $no_hp_ayah);
-                        $this->send_notif_new($message_waiting_list, $no_hp_ibu);
-                    } else {
-                        $this->send_notif_new($message_for_admin, $no_admin);
-                        $this->send_notif_new($message_ortu, $no_hp_ayah);
-                        $this->send_notif_new($message_ortu, $no_hp_ibu);
-                    }
-                    break;
-                case 'cancel':
-                    Pendaftaran::where('order_id', $orderId)->update([
-                        'status_midtrans' => 'canceled',
-                        'metode_pembayaran' => $mtd_pembayaran,
-                        'va_number' => $no_va
-                    ]);
-                    break;
-                default:
-                    Pendaftaran::where('order_id', $orderId)->update([
-                        'status_midtrans' => 'unknown',
-                    ]);
                     break;
             }
     
