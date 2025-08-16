@@ -476,7 +476,7 @@ class JerseyController extends Controller
         $user_id = auth()->user()->id;
         $no_hp = auth()->user()->no_hp;
         $nama_pemesan = auth()->user()->name;
-        $no_pesanan = 'INV-JRS-'. date('YmdHis');
+        $no_pesanan = 'INV-JRS-'.$user_id.'-'. date('YmdHis');
         $profile = Profile::select('sekolah_id')
                         ->where('user_id', $user_id)
                         ->first();
