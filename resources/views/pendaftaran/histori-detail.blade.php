@@ -603,6 +603,16 @@
             const idAnak = '{{ $data_pendaftaran->id_anak }}';
             const baseAmount = {{ $biaya ?? 0 }}; // Base amount from server
 
+            let tglDaftar = '{{ $data_pendaftaran->created_at ?? "ajuanLama" }}';
+            // Format tanggal yang akan dibandingkan (19 Agustus 2025)
+            const batasTanggal = new Date('2025-08-19T00:00:00');
+            // Mengubah tglDaftar menjadi objek Date JavaScript
+            let tanggalPendaftaran = new Date(tglDaftar);
+            // Mengecek apakah tanggal pendaftaran lebih kecil dari batasTanggal
+            if (tanggalPendaftaran < batasTanggal) {
+                tglDaftar = "ajuanLama";
+            }
+
             // Format number as currency (Rp X.XXX.XXX)
             function formatCurrency(amount) {
                 return 'Rp ' + amount.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
@@ -761,13 +771,13 @@
 
             // Wrap the initial check in $(document).ready()
             $(document).ready(function() {
-                if (statusMidtrans === 'kosong') {
+                if (tglDaftar === 'ajuanLama') {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Pendaftaran Sebelum Skema Baru',
                         text: 'Harap diperhatikan, ini adalah pendaftaran sebelum diterapkannya skema baru. Oleh karena itu, tidak ada data pembayaran yang tersedia.',
                     });
-                } else if (statusMidtrans === 'pending'){
+                } else if (statusMidtrans === 'kosong'){
                     openModalPayment();
                 }else if (statusMidtrans === 'expire') {
                     Swal.fire({
@@ -787,13 +797,13 @@
             });
 
             document.getElementById('pay-button')?.addEventListener('click', function() {
-                if (statusMidtrans === 'kosong') {
+                if (tglDaftar === 'ajuanLama') {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Pendaftaran Sebelum Skema Baru',
                         text: 'Harap diperhatikan, ini adalah pendaftaran sebelum diterapkannya skema baru. Oleh karena itu, tidak ada data pembayaran yang tersedia.',
                     });
-                } else if (statusMidtrans === 'pending') {
+                } else if (statusMidtrans === 'kosong') {
                     openModalPayment();
                 } else {
                     openSnapPayment();
