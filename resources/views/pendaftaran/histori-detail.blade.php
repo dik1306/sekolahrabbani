@@ -659,7 +659,7 @@
             function openSnapPayment() {
                 snap.pay(snapToken, {
                     onSuccess: function(result) {
-                        window.location.href = '{{ route('checkout.success') }}';
+                        window.location.reload();
                     },
                     onPending: function(result) {
                         // No action needed; Snap.js handles the pending UI
