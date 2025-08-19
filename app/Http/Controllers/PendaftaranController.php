@@ -36,9 +36,18 @@ class PendaftaranController extends Controller
      */
     public function index()
     {
+
         $contact_person = ContactPerson::where('is_aktif', 1)->get();
 
-        return view('pendaftaran.index', compact('contact_person'));
+        // TODO: UJI COBA TUTUP SEMENTARA HALAMAN PENDAFTARAN
+        $akses = request()->query('akses'); // atau bisa menggunakan request('akses')
+        if ($akses === 'admindopi') {
+            // Logika jika akses diizinkan
+            return view('pendaftaran.index', compact('contact_person'));
+        }
+        
+        return view('pendaftaran.index-close', compact('contact_person'));
+        
     }
 
     public function form_pendaftaran()
