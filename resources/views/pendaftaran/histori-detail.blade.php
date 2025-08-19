@@ -714,8 +714,8 @@
                     if (data.snap_token) {
                         snapToken = data.snap_token;
                         $('#payment-modal').modal('hide');
-                        openSnapPayment();
                         window.location.reload();
+                        // openSnapPayment();
                     } else {
                         Swal.fire({
                             icon: 'error',
