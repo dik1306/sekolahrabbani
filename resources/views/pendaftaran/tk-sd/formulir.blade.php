@@ -17,9 +17,9 @@
                 <h6 class="mt-1" style="color: #ED145B">Pendaftaran</h6>
                 <h4 class="mb-3">Data Calon Siswa</h4>
                 <div class="d-flex justify-content-end">
-                    <a href="{{route('form.histori.detail')}}" style="text-decoration: none">
+                    {{-- <a href="{{route('form.histori.detail')}}" style="text-decoration: none">
                         <button class="btn btn-primary btn-sm px-3 me-2" > Histori Pendaftaran </button>
-                    </a>
+                    </a> --}}
                     <a href="{{route('form.update')}}" style="text-decoration: none">
                         <button class="btn btn-blue btn-sm px-3 ml-2"> Pemenuhan Data </button>
                     </a>
