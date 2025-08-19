@@ -1186,7 +1186,7 @@ class SeragamController extends Controller
                                 'tgl_bayar' => $request->settlement_time,
                                 'updatedate' => $request->settlement_time,
                             ]);
-                            // $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $orderId);
+                            $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $orderId);
 
                             $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                             // TODO: Tracing Error contact_person dan contact_ccrs
@@ -1204,64 +1204,64 @@ class SeragamController extends Controller
 
                             //send notif ke admin
                             $message_for_admin='
-                            Telah diterima pembayaran biaya pendaftaran:
+Telah diterima pembayaran biaya pendaftaran:
 
-                            📌 No. Registrasi: '.$data_anak->id_anak.'
-                            👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                            💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                            ⏰ Waktu Pembayaran: '.$request->settlement_time.'
+📌 No. Registrasi: '.$data_anak->id_anak.'
+👤 Nama Ananda: '.$data_anak->nama_lengkap.'
+💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
-                            Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
+Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
-                            $message_for_admin_wl='
-                            Telah diterima pembayaran biaya pendaftaran:
+                    $message_for_admin_wl='
+Telah diterima pembayaran biaya pendaftaran:
 
-                            📌 No. Registrasi: '.$data_anak->id_anak.'
-                            👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                            💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                            ⏰ Waktu Pembayaran: '.$request->settlement_time.'
+📌 No. Registrasi: '.$data_anak->id_anak.'
+👤 Nama Ananda: '.$data_anak->nama_lengkap.'
+💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
-                            Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
+Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
                             //send notif ke ortu
                             $message_ortu = "
-                            ✅ Pembayaran Pendaftaran Berhasil
+✅ Pembayaran Pendaftaran Berhasil
 
-                            Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-                            Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
+Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
 
-                            📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-                            📌 Nama Ananda: .$data_anak->nama_lengkap.'
+📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
+📌 Nama Ananda: .$data_anak->nama_lengkap.'
 
-                            Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
+Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-                            📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
 
-                            Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
+Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
-                            Hormat kami,
-                            Sekolah Rabbani ✨
-                            ";
+Hormat kami,
+Sekolah Rabbani ✨
+                    ";
 
                             $message_waiting_list = "
-                            ✅ Pembayaran Pendaftaran Berhasil
+✅ Pembayaran Pendaftaran Berhasil
 
-                            Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-                            Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
+Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
 
-                            📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-                            📌 Nama Ananda: .$data_anak->nama_lengkap.'
+📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
+📌 Nama Ananda: .$data_anak->nama_lengkap.'
 
-                            Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
+Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-                            📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
 
-                            Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
+Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
-                            Hormat kami,
-                            Sekolah Rabbani ✨
-                            ";
-                            
+Hormat kami,
+Sekolah Rabbani ✨
+                    ";
+                    
                             if ($data_anak->status_daftar == 3) {
                                 $this->send_notif_new($message_for_admin_wl, $no_admin);
                                 $this->send_notif_new($message_waiting_list, $no_hp_ayah);
@@ -1283,7 +1283,7 @@ class SeragamController extends Controller
                         'tgl_bayar' => $request->settlement_time,
                         'updatedate' => $request->settlement_time,
                     ]);
-                    // $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $orderId);
+                    $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $orderId);
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                     // TODO: Tracing Error contact_person dan contact_ccrs
                     $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
@@ -1300,62 +1300,62 @@ class SeragamController extends Controller
 
                     //send notif ke admin
                     $message_for_admin='
-                    Telah diterima pembayaran biaya pendaftaran:
+Telah diterima pembayaran biaya pendaftaran:
 
-                    📌 No. Registrasi: '.$data_anak->id_anak.'
-                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
+📌 No. Registrasi: '.$data_anak->id_anak.'
+👤 Nama Ananda: '.$data_anak->nama_lengkap.'
+💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
-                    Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
+Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
                     $message_for_admin_wl='
-                    Telah diterima pembayaran biaya pendaftaran:
+Telah diterima pembayaran biaya pendaftaran:
 
-                    📌 No. Registrasi: '.$data_anak->id_anak.'
-                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
+📌 No. Registrasi: '.$data_anak->id_anak.'
+👤 Nama Ananda: '.$data_anak->nama_lengkap.'
+💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
-                    Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
+Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
                     //send notif ke ortu
                     $message_ortu = "
-                    ✅ Pembayaran Pendaftaran Berhasil
+✅ Pembayaran Pendaftaran Berhasil
 
-                    Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
+Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
 
-                    📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-                    📌 Nama Ananda: .$data_anak->nama_lengkap.'
+📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
+📌 Nama Ananda: .$data_anak->nama_lengkap.'
 
-                    Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
+Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
 
-                    Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
+Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
-                    Hormat kami,
-                    Sekolah Rabbani ✨
+Hormat kami,
+Sekolah Rabbani ✨
                     ";
 
                     $message_waiting_list = "
-                    ✅ Pembayaran Pendaftaran Berhasil
+✅ Pembayaran Pendaftaran Berhasil
 
-                    Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
+Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
 
-                    📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-                    📌 Nama Ananda: .$data_anak->nama_lengkap.'
+📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
+📌 Nama Ananda: .$data_anak->nama_lengkap.'
 
-                    Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
+Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
 
-                    Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
+Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
-                    Hormat kami,
-                    Sekolah Rabbani ✨
+Hormat kami,
+Sekolah Rabbani ✨
                     ";
                     
                     if ($data_anak->status_daftar == 3) {
@@ -1375,7 +1375,7 @@ class SeragamController extends Controller
                         'va_number' => $no_va,
                         'expire_time' => $request->expiry_time
                     ]);
-                    // $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $orderId);
+                    $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $orderId);
                     break;
                 case 'deny':
                     Pendaftaran::where('order_id', $orderId)->update([
@@ -1390,7 +1390,61 @@ class SeragamController extends Controller
                         'metode_pembayaran' => $mtd_pembayaran,
                         'va_number' => $no_va
                     ]);
-                    // $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $orderId);
+                    $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $orderId);
+
+                    $data_anak = Pendaftaran::where('order_id', $orderId)->first();
+                    $contact_ccrs =  ContactPerson::where('id', '16')->first();
+                    $contact_ccrs =  $contact_ccrs->telp;
+                    // $no_hp_ayah = $data_anak->no_hp_ayah;
+                    // $no_hp_ibu = $data_anak->no_hp_ibu;
+                    
+                    // TODO: HAPUS INI TESTING
+                    $no_hp_ayah = '+6285173044086';
+                    $no_hp_ibu = '+6285173044086';
+
+                    //send notif ke ortu
+                    $message_ortu = "
+❌ Pembayaran Pendaftaran Telah Kedaluwarsa
+
+Mohon Maaf Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
+Pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+
+📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
+📌 Nama Ananda: .$data_anak->nama_lengkap.'
+
+Status pendaftaran Ananda kini telah kedaluwarsa, silakan untuk mendaftarkan ulang, dan melakukan pembayaran biaya pendaftaran.
+
+📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+
+Hormat kami,
+Sekolah Rabbani ✨
+                    ";
+
+                    $message_waiting_list = "
+❌ Pembayaran Pendaftaran Telah Kedaluwarsa
+
+Mohon Maaf Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
+Pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+
+📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
+📌 Nama Ananda: .$data_anak->nama_lengkap.'
+
+Status pendaftaran Ananda kini telah kedaluwarsa, silakan untuk mendaftarkan ulang, dan melakukan pembayaran biaya pendaftaran.
+
+📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+
+Hormat kami,
+Sekolah Rabbani ✨
+                    ";
+                    
+                    if ($data_anak->status_daftar == 3) {
+                        $this->send_notif_new($message_waiting_list, $no_hp_ayah);
+                        $this->send_notif_new($message_waiting_list, $no_hp_ibu);
+                    } else {
+                        $this->send_notif_new($message_ortu, $no_hp_ayah);
+                        $this->send_notif_new($message_ortu, $no_hp_ibu);
+                    }
+
                     break;
             }
     
@@ -2171,36 +2225,50 @@ class SeragamController extends Controller
         }
     }
 
-    function update_status_pendaftaran_siswa($status, $mtd_pembayaran, $no_pesanan)
+    function update_status_pendaftaran_siswa($status, $mtd_pembayaran, $orderID)
     {
-        {
-            $curl = curl_init();
-    
-            curl_setopt_array($curl, array(
-            //   CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_regist/update_pesan_merchandise.php',
-              CURLOPT_RETURNTRANSFER => 1,
-              CURLOPT_ENCODING => '',
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 0,
-              CURLOPT_FOLLOWLOCATION => true,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => 'POST',
-              // CURLOPT_SSL_VERIFYPEER => false,
-              // CURLOPT_SSL_VERIFYHOST => false,
-              CURLOPT_POSTFIELDS => array(
-                'status' => $status,
-                'mtd_pembayaran' => $mtd_pembayaran,
-                'no_pesanan' => $no_pesanan,
-                )
-    
-            ));
-    
-            $response = curl_exec($curl);
-    
-            // echo $response;
-            curl_close($curl);
-            // return ($response);
+        // Ambil data berdasarkan orderID
+        $data_anak = Pendaftaran::where('order_id', $orderID)->first();
+        
+        // Pastikan data ditemukan
+        if (!$data_anak) {
+            // Jika data anak tidak ditemukan, bisa mencetak pesan atau menangani error sesuai kebutuhan
+            echo "Data anak tidak ditemukan!";
+            return;
         }
+        
+        $id_anak = $data_anak->id_anak;
+        
+        // Inisialisasi cURL
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_regist/update_pembayaran_midtrans.php', // URL API
+            CURLOPT_RETURNTRANSFER => 1,  // Mengembalikan hasil dari eksekusi curl
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST', // Menentukan metode HTTP
+            CURLOPT_POSTFIELDS => array(
+                'status_midtrans' => $status,
+                'mtd_pembayaran' => $mtd_pembayaran,
+                'id_anak' => $id_anak,
+                'order_id' => $$orderID,
+            ),
+        ));
+
+        // Eksekusi cURL
+        $response = curl_exec($curl);
+
+        // Cek jika terjadi kesalahan
+        if(curl_errno($curl)) {
+            echo 'Curl error: ' . curl_error($curl);
+        }
+
+        // Tutup cURL
+        curl_close($curl);
     }
 
     function update_status_merchandise_baru($status, $mtd_pembayaran, $no_pesanan)

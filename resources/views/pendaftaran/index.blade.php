@@ -82,7 +82,10 @@
                 <div class="modal-header">
                 </div>
                 <div class="modal-body">
-                    <h5 class="modal-title" id="label_pendaftaran">Apakah anda sudah mengetahui dan menyetujui Surat Pernyataan Pendaftaran ?</h5>
+                    <h5 class="modal-title text-center" id="label_pendaftaran">
+                        Apakah Ayah/Bunda sudah memahami informasi terkait Sekolah Rabbani (Kurikulum, kegiatan, fasilitas, skema pembiayaan dll)
+                        dan mengetahui terkait Surat Pernyataan Pendaftaran?
+                    </h5>
                     <span class="text-danger" style="font-size: 12px; display: none;" id="alert_cp">
                         Silahkan Hubungi Contact Person Sekolah <a href="#" id="klik_disini" data-bs-toggle="modal" data-bs-target="#cp_modal">Disini</a>
                     </span>
@@ -91,7 +94,26 @@
                     <button type="button" class="btn btn-secondary btn-sm" id="btn-belum" onclick="belum()">Belum</button>
                     {{-- <a href="#" id="belum"  class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#cp_modal">Belum</a> --}}
                     <button type="button" class="btn btn-secondary btn-sm" id="btn-close" style="display: none" data-bs-dismiss="modal" >Close</button>
-                    <a href="{{route('form.pendaftaran')}}" class="btn btn-success btn-sm" >Ya, Sudah</a>
+                    <a class="btn btn-success btn-sm"  data-bs-toggle="modal" data-bs-target="#konfirmasi_modal">Ya, Sudah</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="konfirmasi_modal" tabindex="-1" role="dialog" aria-labelledby="label_pendaftaran" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <h5 class="modal-title text-center" id="label_pendaftaran">
+                        Ya, saya bersedia mengikuti kurikulum sekolah dan menyetujui Surat pernyataan Pendaftaran
+                    </h5>
+                </div>
+                <div class="modal-footer">
+                    {{-- <a href="#" id="belum"  class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#cp_modal">Belum</a> --}}
+                    <button type="button" class="btn btn-md" id="btn" data-bs-dismiss="modal" style="background-color: #e80931; color: white; border-radius: 36px;">Tidak</button>
+                    <a href="{{route('form.pendaftaran')}}" class="btn btn-md" style="background-color: #f3cd74; color: black; border-radius: 36px;">Lanjut</a>
                 </div>
             </div>
         </div>

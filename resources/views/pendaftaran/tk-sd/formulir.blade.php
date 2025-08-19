@@ -16,10 +16,15 @@
             <div class="col-md">
                 <h6 class="mt-1" style="color: #ED145B">Pendaftaran</h6>
                 <h4 class="mb-3">Data Calon Siswa</h4>
-                <a href="{{route('form.update')}}" style="text-decoration: none">
-                    <button class="btn btn-blue btn-sm px-3 d-block" style="margin-left: auto" > Pemenuhan Data </button>
-                </a>
-                <form action="{{route('store.pendaftaran')}}"  method="POST" id="form_pendaftaran">
+                <div class="d-flex justify-content-end">
+                    <a href="{{route('form.histori.detail')}}" style="text-decoration: none">
+                        <button class="btn btn-primary btn-sm px-3 me-2" > Histori Pendaftaran </button>
+                    </a>
+                    <a href="{{route('form.update')}}" style="text-decoration: none">
+                        <button class="btn btn-blue btn-sm px-3 ml-2"> Pemenuhan Data </button>
+                    </a>
+                </div>
+                <form action="{{route('store.pendaftaran')}}"  method="POST" id="form_pendaftaran" onsubmit="return validateForm()">
                     @csrf
                     
                     <div class="form-group mt-3">
@@ -146,20 +151,44 @@
                     <div class="mt-3">
                         <span for="info_ppdb" class="form-label">Informasi PPDB</span>
                         <div class="form-check">
-                            <input type="radio" name="radios" class="form-check-input" value="spanduk/baliho" id="spanduk_baliho" onclick="close_info()" required>
-                            <label class="form-check-label" for="spanduk_baliho">Spanduk / Baliho</label>
+                            <input type="radio" name="radios" class="form-check-input" value="Keluarga/saudara" id="Keluarga_saudara" onclick="close_info()" required>
+                            <label class="form-check-label" for="Keluarga_saudara">Keluarga/Saudara</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="radios" class="form-check-input" value="flyer" id="flyer" onclick="close_info()">
-                            <label class="form-check-label" for="flyer">Flyer</label>
+                            <input type="radio" name="radios" class="form-check-input" value="orangtua siswa rabbani" id="orangtua_siswa_rabbani" onclick="close_info()">
+                            <label class="form-check-label" for="orangtua_siswa_rabbani">Orangtua Siswa Rabbani</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="radios" class="form-check-input" value="tetangga" id="tetangga" onclick="close_info()">
+                            <label class="form-check-label" for="tetangga">Tetangga</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="radios" class="form-check-input" value="teman" id="teman" onclick="close_info()">
+                            <label class="form-check-label" for="teman">Teman</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="radios" class="form-check-input" value="baligho/spanduk" id="baligho/spanduk" onclick="close_info()">
+                            <label class="form-check-label" for="baligho/spanduk">Baligho/Spanduk</label>
                         </div>
                         <div class="form-check">
                             <input type="radio" name="radios" class="form-check-input" value="instagram" id="instagram" onclick="close_info()">
                             <label class="form-check-label" for="instagram">Instagram</label>
                         </div>
                         <div class="form-check">
+                            <input type="radio" name="radios" class="form-check-input" value="facebook" id="facebook" onclick="close_info()">
+                            <label class="form-check-label" for="facebook">Facebook</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="radios" class="form-check-input" value="youtube" id="youtube" onclick="close_info()">
+                            <label class="form-check-label" for="youtube">Youtube</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="radios" class="form-check-input" value="tiktok" id="tiktok" onclick="close_info()">
+                            <label class="form-check-label" for="tiktok">TikTok</label>
+                        </div>
+                        <div class="form-check">
                             <input type="radio" name="radios" class="form-check-input" value="lainnya" onclick="open_info()" id="lainnya">
-                            <label class="form-check-label" for="lainnya">Rekomendasi Orang Lain</label>
+                            <label class="form-check-label" for="lainnya">Lainnya</label>
                         </div>
                         <div class="mb-3 form-check show_rekom" id="show_rekom">
                             <input type="text" style="display: none" name="radios2" id="input_rekomen" placeholder="Sebutkan" class="form-control form-control-sm"><br>
@@ -170,6 +199,19 @@
                         @endif
                     </div>
 
+                    <div class="mt-3">
+                        <span for="ada_abk" class="form-label">Apakah Ananda mempunyai kebutuhan khusus (ABK)?</span>
+                        <div class="form-check">
+                            <input type="radio" name="abk_radios" class="form-check-input" value="ya" id="ya_option_abk" onclick="close_info()">
+                            <label class="form-check-label" for="ya_option_abk">Ya</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="abk_radios" class="form-check-input" value="tidak" id="tidak_option_abk" onclick="close_info()">
+                            <label class="form-check-label" for="tidak_option_abk">Tidak</label>
+                        </div>
+                    </div>
+
+
                     <div class="mt-3 center">
                         <button type="submit" class="btn btn-primary px-3" id="btn-submit"> Submit </button>
                     </div>
@@ -178,35 +220,141 @@
         </div>
     </div>
           
+    <!-- Impor SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $("#btn-submit").click(function() {
-
-                var nama = $('#nama').val();
-                var tempat_lahir = $('#tempat_lahir').val();
-                var tgl_lahir = $('#tgl_lahir').val();
-                var jenis_kelamin = $('#jenis_kelamin').val();
-                var nama_ayah = $('#nama_ayah').val();
-                var nama_ibu = $('#nama_ibu').val();
-                var no_hp_ibu = $('#no_hp_ibu').val();
-                var no_hp_ayah = $('#no_hp_ayah').val();
-                var asal_sekolah = $('#asal_sekolah').val();
-                var info_ppdb = $('input[name="radios"]').val();
-                if (nama == '' || tempat_lahir == '' || tgl_lahir == '' || jenis_kelamin == '' || nama_ayah == '' || nama_ibu == '' || asal_sekolah == '' || info_ppdb == '' ) {
-
-                } else {
-                    // disable button
-                    $(this).prop("disabled", true);
-                    // add spinner to button
-                    $(this).html(
-                        `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
-                    );
-                    $("#form_pendaftaran").submit();
+        function validateForm() {
+            // Memeriksa apakah ada radio button yang dipilih untuk 'abk_radios'
+            const abkRadios = document.getElementsByName('abk_radios');
+            let isAbkChecked = false;
+            
+            for (let i = 0; i < abkRadios.length; i++) {
+                if (abkRadios[i].checked) {
+                    isAbkChecked = true;
+                    break;
                 }
+            }
 
-            });
+            // Memeriksa apakah ada radio button yang dipilih untuk 'radios'
+            const infoRadios = document.getElementsByName('radios');
+            let isInfoChecked = false;
+
+            for (let i = 0; i < infoRadios.length; i++) {
+                if (infoRadios[i].checked) {
+                    isInfoChecked = true;
+                    break;
+                }
+            }
+
+            // Menampilkan SweetAlert jika 'radios' tidak dipilih
+            if (!isInfoChecked) {
+                Swal.fire({
+                    title: 'Peringatan!',
+                    text: 'Harap pilih salah satu opsi informasi PPDB.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return false; // Mencegah form untuk disubmit
+            }
+
+            // Menampilkan alert jika 'abk_radios' tidak dipilih
+            if (!isAbkChecked) {
+                alert("Harap pilih salah satu opsi pada Kebutuhan Khusus (ABK).");
+                return false; // Mencegah form untuk disubmit
+            }
+
+            return true; // Jika kedua grup dipilih, form akan disubmit
+        }
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            $("#btn-submit").click(function(event) {
+            event.preventDefault(); // Mencegah form untuk langsung disubmit
+            var id_lokasi = document.getElementById("lokasi").value;
+            var jenjang = $('#jenjang').val(); // Mengambil nilai jenjang
+            var asal_sekolah = $('#asal_sekolah').val().trim();
+
+            // Mengambil nilai dari input form
+            var nama = $('#nama').val().trim();
+            var tempat_lahir = $('#tempat_lahir').val().trim();
+            var tgl_lahir = $('#tgl_lahir').val().trim();
+            var jenis_kelamin = $('#jenis_kelamin').val();
+            var lokasi = $('#lokasi').val();
+            var kelas = $('#kelas').val();
+            // var jenis_pendidikan = $('#jenis_pendidikan').val();
+            var nama_ayah = $('#nama_ayah').val().trim();
+            var nama_ibu = $('#nama_ibu').val().trim();
+            var no_hp_ibu = $('#no_hp_ibu').val().trim();
+            var no_hp_ayah = $('#no_hp_ayah').val().trim();
+            var info_ppdb = $('input[name="radios"]:checked').val(); // Memeriksa nilai yang dipilih
+            var abk_radios = $('input[name="abk_radios"]:checked').val();  // Memeriksa apakah ada pilihan pada abk_radios
+
+            // Variabel untuk menampung pesan error
+            var errorMessage = '';
+
+            // Memeriksa setiap field dan menambahkan pesan error jika ada yang kosong
+            if (!nama) errorMessage += 'Nama Lengkap, ';
+            if (!tempat_lahir) errorMessage += 'Tempat Lahir, ';
+            if (!tgl_lahir) errorMessage += 'Tanggal Lahir, ';
+            if (!jenis_kelamin) errorMessage += 'Jenis Kelamin, ';
+            if (!lokasi) errorMessage += 'Lokasi, ';
+            
+            // Validasi Jenjang hanya wajib diisi jika lokasi bukan UBR
+            if (id_lokasi != 'UBR' && !jenjang) {
+                errorMessage += 'Jenjang, ';
+            }
+            if (!kelas) errorMessage += 'Kelas, ';
+            if (!nama_ayah) errorMessage += 'Nama Ayah, ';
+            if (!nama_ibu) errorMessage += 'Nama Ibu, ';
+            if (!no_hp_ibu) errorMessage += 'No Whatsapp Ibu, ';
+            if (!no_hp_ayah) errorMessage += 'No Whatsapp Ayah, ';
+            
+            // Validasi Asal Sekolah
+            if (id_lokasi == 'UBR' && !asal_sekolah) {
+                // Asal Sekolah wajib diisi jika lokasi adalah UBR
+                errorMessage += 'Asal Sekolah, ';
+            } else if (id_lokasi != 'UBR' && jenjang > 4 && !asal_sekolah) {
+                // Asal Sekolah wajib diisi jika lokasi selain UBR dan jenjang lebih dari 4
+                errorMessage += 'Asal Sekolah, ';
+            }
+            
+            if (!info_ppdb) errorMessage += 'Informasi PPDB, ';
+            if (!abk_radios) errorMessage += 'Kebutuhan Khusus (ABK), ';
+
+            // Menghapus koma terakhir jika ada
+            if (errorMessage.length > 0) {
+                errorMessage = errorMessage.slice(0, -2);  // Menghapus koma dan spasi terakhir
+            }
+
+            // Jika ada error (field yang kosong), munculkan SweetAlert dengan pesan yang sesuai
+            if (errorMessage) {
+                Swal.fire({
+                    title: 'Peringatan!',
+                    text: 'Harap lengkapi data berikut: ' + errorMessage,
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Reset tombol submit jika ada kesalahan dan menampilkan kembali button normal
+                    $("#btn-submit").prop("disabled", false);
+                    $("#btn-submit").html('Submit');
+                });
+            } else {
+                // Jika semua data lengkap, disable tombol dan tampilkan spinner
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+                );
+                // Submit form setelah semua validasi terpenuhi
+                $("#form_pendaftaran").submit();
+            }
         });
+
+        });
+
 
         function open_info() {
             $('#input_rekomen').show()

@@ -342,10 +342,17 @@ Route::prefix('pendaftaran')->group(function () {
     Route::get('/formulir', [PendaftaranController::class, 'form_pendaftaran'])->name('form.pendaftaran');
     Route::post('/formulir', [PendaftaranController::class, 'store'])->name('store.pendaftaran');
     Route::get('/formulir/find', [PendaftaranController::class, 'find'])->name('form.find');
+
+    Route::post('/store-pembayaran', [PendaftaranController::class, 'storePembayaran'])->name('pendaftaran.store.pembayaran');
+    Route::post('/cek-status-pembayaran', [PendaftaranController::class, 'cekStatusPembayaran'])->name('cek.status.pembayaran');
+    Route::get('/histori/detail', [PendaftaranController::class, 'histori_detail'])->name('form.histori.detail');
+    Route::get('/invoice/{id_anak}', [InvoiceController::class, 'generateInvoice'])->name('pendaftaran.invoice');
+
     Route::get('/formulir/update', [PendaftaranController::class, 'edit'])->name('form.update');
     Route::post('/formulir/update', [PendaftaranController::class, 'forget_no_regis'])->name('forget_no_regis');
     Route::put('/formulir/update/{id}', [PendaftaranController::class, 'update'])->name('form.update.id');
     // Route::get('/formulir/update/{find}', [PendaftaranController::class, 'get_profile_by_no_regist'])->name('form.edit');
+    
     Route::post('/get-jenjang', [PendaftaranController::class, 'get_jenjang'])->name('get_jenjang');
     Route::post('/get-jenjang-trial', [PendaftaranController::class, 'get_jenjang_trial'])->name('get_jenjang_trial');
     Route::post('/get-kelas', [PendaftaranController::class, 'get_kelas'])->name('get_kelas');

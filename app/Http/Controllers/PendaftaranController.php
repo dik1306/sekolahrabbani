@@ -189,14 +189,13 @@ class PendaftaranController extends Controller
             'nama' => 'required',
             'lokasi' => 'required',
             'no_hp_ayah' => 'required|alpha_num',
-            'no_hp_ibu' => 'required',
+            'no_hp_ibu' => 'required'   
         ], [
             'nama.required' => 'Name is required',
             'no_hp_ayah.required' => 'No Whatsapp Ayah is required',
             'no_hp_ibu.required' => 'No Whatsapp Ibu is required',
             'no_hp_ayah.alpha_num' => 'No Whatsapp Hanya Nomor saja, tanpa special character seperti + , -',
             'no_hp_ibu.alpha_num' => 'No Whatsapp Hanya Nomor saja, tanpa special character seperti + , -',
-
         ]);
 
         $jenjang = $request->jenjang;
@@ -207,11 +206,10 @@ class PendaftaranController extends Controller
 
         if ($request->jenjang == '1' || $request->jenjang == '3') {
             $tingkat = $request->kelas;
-        }else if ($request->jenjang == '4') {
+        } else if ($request->jenjang == '4') {
             $tingkat = 'SD';
         }
 
-        
         if ($request->radios == 'lainnya') {
             $sumber_ppdb = $request->radios2;
         } else if ($request->radios == null || $request->radios == '') {
@@ -220,6 +218,7 @@ class PendaftaranController extends Controller
             $sumber_ppdb = $request->radios;
         }
 
+        $info_apakah_abk = $request->abk_radios;
         $lokasi = $request->lokasi;
         $nama_lengkap = $request->nama;
         $kelas = $request->kelas;
@@ -249,18 +248,19 @@ class PendaftaranController extends Controller
         
         $count_pendaftar = $pendaftar->count();
 
-        if ($kelas == 1 || $kelas == 7 || $kelas == 'tka' || $kelas == 'tkb' || $kelas == 'kober') {
-            if ($kuota > $count_pendaftar) {
-                $status_daftar = 2 ;
-            } else {
-                $status_daftar = 3 ;
-            }
-        } else {
-            $status_daftar = 2;
-        }
+        // if ($kelas == 1 || $kelas == 7 || $kelas == 'tka' || $kelas == 'tkb' || $kelas == 'kober') {
+        //     if ($kuota > $count_pendaftar) {
+        //         $status_daftar = 2 ;
+        //     } else {
+        //         $status_daftar = 3 ;
+        //     }
+        // } else {
+        //     $status_daftar = 2;
+        // }
+        $status_daftar = 2;
 
         // simpan ke tbl_anak
-        Pendaftaran::create([
+        $pendaftaran_data = Pendaftaran::create([
             'id_anak' => $id_anak,
             'nama_lengkap' => $nama_lengkap,
             'tempat_lahir' => $tempat_lahir,
@@ -273,6 +273,7 @@ class PendaftaranController extends Controller
             'no_hp_ayah' => $no_hp_ayah,
             'no_hp_ibu' => $no_hp_ibu,
             'info_ppdb' => $sumber_ppdb,
+            'info_apakah_abk' => $info_apakah_abk,
             'jenis_pendidikan' => $jenis_pendidikan,
             'tahun_ajaran' => $tahun_ajaran,
             'is_pindahan' => $is_pindahan,
@@ -302,47 +303,233 @@ class PendaftaranController extends Controller
             'id_anak' => $id_anak
         ]);
 
-        // send ke qlp
-        $this->send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan);
-        $this->send_pendaftaran_baru($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan);
-
+        
         $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $lokasi)->where('id_jenjang', $jenjang)->first();
         $no_admin = $contact_person->telp;
         $biaya = $contact_person->biaya;
         $no_rek = $contact_person->norek;
         $nama_rek = $contact_person->nama_rek;
 
-        //send notif ke admin
-		$message_for_admin='Pendaftaran telah berhasil dengan nomor registrasi "'.$id_anak.'". a/n "'.$nama_lengkap.'" ';
-		$message_for_admin_wl='Pendaftaran telah berhasil dengan nomor registrasi "'.$id_anak.'". a/n "'.$nama_lengkap.'" masuk dalam waiting list';
+        // send ke qlp
+        // $this->send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
+        // $this->send_pendaftaran_baru($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
+
+
+        //send notif ke admin (dijadikan komentar saja)
+        //$message_for_admin='Pendaftaran telah berhasil dengan nomor registrasi "'.$id_anak.'". a/n "'.$nama_lengkap.'" ';
+        //$message_for_admin_wl='Pendaftaran telah berhasil dengan nomor registrasi "'.$id_anak.'". a/n "'.$nama_lengkap.'" masuk dalam waiting list';
+        //if ($status_daftar == 3) {
+        //    $this->send_notif($message_for_admin_wl, $no_admin);
+        //} else {
+        //    $this->send_notif($message_for_admin, $no_admin);
+        //}
 
         //send notif ke ortu
-        $message_ortu = "Terimakasih *Ayah/Bunda $nama_lengkap* telah mendaftarkan Anandanya ke Sekolah Rabbani. 
-No Registrasi / Pendaftaran adalah *$id_anak* mohon disimpan untuk selanjutnya pemenuhan data saat psikotest. 
+        $message_ortu = "
+    Terimakasih *Ayah/Bunda $nama_lengkap* telah mendaftarkan Ananda ke Sekolah Rabbani 🏫 
+    📌 No. Registrasi / Pendaftaran: *$id_anak*
+    Mohon disimpan untuk keperluan pemenuhan data.
 
-Silahkan lakukan pembayaran pendaftaran sebesar *Rp ".number_format($biaya)."* ke rekening *".$nama_rek." ".$no_rek."* dan kirim bukti bayar ke nomor https://wa.me/".$no_admin." 
+    💳 Silakan melakukan pembayaran biaya pendaftaran sebesar *Rp ".number_format($biaya)."* _(Belum termasuk biaya admin)_
+    Melalui Laman Pembayaran berikut:
+    https://sekolahrabbani.sch.id/pendaftaran/histori/detail?no_registrasi=$id_anak
 
-Apabila ada pertanyaan silahkan hubungi Customer Service kami di nomor ".$no_admin.", Terima Kasih.";
+    Setelah pembayaran dilakukan, status pendaftaran Ananda akan otomatis tercatat di sistem kami dan akan dilanjutkan ke tahap berikutnya.
 
-        $message_waiting_list = "Terimakasih *Ayah/Bunda $nama_lengkap* telah mendaftarkan Anandanya ke Sekolah Rabbani dengan No Registrasi adalah *$id_anak*. Kami sangat menghargai kepercayaan Ayah/Bunda kepada kami. 
+    📞 Untuk pertanyaan lebih lanjut, silakan hubungi Customer Service kami di ".$no_admin.".
+    Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
+    Kami akan segera menginformasikan proses selanjutnya.
 
-Kami akan segera menginformasikan ke    pada Ayah/Bunda mengenai proses selanjutnya. Jika ada pertanyaan atau kebutuhan informasi tambahan, jangan ragu untuk menghubungi kami melalui nomor ".$no_admin." 
+    Balas *Ya* jika data berikut benar, dan silakan mengakses link pembayaran
 
-Hormat Kami,
-*Sekolah Rabbani.*";
+    *Hormat kami*,
+    Sekolah Rabbani ✨
+    ";
 
-        if ($status_daftar == 3) {
-            $this->send_notif($message_for_admin_wl, $no_admin);
-            $this->send_notif($message_waiting_list, $no_hp_ayah);
-            $this->send_notif($message_waiting_list, $no_hp_ibu);
-        } else {
-            $this->send_notif($message_for_admin, $no_admin);
-            $this->send_notif($message_ortu, $no_hp_ayah);
-            $this->send_notif($message_ortu, $no_hp_ibu);
+        $message_waiting_list = "
+    Terimakasih *Ayah/Bunda $nama_lengkap* telah mendaftarkan Ananda ke Sekolah Rabbani 🏫 
+    📌 No. Registrasi / Pendaftaran: *$id_anak*
+    Mohon disimpan untuk keperluan pemenuhan data.
+
+    💳 Silakan melakukan pembayaran biaya pendaftaran sebesar *Rp ".number_format($biaya)."* _(Belum termasuk biaya admin)_
+    Melalui Laman Pembayaran berikut:
+    https://sekolahrabbani.sch.id/pendaftaran/histori/detail?no_registrasi=$id_anak
+
+    Setelah pembayaran dilakukan, status pendaftaran Ananda akan otomatis tercatat di sistem kami dan akan dilanjutkan ke tahap berikutnya.
+
+    📞 Untuk pertanyaan lebih lanjut, silakan hubungi Customer Service kami di ".$no_admin.".
+    Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
+    Kami akan segera menginformasikan proses selanjutnya.
+
+    Balas *Ya* jika data berikut benar, dan silakan mengakses link pembayaran
+
+    *Hormat kami*,
+    Sekolah Rabbani ✨
+    ";
+
+    if ($status_daftar == 3) {
+        $this->send_notif($message_waiting_list, $no_hp_ayah);
+        $this->send_notif($message_waiting_list, $no_hp_ibu);
+    } else {
+        $this->send_notif($message_ortu, $no_hp_ayah);
+        $this->send_notif($message_ortu, $no_hp_ibu);
+    }
+
+    // Redirect ke histori detail dengan no_registrasi = $id_anak
+    return redirect()->route('form.histori.detail', ['no_registrasi' => $id_anak])
+        ->with('success', 'Pendaftaran Berhasil.');
+       
+    }
+
+    public function storePembayaran(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'id_anak' => 'required',
+                'payment_method' => 'required|in:other_qris,qris,gopay,shopeepay,bca_va,bni_va,bri_va,mandiri_va,echannel,cimb_va,permata_va',
+                'admin_id' => 'required|in:qris,va,deeplink',
+            ]);
+
+            $idAnak = $request->id_anak;
+            $paymentMethod = $request->payment_method;
+            $adminId = $request->admin_id;
+
+            $pendaftaran_data = Pendaftaran::where('id_anak', $idAnak)->firstOrFail();
+            $biaya = ContactPerson::where('is_aktif', '1')
+                ->where('kode_sekolah', $pendaftaran_data->lokasi)
+                ->where('id_jenjang', $pendaftaran_data->jenjang)
+                ->first()->biaya;
+
+            if ($adminId == 'qris') {
+                $totalAmount = $biaya + ($biaya * 0.007);
+            } elseif ($adminId == 'va') {
+                $totalAmount = $biaya + 4400;
+            } elseif ($adminId == 'deeplink') {
+                $totalAmount = $biaya + ($biaya * 0.02);
+            } else {
+                return response()->json(['failed' => 'Jenis pembayaran Tidak ditemukan'], 400);
+            }
+
+            \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+            \Midtrans\Config::$isProduction = config('midtrans.isProduction');
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            $order_id = $idAnak . '-' . time();
+            $paymentMethods = [$paymentMethod];
+
+            if ($paymentMethod == 'other_qris') {
+                $paymentMethod = 'qris';
+            } else if ($paymentMethod == 'echannel') {
+                $paymentMethod = 'mandiri_va';
+            } else {
+                $paymentMethod = $paymentMethod;
+            }
+
+            // return response()->json(['failed' => 'Terjadi kesalahan: ' . $paymentMethod], 400);
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => $order_id,
+                    'gross_amount' => $totalAmount,
+                ],
+                'enabled_payments' => $paymentMethods,
+                'customer_details' => [
+                    'first_name' => $pendaftaran_data->nama_lengkap,
+                    'phone' => $pendaftaran_data->no_hp_ibu,
+                ]
+            ];
+
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+            Pendaftaran::where('id_anak', $idAnak)->update([
+                'order_id' => $order_id,
+                'snap_token' => $snapToken,
+                'metode_pembayaran' => $paymentMethod,
+                'status_midtrans' => 'pending',
+                'total_harga' => $totalAmount,
+            ]);
+
+            return response()->json(['snap_token' => $snapToken], 200);
+        } catch (\Exception $e) {
+            Log::error('Error in storePembayaran: ' . $e->getMessage());
+            return response()->json(['failed' => 'Terjadi kesalahan: ' . $e->getMessage()], 400);
+        }
+    }
+
+
+    
+    public function cekStatusPembayaran(Request $request)
+    {
+        $id_anak = $request->input('id_anak');
+        $pendaftaran = Pendaftaran::where('id_anak', $id_anak)->first();
+
+        if ($pendaftaran) {
+            return response()->json([
+                'status_midtrans' => $pendaftaran->status_midtrans ?? 'pending'
+            ]);
         }
 
-        return redirect()->route('pendaftaran')
-            ->with('success', 'Pendaftaran Berhasil.');
+        return response()->json(['error' => 'Data not found'], 404);
+    }
+
+    public function histori_detail(Request $request)
+    {
+        $no_registrasi = $request->no_registrasi ?? null;
+
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = config('midtrans.isProduction');
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+        
+        if ($request->has('no_registrasi')) {
+            $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
+            $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
+            $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
+
+            $biaya = ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_pendaftaran->lokasi)->where('id_jenjang', $data_pendaftaran->jenjang)->first()->biaya;
+            
+            $lokasi = Lokasi::where('kode_sekolah', $data_pendaftaran->lokasi)->first();
+            $lokasi = $lokasi->nama_sekolah;
+
+            // $transaction = \Midtrans\Transaction::status('PPDB-tka-CMH-20250813092804-1755052090');
+            // dd($transaction);
+        } else {
+            $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
+            $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
+            $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
+            $lokasi = 'Tidak ditemukan';
+            $biaya = 0;
+        }
+
+        
+        if($data_pendaftaran->order_id) {
+
+            $status = \Midtrans\Transaction::status($data_pendaftaran->order_id);            
+            // Ambil expiry_time
+            $expiryTime = $status->expiry_time ?? null;
+            // $total_harga = (int) $status->gross_amount;
+
+            if (is_object($status) && isset($status->gross_amount)) {
+                $total_harga = (int) $status->gross_amount;
+            } else {
+                $total_harga = 0; // Nilai default jika gagal
+            }
+            Pendaftaran::where('id_anak', $no_registrasi)->update([
+                'expire_time' => $expiryTime,
+                'total_harga' => $total_harga,
+            ]);
+
+            $data_pendaftaran = Pendaftaran::where('id_anak', $no_registrasi)->first();
+        }
+
+        return view('pendaftaran.histori-detail', 
+            compact('data_pendaftaran','no_registrasi', 'get_profile_ibu', 'get_profile_ayah', 'lokasi', 'biaya')
+        );
     }
 
     /**
