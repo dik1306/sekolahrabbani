@@ -2230,37 +2230,32 @@ Sekolah Rabbani ✨
     }
 
     function update_status_pendaftaran_siswa($status, $mtd_pembayaran, $id_anak, $orderID)
-    {        
-        // Inisialisasi cURL
+    {       
         $curl = curl_init();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_regist/update_pembayaran_midtrans.php', // URL API
-            CURLOPT_RETURNTRANSFER => 1,  // Mengembalikan hasil dari eksekusi curl
+		curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_regist/update_pembayaran_midtrans.php',
+            CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 0,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST', // Menentukan metode HTTP
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            // CURLOPT_SSL_VERIFYPEER => false,
+            // CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_POSTFIELDS => array(
                 'status_midtrans' => $status,
                 'mtd_pembayaran' => $mtd_pembayaran,
                 'id_anak' => $id_anak,
                 'order_id' => $$orderID,
-            ),
-        ));
+            )
+		));
 
-        // Eksekusi cURL
-        $response = curl_exec($curl);
+		$response = curl_exec($curl);
 
-        // Cek jika terjadi kesalahan
-        if(curl_errno($curl)) {
-            echo 'Curl error: ' . curl_error($curl);
-        }
-
-        // Tutup cURL
-        curl_close($curl);
+		// echo $response;
+		curl_close($curl);
     }
 
     function update_status_merchandise_baru($status, $mtd_pembayaran, $no_pesanan)
