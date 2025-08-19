@@ -20,6 +20,7 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\PosisiLamaranController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileSekolahController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\QurbanController;
 use App\Http\Controllers\SeragamController;
 use App\Http\Controllers\TagihanController;

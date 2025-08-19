@@ -1191,17 +1191,14 @@ class SeragamController extends Controller
 
                             $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                             // TODO: Tracing Error contact_person dan contact_ccrs
-                            // $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
-                            // $no_admin = $contact_person->telp;
+                            $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
+                            $no_admin = $contact_person->telp;
+
                             $contact_ccrs =  ContactPerson::where('id', '16')->first();
                             $contact_ccrs =  $contact_ccrs->telp;
-                            // $no_hp_ayah = $data_anak->no_hp_ayah;
-                            // $no_hp_ibu = $data_anak->no_hp_ibu;
                             
-                            // TODO: HAPUS INI TESTING
-                            $no_admin = '+6285173044086';
-                            $no_hp_ayah = '+6285173044086';
-                            $no_hp_ibu = '+6285173044086';
+                            $no_hp_ayah = $data_anak->no_hp_ayah;
+                            $no_hp_ibu = $data_anak->no_hp_ibu;
 
                             //send notif ke admin
                             $message_for_admin='
@@ -1287,19 +1284,15 @@ Sekolah Rabbani ✨
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                     $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
-                    // TODO: Tracing Error contact_person dan contact_ccrs
-                    // $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
-                    // $no_admin = $contact_person->telp;
+                    
+                    $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
+                    $no_admin = $contact_person->telp;
                     $contact_ccrs =  ContactPerson::where('id', '16')->first();
                     $contact_ccrs =  $contact_ccrs->telp;
-                    // $no_hp_ayah = $data_anak->no_hp_ayah;
-                    // $no_hp_ibu = $data_anak->no_hp_ibu;
                     
-                    // TODO: HAPUS INI TESTING
-                    $no_admin = '+6285173044086';
-                    $no_hp_ayah = '+6285173044086';
-                    $no_hp_ibu = '+6285173044086';
-
+                    $no_hp_ayah = $data_anak->no_hp_ayah;
+                    $no_hp_ibu = $data_anak->no_hp_ibu;
+                    
                     //send notif ke admin
                     $message_for_admin='
 Telah diterima pembayaran biaya pendaftaran:
@@ -1399,13 +1392,10 @@ Sekolah Rabbani ✨
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                     $contact_ccrs =  ContactPerson::where('id', '16')->first();
                     $contact_ccrs =  $contact_ccrs->telp;
-                    // $no_hp_ayah = $data_anak->no_hp_ayah;
-                    // $no_hp_ibu = $data_anak->no_hp_ibu;
-                    
-                    // TODO: HAPUS INI TESTING
-                    $no_hp_ayah = '+6285173044086';
-                    $no_hp_ibu = '+6285173044086';
 
+                    $no_hp_ayah = $data_anak->no_hp_ayah;
+                    $no_hp_ibu = $data_anak->no_hp_ibu;
+                    
                     //send notif ke ortu
                     $message_ortu = "
 ❌ Pembayaran Pendaftaran Telah Kedaluwarsa
