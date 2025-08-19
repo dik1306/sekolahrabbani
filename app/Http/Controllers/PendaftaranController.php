@@ -487,10 +487,11 @@ class PendaftaranController extends Controller
         // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = true;
         
+        $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
+        $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
+        $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
+
         if ($request->has('no_registrasi')) {
-            $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
-            $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
-            $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
 
             $biaya = ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_pendaftaran->lokasi)->where('id_jenjang', $data_pendaftaran->jenjang)->first()->biaya;
             
@@ -500,9 +501,6 @@ class PendaftaranController extends Controller
             // $transaction = \Midtrans\Transaction::status('PPDB-tka-CMH-20250813092804-1755052090');
             // dd($transaction);
         } else {
-            $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
-            $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
-            $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
             $lokasi = 'Tidak ditemukan';
             $biaya = 0;
         }
