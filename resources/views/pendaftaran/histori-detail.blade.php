@@ -659,11 +659,10 @@
             function openSnapPayment() {
                 snap.pay(snapToken, {
                     onSuccess: function(result) {
-                        window.location.reload();
+                        // window.location.reload();
                     },
                     onPending: function(result) {
                         // No action needed; Snap.js handles the pending UI
-                        window.location.reload();
                     },
                     onError: function(result) {
                         Swal.fire({
@@ -715,8 +714,8 @@
                     if (data.snap_token) {
                         snapToken = data.snap_token;
                         $('#payment-modal').modal('hide');
-                        openSnapPayment();
-                        // window.location.reload();
+                        snap.pay(snapToken);
+                        window.location.reload();
                     } else {
                         Swal.fire({
                             icon: 'error',
