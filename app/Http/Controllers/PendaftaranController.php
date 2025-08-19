@@ -237,17 +237,17 @@ class PendaftaranController extends Controller
         $id_anak = "PPDB-$tingkat-$lokasi-$now";
         $is_pindahan = $request->is_pindahan;
 
-        // cek kuota
-        $cek_kuota = KuotaPPDB::where('id_tahun_ajaran', $tahun_ajaran)->where('lokasi', $lokasi)
-                                ->where('tingkat', $tingkat)->where('jenjang', $jenjang)->first();
+        // // cek kuota
+        // $cek_kuota = KuotaPPDB::where('id_tahun_ajaran', $tahun_ajaran)->where('lokasi', $lokasi)
+        //                         ->where('tingkat', $tingkat)->where('jenjang', $jenjang)->first();
         
-        $kuota = $cek_kuota->kuota;
+        // $kuota = $cek_kuota->kuota;
 
-        $pendaftar = Pendaftaran::where('tahun_ajaran', $tahun_ajaran)->where('lokasi', $lokasi)
-                                        ->where('tingkat', $tingkat)->where('jenjang', $jenjang)
-                                        ->where('status_pembayaran', 1)->get();
+        // $pendaftar = Pendaftaran::where('tahun_ajaran', $tahun_ajaran)->where('lokasi', $lokasi)
+        //                                 ->where('tingkat', $tingkat)->where('jenjang', $jenjang)
+        //                                 ->where('status_pembayaran', 1)->get();
         
-        $count_pendaftar = $pendaftar->count();
+        // $count_pendaftar = $pendaftar->count();
 
         // if ($kelas == 1 || $kelas == 7 || $kelas == 'tka' || $kelas == 'tkb' || $kelas == 'kober') {
         //     if ($kuota > $count_pendaftar) {
