@@ -2247,7 +2247,7 @@ Sekolah Rabbani ✨
                 'status_midtrans' => $status,
                 'mtd_pembayaran' => $mtd_pembayaran,
                 'id_anak' => $id_anak,
-                'order_id' => $$orderID,
+                'order_id' => $orderID,
             )
 		));
 
