@@ -487,11 +487,10 @@ class PendaftaranController extends Controller
         // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = true;
         
-        $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
-        $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
-        $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
-
         if ($request->has('no_registrasi')) {
+            $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
+            $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
+            $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
 
             $biaya = ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_pendaftaran->lokasi)->where('id_jenjang', $data_pendaftaran->jenjang)->first()->biaya;
             
@@ -501,29 +500,33 @@ class PendaftaranController extends Controller
             // $transaction = \Midtrans\Transaction::status('PPDB-tka-CMH-20250813092804-1755052090');
             // dd($transaction);
         } else {
+            $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
+            $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
+            $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
             $lokasi = 'Tidak ditemukan';
             $biaya = 0;
         }
 
         
-        if($data_pendaftaran->order_id) {
+        if($data_pendaftaran) {
+            if ($data_pendaftaran->order_id) {
+                $status = \Midtrans\Transaction::status($data_pendaftaran->order_id);            
+                // Ambil expiry_time
+                $expiryTime = $status->expiry_time ?? null;
+                // $total_harga = (int) $status->gross_amount;
 
-            $status = \Midtrans\Transaction::status($data_pendaftaran->order_id);            
-            // Ambil expiry_time
-            $expiryTime = $status->expiry_time ?? null;
-            // $total_harga = (int) $status->gross_amount;
+                if (is_object($status) && isset($status->gross_amount)) {
+                    $total_harga = (int) $status->gross_amount;
+                } else {
+                    $total_harga = 0; // Nilai default jika gagal
+                }
+                Pendaftaran::where('id_anak', $no_registrasi)->update([
+                    'expire_time' => $expiryTime,
+                    'total_harga' => $total_harga,
+                ]);
 
-            if (is_object($status) && isset($status->gross_amount)) {
-                $total_harga = (int) $status->gross_amount;
-            } else {
-                $total_harga = 0; // Nilai default jika gagal
+                $data_pendaftaran = Pendaftaran::where('id_anak', $no_registrasi)->first();
             }
-            Pendaftaran::where('id_anak', $no_registrasi)->update([
-                'expire_time' => $expiryTime,
-                'total_harga' => $total_harga,
-            ]);
-
-            $data_pendaftaran = Pendaftaran::where('id_anak', $no_registrasi)->first();
         }
 
         return view('pendaftaran.histori-detail', 
