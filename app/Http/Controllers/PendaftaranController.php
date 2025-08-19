@@ -402,7 +402,7 @@ class PendaftaranController extends Controller
             //     ->first()->biaya;
 
             // TODO: UNTUK TESTING AJA
-            $biaya = 1;
+            $biaya = 1.0;
 
             if ($adminId == 'qris') {
                 $totalAmount = $biaya + ($biaya * 0.007);
