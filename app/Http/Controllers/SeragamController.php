@@ -1191,10 +1191,10 @@ class SeragamController extends Controller
 
                             $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                             // TODO: Tracing Error contact_person dan contact_ccrs
-                            $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
+                            // $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
                             // $no_admin = $contact_person->telp;
-                            $contact_ccrs =  ContactPerson::where('id', '16')->first();
-                            $contact_ccrs =  $contact_ccrs->telp;
+                            // $contact_ccrs =  ContactPerson::where('id', '16')->first();
+                            // $contact_ccrs =  $contact_ccrs->telp;
                             // $no_hp_ayah = $data_anak->no_hp_ayah;
                             // $no_hp_ibu = $data_anak->no_hp_ibu;
                             
@@ -1236,7 +1236,7 @@ Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_am
 
 Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di +62
 
 Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
@@ -1255,7 +1255,7 @@ Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_am
 
 Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di +62
 
 Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
@@ -1288,10 +1288,10 @@ Sekolah Rabbani ✨
                     $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $data_anak->id_anak, $orderId);
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                     // TODO: Tracing Error contact_person dan contact_ccrs
-                    $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
+                    // $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
                     // $no_admin = $contact_person->telp;
-                    $contact_ccrs =  ContactPerson::where('id', '16')->first();
-                    $contact_ccrs =  $contact_ccrs->telp;
+                    // $contact_ccrs =  ContactPerson::where('id', '16')->first();
+                    // $contact_ccrs =  $contact_ccrs->telp;
                     // $no_hp_ayah = $data_anak->no_hp_ayah;
                     // $no_hp_ibu = $data_anak->no_hp_ibu;
                     
@@ -1302,62 +1302,62 @@ Sekolah Rabbani ✨
 
                     //send notif ke admin
                     $message_for_admin='
-Telah diterima pembayaran biaya pendaftaran:
+                    Telah diterima pembayaran biaya pendaftaran:
 
-📌 No. Registrasi: '.$data_anak->id_anak.'
-👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-⏰ Waktu Pembayaran: '.$request->settlement_time.'
+                    📌 No. Registrasi: '.$data_anak->id_anak.'
+                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
+                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
-Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
+                    Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
-                    $message_for_admin_wl='
-Telah diterima pembayaran biaya pendaftaran:
+                                        $message_for_admin_wl='
+                    Telah diterima pembayaran biaya pendaftaran:
 
-📌 No. Registrasi: '.$data_anak->id_anak.'
-👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-💳 Jumlah Bayar: Rp '.$request->gross_amount.'
-⏰ Waktu Pembayaran: '.$request->settlement_time.'
+                    📌 No. Registrasi: '.$data_anak->id_anak.'
+                    👤 Nama Ananda: '.$data_anak->nama_lengkap.'
+                    💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+                    ⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
-Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
+                    Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
 
-                    //send notif ke ortu
-                    $message_ortu = "
-✅ Pembayaran Pendaftaran Berhasil
+                                        //send notif ke ortu
+                                        $message_ortu = "
+                    ✅ Pembayaran Pendaftaran Berhasil
 
-Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+                    Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
+                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
 
-📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-📌 Nama Ananda: .$data_anak->nama_lengkap.'
+                    📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
+                    📌 Nama Ananda: .$data_anak->nama_lengkap.'
 
-Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
+                    Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di +62
 
-Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
+                    Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
-Hormat kami,
-Sekolah Rabbani ✨
-                    ";
+                    Hormat kami,
+                    Sekolah Rabbani ✨
+                                        ";
 
-                    $message_waiting_list = "
-✅ Pembayaran Pendaftaran Berhasil
+                                        $message_waiting_list = "
+                    ✅ Pembayaran Pendaftaran Berhasil
 
-Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
-Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
+                    Terima kasih Ayah/Bunda '.$data_anak->nama_lengkap.' 🙏
+                    Kami telah menerima pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
 
-📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
-📌 Nama Ananda: .$data_anak->nama_lengkap.'
+                    📌 No. Registrasi / Pendaftaran: '.$data_anak->id_anak.'
+                    📌 Nama Ananda: .$data_anak->nama_lengkap.'
 
-Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
+                    Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
 
-📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+                    📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di+62
 
-Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
+                    Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
 
-Hormat kami,
-Sekolah Rabbani ✨
+                    Hormat kami,
+                    Sekolah Rabbani ✨
                     ";
                     
                     if ($data_anak->status_daftar == 3) {
@@ -1449,9 +1449,8 @@ Sekolah Rabbani ✨
                         $this->send_notif_new($message_ortu, $no_hp_ibu);
                     }
 
-                    break;
-            }
-    
+                    break;   
+            } 
             return response()->json(['message' => 'Callback received successfully']);
         }  
     }
