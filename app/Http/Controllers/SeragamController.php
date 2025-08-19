@@ -1393,8 +1393,8 @@ Sekolah Rabbani ✨
                     $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $orderId);
 
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
-                    $contact_ccrs =  ContactPerson::where('id', '16')->first();
-                    $contact_ccrs =  $contact_ccrs->telp;
+                    // $contact_ccrs =  ContactPerson::where('id', '16')->first();
+                    // $contact_ccrs =  $contact_ccrs->telp;
                     // $no_hp_ayah = $data_anak->no_hp_ayah;
                     // $no_hp_ibu = $data_anak->no_hp_ibu;
                     
@@ -1414,7 +1414,7 @@ Pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
 
 Status pendaftaran Ananda kini telah kedaluwarsa, silakan untuk mendaftarkan ulang, dan melakukan pembayaran biaya pendaftaran.
 
-📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di +62
 
 Hormat kami,
 Sekolah Rabbani ✨
@@ -1431,7 +1431,7 @@ Pembayaran biaya pendaftaran sebesar Rp '.$request->gross_amount.'. untuk:
 
 Status pendaftaran Ananda kini telah kedaluwarsa, silakan untuk mendaftarkan ulang, dan melakukan pembayaran biaya pendaftaran.
 
-📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di ".$contact_ccrs.".
+📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di +62
 
 Hormat kami,
 Sekolah Rabbani ✨
