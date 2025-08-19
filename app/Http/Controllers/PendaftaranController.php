@@ -312,8 +312,8 @@ class PendaftaranController extends Controller
         $nama_rek = $contact_person->nama_rek;
 
         // send ke qlp
-        // $this->send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
-        // $this->send_pendaftaran_baru($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
+        $this->send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
+        $this->send_pendaftaran_baru($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
 
 
         //send notif ke admin (dijadikan komentar saja)
@@ -951,7 +951,7 @@ Sekolah Rabbani";
         return view('pendaftaran.trial-success');
     }
 
-    function send_pendaftaran_baru($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $info_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan){
+    function send_pendaftaran_baru($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $info_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk){
 	    $curl = curl_init();
 
 		curl_setopt_array($curl, array(
@@ -985,7 +985,8 @@ Sekolah Rabbani";
 			'tahun_ajaran' => $tahun_ajaran,
 			'asal_sekolah' => $asal_sekolah,
 			'status_daftar' => $status_daftar,
-			'is_pindahan' => $is_pindahan
+			'is_pindahan' => $is_pindahan,
+			'info_apakah_abk' => $info_apakah_abk,
             )
 
 		));
@@ -998,7 +999,7 @@ Sekolah Rabbani";
 	}
 
 
-    function send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $info_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan){
+    function send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $info_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk){
 	    $curl = curl_init();
 
 		curl_setopt_array($curl, array(
@@ -1032,7 +1033,8 @@ Sekolah Rabbani";
 			'tahun_ajaran' => $tahun_ajaran,
 			'asal_sekolah' => $asal_sekolah,
 			'status_daftar' => $status_daftar,
-			'is_pindahan' => $is_pindahan
+			'is_pindahan' => $is_pindahan,
+			'info_apakah_abk' => $info_apakah_abk,
             )
 
 		));
