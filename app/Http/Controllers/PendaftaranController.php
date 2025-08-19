@@ -530,10 +530,9 @@ class PendaftaranController extends Controller
                     'expire_time' => $expiryTime,
                     'total_harga' => $total_harga,
                 ]);
-
-                $data_pendaftaran = Pendaftaran::where('id_anak', $no_registrasi)->first();
             }
         }
+        $data_pendaftaran = Pendaftaran::where('id_anak', $no_registrasi)->first();
 
         return view('pendaftaran.histori-detail', 
             compact('data_pendaftaran','no_registrasi', 'get_profile_ibu', 'get_profile_ayah', 'lokasi', 'biaya')
