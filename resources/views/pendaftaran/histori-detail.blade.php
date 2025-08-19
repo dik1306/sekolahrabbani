@@ -714,8 +714,24 @@
                     if (data.snap_token) {
                         snapToken = data.snap_token;
                         $('#payment-modal').modal('hide');
-                        snap.pay(snapToken);
-                        window.location.reload();
+                        snap.pay(snapToken, {
+                            onPending: function(result) {
+                                // No action needed; Snap.js handles the pending UI
+                                window.location.reload();
+                            },
+                            onError: function(result) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Pembayaran Gagal',
+                                    text: 'Terjadi kesalahan saat memproses pembayaran, silakan coba lagi.',
+                                });
+                            },
+                            onClose: function() {
+                                // No action on close
+                                window.location.reload();
+                            }
+                        });
+                        // window.location.reload();
                     } else {
                         Swal.fire({
                             icon: 'error',
