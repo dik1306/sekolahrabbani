@@ -372,7 +372,7 @@
                                         <th>Status Pembayaran (Midtrans)</th>
                                         <td>
                                             <span class="badge {{ $data_pendaftaran->status_midtrans == 'success' ? 'bg-success' : ($data_pendaftaran->status_midtrans == 'pending' ? 'bg-warning' : 'bg-danger') }}">
-                                                {{ ucfirst($data_pendaftaran->status_midtrans ?? 'Pending') }}
+                                                {{ ucfirst($data_pendaftaran->status_midtrans ?? 'Tidak ada data') }}
                                             </span>
                                         </td>
                                     </tr>
@@ -425,7 +425,7 @@
                                             <i class="fa fa-file-invoice" aria-hidden="true"></i> Unduh Invoice
                                         </button>
                                     </form>
-                                @elseif ($data_pendaftaran->status_midtrans == 'pending' || $data_pendaftaran->status_midtrans == null)
+                                @elseif ($data_pendaftaran->status_midtrans == 'pending')
                                     <h5 class="mt-4">Aksi</h5>
                                     <button id="pay-button" class="btn btn-primary btn-sm">
                                         <i class="fa fa-wallet" aria-hidden="true"></i> Lihat Pembayaran
@@ -762,8 +762,14 @@
             // Wrap the initial check in $(document).ready()
             $(document).ready(function() {
                 if (statusMidtrans === 'kosong') {
-                    openModalPayment(); // Show modal if status is 'kosong'
-                } else if (statusMidtrans === 'expire') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Pendaftaran Sebelum Skema Baru',
+                        text: 'Harap diperhatikan, ini adalah pendaftaran sebelum diterapkannya skema baru. Oleh karena itu, tidak ada data pembayaran yang tersedia.',
+                    });
+                } else if (statusMidtrans === 'pending'){
+                    openModalPayment();
+                }else if (statusMidtrans === 'expire') {
                     Swal.fire({
                         icon: 'error',
                         title: 'WAKTU PEMBAYARAN HABIS',
@@ -782,6 +788,12 @@
 
             document.getElementById('pay-button')?.addEventListener('click', function() {
                 if (statusMidtrans === 'kosong') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Pendaftaran Sebelum Skema Baru',
+                        text: 'Harap diperhatikan, ini adalah pendaftaran sebelum diterapkannya skema baru. Oleh karena itu, tidak ada data pembayaran yang tersedia.',
+                    });
+                } else if (statusMidtrans === 'pending') {
                     openModalPayment();
                 } else {
                     openSnapPayment();
