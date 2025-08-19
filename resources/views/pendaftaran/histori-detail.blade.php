@@ -789,13 +789,13 @@
                     });
                 } else if (statusMidtrans === 'kosong'){
                     openModalPayment();
-                }else if (statusMidtrans === 'expire') {
+                }else if (statusMidtrans === 'expired') {
                     Swal.fire({
                         icon: 'error',
                         title: 'WAKTU PEMBAYARAN HABIS',
                         text: 'Status Pembayaran telah kedaluwarsa, silakan mengisi form pendaftaran kembali, Terima kasih',
                     });
-                } else if (statusMidtrans != 'expire' && statusMidtrans != 'success'){
+                } else if (statusMidtrans != 'expired' && statusMidtrans != 'success'){
                     openSnapPayment(); // Proceed with Snap payment if status is not 'kosong'
                 } else {
                     Swal.fire({
