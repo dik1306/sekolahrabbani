@@ -70,6 +70,7 @@ class PendaftaranController extends Controller
         $lokasi = Lokasi::where('status', 1)->get();
         $jenjang_per_sekolah = JenjangSekolah::all();
         $tahun_ajaran = TahunAjaranAktif::where('status', 1)->where('status_tampil', 1)->orderBy('id', 'asc')->get();
+        dd('bisa');
         // dd($tahun_ajaran);
         return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
     }
