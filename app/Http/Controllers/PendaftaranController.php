@@ -492,10 +492,16 @@ class PendaftaranController extends Controller
             $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
             $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
 
-            $biaya = ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_pendaftaran->lokasi)->where('id_jenjang', $data_pendaftaran->jenjang)->first()->biaya;
             
-            $lokasi = Lokasi::where('kode_sekolah', $data_pendaftaran->lokasi)->first();
-            $lokasi = $lokasi->nama_sekolah;
+            if($data_pendaftaran) {
+                $biaya = ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_pendaftaran->lokasi)->where('id_jenjang', $data_pendaftaran->jenjang)->first()->biaya;
+                
+                $lokasi = Lokasi::where('kode_sekolah', $data_pendaftaran->lokasi)->first();
+                $lokasi = $lokasi->nama_sekolah;
+            } else {
+                $lokasi = 'Tidak ditemukan';
+                $biaya = 0;
+            }
 
             // $transaction = \Midtrans\Transaction::status('PPDB-tka-CMH-20250813092804-1755052090');
             // dd($transaction);
