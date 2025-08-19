@@ -396,13 +396,10 @@ class PendaftaranController extends Controller
             $adminId = $request->admin_id;
 
             $pendaftaran_data = Pendaftaran::where('id_anak', $idAnak)->firstOrFail();
-            // $biaya = ContactPerson::where('is_aktif', '1')
-            //     ->where('kode_sekolah', $pendaftaran_data->lokasi)
-            //     ->where('id_jenjang', $pendaftaran_data->jenjang)
-            //     ->first()->biaya;
-
-            // TODO: UNTUK TESTING AJA
-            $biaya = 1.0;
+            $biaya = ContactPerson::where('is_aktif', '1')
+                ->where('kode_sekolah', $pendaftaran_data->lokasi)
+                ->where('id_jenjang', $pendaftaran_data->jenjang)
+                ->first()->biaya;
 
             if ($adminId == 'qris') {
                 $totalAmount = $biaya + ($biaya * 0.007);
@@ -413,6 +410,10 @@ class PendaftaranController extends Controller
             } else {
                 return response()->json(['failed' => 'Jenis pembayaran Tidak ditemukan'], 400);
             }
+
+            
+            // TODO: UNTUK TESTING AJA
+            $totalAmount = 100;
 
             \Midtrans\Config::$serverKey = config('midtrans.serverKey');
             \Midtrans\Config::$isProduction = config('midtrans.isProduction');
