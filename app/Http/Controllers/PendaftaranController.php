@@ -396,10 +396,13 @@ class PendaftaranController extends Controller
             $adminId = $request->admin_id;
 
             $pendaftaran_data = Pendaftaran::where('id_anak', $idAnak)->firstOrFail();
-            $biaya = ContactPerson::where('is_aktif', '1')
-                ->where('kode_sekolah', $pendaftaran_data->lokasi)
-                ->where('id_jenjang', $pendaftaran_data->jenjang)
-                ->first()->biaya;
+            // $biaya = ContactPerson::where('is_aktif', '1')
+            //     ->where('kode_sekolah', $pendaftaran_data->lokasi)
+            //     ->where('id_jenjang', $pendaftaran_data->jenjang)
+            //     ->first()->biaya;
+
+            // TODO: UNTUK TESTING AJA
+            $biaya = 1;
 
             if ($adminId == 'qris') {
                 $totalAmount = $biaya + ($biaya * 0.007);
