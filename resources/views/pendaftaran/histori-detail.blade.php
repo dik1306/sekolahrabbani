@@ -410,13 +410,7 @@
 
                                 <!-- Tombol Aksi Dinamis -->
                                 @if ($data_pendaftaran->status_pembayaran == 0 && $data_pendaftaran->status_midtrans == 'expired')
-                                    <h5 class="mt-4">Aksi</h5>
-                                    <form action="{{ route('pendaftaran.ulang_pembayaran', $data_pendaftaran->id_anak) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-warning">
-                                            <i class="fa fa-refresh" aria-hidden="true"></i> Ulang Pembayaran
-                                        </button>
-                                    </form>
+                                                                        
                                 @elseif ($data_pendaftaran->status_pembayaran == 1 && $data_pendaftaran->status_midtrans == 'success')
                                     <h5 class="mt-4">Aksi</h5>
                                     <form action="{{ route('pendaftaran.invoice', $no_registrasi) }}" method="GET">
