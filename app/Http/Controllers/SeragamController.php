@@ -1188,6 +1188,7 @@ class SeragamController extends Controller
                             ]);
                             $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                             $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
+                            $this->update_status_pendaftaran_siswa_baru('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
 
                             $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                             // TODO: Tracing Error contact_person dan contact_ccrs
@@ -1281,8 +1282,9 @@ Sekolah Rabbani ✨
                         'tgl_bayar' => $request->settlement_time,
                         'updatedate' => $request->settlement_time,
                     ]);
-                    $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                     $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
+                    $this->update_status_pendaftaran_siswa_baru('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
+                    
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                     
                     $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
@@ -1372,6 +1374,7 @@ Sekolah Rabbani ✨
                     ]);
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                     $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $data_anak->id_anak, $orderId, null);
+                    $this->update_status_pendaftaran_siswa_baru('pending', $mtd_pembayaran, $data_anak->id_anak, $orderId, null);
                     break;
                 case 'deny':
                     Pendaftaran::where('order_id', $orderId)->update([
@@ -1388,6 +1391,7 @@ Sekolah Rabbani ✨
                     ]);
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                     $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $data_anak->id_anak, $orderId, null);
+                    $this->update_status_pendaftaran_siswa_baru('expired', $mtd_pembayaran, $data_anak->id_anak, $orderId, null);
 
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                     $contact_ccrs =  ContactPerson::where('id', '16')->first();
@@ -2216,6 +2220,36 @@ Sekolah Rabbani ✨
             curl_close($curl);
             // return ($response);
         }
+    }
+
+    function update_status_pendaftaran_siswa_baru($status, $mtd_pembayaran, $id_anak, $orderID, $tgl_bayar)
+    {       
+        $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/update_pembayaran_midtrans.php',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            // CURLOPT_SSL_VERIFYPEER => false,
+            // CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => array(
+                'status_midtrans' => $status,
+                'mtd_pembayaran' => $mtd_pembayaran,
+                'id_anak' => $id_anak,
+                'order_id' => $orderID,
+                'tgl_bayar' => $tgl_bayar,
+            )
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
     }
 
     function update_status_pendaftaran_siswa($status, $mtd_pembayaran, $id_anak, $orderID, $tgl_bayar)
