@@ -317,7 +317,7 @@
             if (id_lokasi == 'UBR' && !asal_sekolah) {
                 // Asal Sekolah wajib diisi jika lokasi adalah UBR
                 errorMessage += 'Asal Sekolah, ';
-            } else if (id_lokasi != 'UBR' && jenjang > 4 && !asal_sekolah) {
+            } else if (id_lokasi != 'UBR' && jenjang > 3 && !asal_sekolah) {
                 // Asal Sekolah wajib diisi jika lokasi selain UBR dan jenjang lebih dari 4
                 errorMessage += 'Asal Sekolah, ';
             }

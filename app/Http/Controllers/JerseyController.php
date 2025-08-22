@@ -492,6 +492,8 @@ class JerseyController extends Controller
         $nama_punggung_now = $request->nama_punggung;
         $no_punggung_now = $request->no_punggung;
 
+        dd($request);
+
         if ($total_harga_now == null || $total_harga_now == 'undefined' || $total_harga_now == '') {
 
             $order = CartJersey::select('t_cart_jersey.quantity', 't_cart_jersey.id', 't_cart_jersey.jersey_id', 't_cart_jersey.is_selected', 
