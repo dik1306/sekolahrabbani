@@ -633,8 +633,8 @@ class JerseyController extends Controller
             $this->send_pesan_jersey($no_pesanan, $nama_pemesan, $no_hp);
             $this->send_pesan_jersey_baru($no_pesanan, $nama_pemesan, $no_hp);
 
-            $this->send_pesan_jersey_detail($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now, $no_punggung_now, $nama_punggung_now);
-            $this->send_pesan_jersey_detail_baru($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now, $no_punggung_now, $nama_punggung_now);
+            $this->send_pesan_jersey_detail($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $get_jersey->harga_awal, $diskon_now, $hpp_now, $no_punggung_now, $nama_punggung_now);
+            $this->send_pesan_jersey_detail_baru($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $get_jersey->harga_awal, $diskon_now, $hpp_now, $no_punggung_now, $nama_punggung_now);
 
                // Set your Merchant Server Key
                \Midtrans\Config::$serverKey = config('midtrans.serverKey');
