@@ -311,12 +311,20 @@ class PendaftaranController extends Controller
             'id_anak' => $id_anak
         ]);
 
+        $telp_id = ContactPerson::where('is_aktif', '1')
+            ->where('kode_sekolah', $pendaftaran_data->lokasi)
+            ->where('id_jenjang', $pendaftaran_data->jenjang)
+            ->first()->id;
+        $ajaran_id = TahunAjaranAktif::where('id', $pendaftaran_data->tahun_ajaran)->first()->id;
         
         $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $lokasi)->where('id_jenjang', $jenjang)->first();
         $no_admin = $contact_person->telp;
-        $biaya = $contact_person->biaya;
-        $no_rek = $contact_person->norek;
-        $nama_rek = $contact_person->nama_rek;
+        $biaya = BiayaSPMB::where('tahun_ajaran_id', $ajaran_id)
+                ->where('telp_id', $telp_id)
+                ->first()->biaya;
+
+        // $no_rek = $contact_person->norek;
+        // $nama_rek = $contact_person->nama_rek;
 
         // send ke qlp
         $this->send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
@@ -418,6 +426,8 @@ class PendaftaranController extends Controller
                 $totalAmount = $biaya + 4400;
             } elseif ($adminId == 'deeplink') {
                 $totalAmount = $biaya + ($biaya * 0.02);
+            } else if ($biaya == 0){
+                return response()->json(['failed' => 'Terjadi kesalahan pada nominal pembayaran'], 400);
             } else {
                 return response()->json(['failed' => 'Jenis pembayaran Tidak ditemukan'], 400);
             }
@@ -509,8 +519,15 @@ class PendaftaranController extends Controller
 
             
             if($data_pendaftaran) {
-                $biaya = ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_pendaftaran->lokasi)->where('id_jenjang', $data_pendaftaran->jenjang)->first()->biaya;
-                
+                $telp_id = ContactPerson::where('is_aktif', '1')
+                    ->where('kode_sekolah', $data_pendaftaran->lokasi)
+                    ->where('id_jenjang', $data_pendaftaran->jenjang)
+                    ->first()->id;
+                $ajaran_id = TahunAjaranAktif::where('id', $data_pendaftaran->tahun_ajaran)->first()->id;
+                $biaya = BiayaSPMB::where('tahun_ajaran_id', $ajaran_id)
+                    ->where('telp_id', $telp_id)
+                    ->first()->biaya;
+                    
                 $lokasi = Lokasi::where('kode_sekolah', $data_pendaftaran->lokasi)->first();
                 $lokasi = $lokasi->nama_sekolah;
             } else {
