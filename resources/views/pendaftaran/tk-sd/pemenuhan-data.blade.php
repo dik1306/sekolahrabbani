@@ -172,7 +172,7 @@
 
                                 <div class="mb-3">
                                     <span for="asal_sekolah" class="form-label">Asal Sekolah</span>
-                                    <input class="form-control form-control-sm px-3" id="asal_sekolah" name="asal_sekolah" value="{{$get_profile->asal_sekolah}}"  placeholder="Sekolah Sebelumnya" required>
+                                    <input class="form-control form-control-sm px-3" id="asal_sekolah" name="asal_sekolah" value="{{ $get_profile->asal_sekolah ? $get_profile->asal_sekolah : '-' }}" placeholder="Sekolah Sebelumnya" required readonly>
                                 </div>
                              
                                 <div class="mb-3">
@@ -1216,7 +1216,6 @@
             var kelurahan = $('#kelurahan').val();
             var status_tinggal = $('#status_tinggal').val();
             var bhs_digunakan = $('#bhs_digunakan').val();
-            var kec_asal_sekolah = $('#kec_asal_sekolah').val();
             var gol_darah = $('#gol_darah').val();
 
             var pekerjaan_ibu = $('#pekerjaan_ibu').val();
@@ -1242,7 +1241,6 @@
             if (!kelurahan) return alert('Mohon cek kembali inputan kelurahan, Pastikan Semua Data Sudah Terisi');
             if (!status_tinggal) return alert('Mohon cek kembali inputan status tinggal, Pastikan Semua Data Sudah Terisi');
             if (!bhs_digunakan) return alert('Mohon cek kembali inputan bahasa yang digunakan, Pastikan Semua Data Sudah Terisi');
-            if (!kec_asal_sekolah) return alert('Mohon cek kembali inputan kecamatan asal sekolah, Pastikan Semua Data Sudah Terisi');
             if (!gol_darah) return alert('Mohon cek kembali inputan golongan darah, Pastikan Semua Data Sudah Terisi');
             if (!pekerjaan_ibu) return alert('Mohon cek kembali inputan pekerjaan ibu, Pastikan Semua Data Sudah Terisi');
             if (!penghasilan_ibu) return alert('Mohon cek kembali inputan penghasilan ibu, Pastikan Semua Data Sudah Terisi');
@@ -1274,7 +1272,7 @@
                 var dataPertanyaan = $(this).data('pertanyaan');  // ambil data-pertanyaan dari input
 
                 // Lewati pengecekan jika nama adalah "info_detail_khusus[]"
-                if (name === "info_detail_khusus[]" || name === "no_hp" || name === "nama_lengkap" || name.endsWith("_self_fill") || name.endsWith("_self_fill_pengasuhan")) {
+                if (name === "info_detail_khusus[]" || name === "asal_sekolah"  || name === "npsm"  || name === "riwayat_penyakit" ||name === "no_hp" || name === "nama_lengkap" || name.endsWith("_self_fill") || name.endsWith("_self_fill_pengasuhan")) {
                     return; // Skip elemen ini
                 }
 
