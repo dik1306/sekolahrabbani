@@ -1191,7 +1191,6 @@ class SeragamController extends Controller
                             $this->update_status_pendaftaran_siswa_baru('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
 
                             $data_anak = Pendaftaran::where('order_id', $orderId)->first();
-                            // TODO: Tracing Error contact_person dan contact_ccrs
                             $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
                             $no_admin = $contact_person->telp;
 

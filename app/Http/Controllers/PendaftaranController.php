@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Angket;
+use App\Models\BiayaSPMB;
 use App\Models\ContactPerson;
 use App\Models\JenjangSekolah;
 use App\Models\Kecamatan;
@@ -402,10 +403,14 @@ class PendaftaranController extends Controller
             $adminId = $request->admin_id;
 
             $pendaftaran_data = Pendaftaran::where('id_anak', $idAnak)->firstOrFail();
-            $biaya = ContactPerson::where('is_aktif', '1')
+            $telp_id = ContactPerson::where('is_aktif', '1')
                 ->where('kode_sekolah', $pendaftaran_data->lokasi)
                 ->where('id_jenjang', $pendaftaran_data->jenjang)
-                ->first()->biaya;
+                ->first()->id;
+            $ajaran_id = TahunAjaranAktif::where('id', $pendaftaran_data->tahun_ajaran)->first()->id;
+            $biaya = BiayaSPMB::where('tahun_ajaran_id', $ajaran_id)
+                    ->where('telp_id', $telp_id)
+                    ->first()->biaya;
 
             if ($adminId == 'qris') {
                 $totalAmount = $biaya + ($biaya * 0.007);
@@ -418,8 +423,8 @@ class PendaftaranController extends Controller
             }
 
             
-            // TODO: UNTUK TESTING AJA
-            $totalAmount = 100;
+            // // TODO: UNTUK TESTING AJA
+            // $totalAmount = 100;
 
             \Midtrans\Config::$serverKey = config('midtrans.serverKey');
             \Midtrans\Config::$isProduction = config('midtrans.isProduction');
