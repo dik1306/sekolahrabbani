@@ -666,8 +666,7 @@ class PendaftaranController extends Controller
 
 
         return view('pendaftaran.tk-sd.pemenuhan-data', compact('provinsi', 'kecamatan', 'kecamatan_asal_sekolah', 'kelurahan', 'kota', 
-        'get_profile',  'get_profile_ibu',  'get_profile_ayah', 'get_profile_wali', 'no_registrasi', 'kuesioner', 'kuesioner_ortu',
-        'get_kuesioner_ortu', 'get_kuesioner_anak', 'list_pekerjaan_ayah', 'list_pekerjaan_ibu', 
+        'get_profile',  'get_profile_ibu',  'get_profile_ayah', 'get_profile_wali', 'no_registrasi', 'list_pekerjaan_ayah', 'list_pekerjaan_ibu', 
         'head_perkembangan', 'pertanyaan_perkembangan','head_pengasuhan', 'pertanyaan_pengasuhan', 'jawaban_perkembangan', 'jawaban_pengasuhan'));
     }
 
