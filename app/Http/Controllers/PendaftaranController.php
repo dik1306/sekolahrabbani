@@ -744,13 +744,13 @@ class PendaftaranController extends Controller
             'tinggi_badan' => $data['tinggi_badan'],
             'berat_badan' => $data['berat_badan'],
             'bahasa' => $data['bhs_digunakan'],
-            'asal_sekolah' => $data['asal_sekolah'],
-            'npsn' => $data['npsn'],
-            'kec_asal_sekolah' => $data['kec_asal_sekolah'],
+            'asal_sekolah' => isset($data['asal_sekolah']) && !empty($data['asal_sekolah']) ? $data['asal_sekolah'] : '-',
+            'npsn' => isset($data['npsn']) && !empty($data['npsn']) ? $data['npsn'] : '-',
+            'kec_asal_sekolah' => isset($data['kec_asal_sekolah']) && !empty($data['kec_asal_sekolah']) ? $data['kec_asal_sekolah'] : '-',
             'agama' => $data['agama'],
             'gol_darah' => $data['gol_darah'],
             'hafalan' => $data['hafalan'],
-            'riwayat_penyakit' => $data['riwayat_penyakit'],
+            'riwayat_penyakit' => isset($data['riwayat_penyakit']) && !empty($data['riwayat_penyakit']) ? $data['riwayat_penyakit'] : '-',
             'info_apakah_abk' => $data['info_apakah_abk'],
             
             // Menggabungkan array menjadi string dengan pemisah ;

@@ -1322,7 +1322,7 @@
                     continue; // Skip elemen dengan key yang berakhiran "_self_fill" atau "_self_fill_pengasuhan" atau "pengasuhan_extra_"
                 }
 
-                if ((value === "" || value === null) && key !== "info_detail_khusus[]") {
+                if ((value === "" || value === null) && key !== "info_detail_khusus[]" && key !== "asal_sekolah"  && key !== "npsm"  && key !== "riwayat_penyakit") {
                     // Cek apakah input adalah radio dan apakah ada yang dipilih
                     var radioElement = document.querySelector(`[name="${key}"]`);
                     
