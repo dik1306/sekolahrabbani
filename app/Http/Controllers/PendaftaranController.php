@@ -25,6 +25,12 @@ use App\Models\TahunAjaranAktif;
 use App\Models\TrialClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\HasilPengasuhan;
+use App\Models\HasilPerkembangan;
+use App\Models\HeadPengasuhan;
+use App\Models\HeadPerkembangan;
+use App\Models\PertanyaanPengasuhan;
+use App\Models\PertanyaanPerkembangan;
 use Carbon\Carbon;
 
 class PendaftaranController extends Controller
@@ -588,26 +594,81 @@ class PendaftaranController extends Controller
             $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
             $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
             $get_profile_wali = PendaftaranWali::get_profile($no_registrasi);
-            $kuesioner = KuesionerAnak::all();
-            $kuesioner_ortu = KuesionerOrtu::all();
-            $get_kuesioner_anak = Angket::get_profile($no_registrasi);
-            $get_kuesioner_ortu = ProgramReg::get_profile($no_registrasi);
         }
         
 
         $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
         $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
         $get_profile_wali = PendaftaranWali::get_profile($no_registrasi);
-        $kuesioner = KuesionerAnak::all();
-        $kuesioner_ortu = KuesionerOrtu::all();
-        $get_kuesioner_anak = Angket::get_profile($no_registrasi);
-        $get_kuesioner_ortu = ProgramReg::get_profile($no_registrasi);
         // dd($get_kuesioner_ortu);
+
+        if ($get_profile) {
+            $tingkat = strtolower($get_profile->tingkat);
+        } else {
+            $tingkat = null;
+        }
+
+        if (($tingkat == 'kober' || $tingkat == 'tka' || $tingkat == 'tkb')) {
+             $jenjang = 'kober_tk';
+        } else {
+            $jenjang = $tingkat;
+        }
+        
+        $head_perkembangan = HeadPerkembangan::where('is_aktif', 1)->where('jenjang',$jenjang)->get();
+        $pertanyaan_perkembangan = PertanyaanPerkembangan::where('is_aktif', 1)->get();
+        
+        $head_pengasuhan = HeadPengasuhan::where('is_aktif', 1)->where('jenjang',$jenjang)->get();
+        $pertanyaan_pengasuhan = PertanyaanPengasuhan::where('is_aktif', 1)->get();
+        
+        
+        $jawaban_perkembangan_raw = HasilPerkembangan::where('id_anak', $no_registrasi)->get(); 
+        $jawaban_pengasuhan_raw = HasilPengasuhan::where('id_anak', $no_registrasi)->get();
+        // Menyimpan jawaban pertanyaan dalam format yang diinginkan
+        $jawaban_perkembangan = [];
+        $jawaban_pengasuhan = [];
+
+        foreach ($jawaban_perkembangan_raw as $key => $value) {
+            // Decode JSON jawaban dari database
+            $decoded_answer = json_decode($value->jawaban, true);
+            
+            // Pastikan data terstruktur dengan format yang diinginkan
+            $id_pertanyaan = $value->id_pertanyaan; // Ambil ID pertanyaan dari database
+
+            $kode_perkembangan = PertanyaanPerkembangan::where('id', $id_pertanyaan)->first();
+            $kode_perkembangan = $kode_perkembangan->kode_perkembangan;
+            
+            // Menyusun ulang format jawaban
+            $jawaban_perkembangan[$id_pertanyaan] = [
+                'id_pertanyaan' => $id_pertanyaan,
+                'kode_perkembangan' => $kode_perkembangan,
+                'option_field' => isset($decoded_answer['option_field']) ? $decoded_answer['option_field'] : '_',
+                'option_default' => isset($decoded_answer['option_default']) ? $decoded_answer['option_default'] : '_',
+                'input_field' => isset($decoded_answer['input_field']) ? $decoded_answer['input_field'] : '_',
+            ];
+        }
+        
+        foreach ($jawaban_pengasuhan_raw as $key => $value) {
+            // Decode JSON jawaban dari database
+            $decoded_answer = json_decode($value->jawaban, true);
+            
+            // Pastikan data terstruktur dengan format yang diinginkan
+            $id_pertanyaan = $value->id_pertanyaan; // Ambil ID pertanyaan dari database
+            
+            // Menyusun ulang format jawaban
+            $jawaban_pengasuhan[$id_pertanyaan] = [
+                'id_pertanyaan' => $id_pertanyaan,
+                'option_field' => isset($decoded_answer['option_field']) ? $decoded_answer['option_field'] : '_',
+                'option_default' => isset($decoded_answer['option_default']) ? $decoded_answer['option_default'] : '_',
+                'input_field' => isset($decoded_answer['input_field']) ? $decoded_answer['input_field'] : '_',
+            ];
+        }
+        // dd($jawaban_perkembangan, $jawaban_pengasuhan); 
 
 
         return view('pendaftaran.tk-sd.pemenuhan-data', compact('provinsi', 'kecamatan', 'kecamatan_asal_sekolah', 'kelurahan', 'kota', 
         'get_profile',  'get_profile_ibu',  'get_profile_ayah', 'get_profile_wali', 'no_registrasi', 'kuesioner', 'kuesioner_ortu',
-        'get_kuesioner_ortu', 'get_kuesioner_anak', 'list_pekerjaan_ayah', 'list_pekerjaan_ibu'));
+        'get_kuesioner_ortu', 'get_kuesioner_anak', 'list_pekerjaan_ayah', 'list_pekerjaan_ibu', 
+        'head_perkembangan', 'pertanyaan_perkembangan','head_pengasuhan', 'pertanyaan_pengasuhan', 'jawaban_perkembangan', 'jawaban_pengasuhan'));
     }
 
     public function find(Request $request, Pendaftaran $pendaftaran)
@@ -643,191 +704,318 @@ class PendaftaranController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            // Ambil semua data dari request
+        $data = $request->all();
 
-            $nik = $request->nik;
-            $alamat = $request->alamat;
-            $provinsi = $request->provinsi;
-            $kota = $request->kota;
-            $kecamatan = $request->kecamatan;
-            $kelurahan = $request->kelurahan;
-            $agama = $request->agama;
-            $anak_ke = $request->anak_ke;
-            $jumlah_saudara = $request->jumlah_saudara;
-            $tinggi_badan = $request->tinggi_badan;
-            $berat_badan = $request->berat_badan;
-            $gol_darah = $request->gol_darah;
-            $riwayat_penyakit = $request->riwayat_penyakit;
-            $kec_asal_sekolah = $request->kec_asal_sekolah;
-            $email_ibu = $request->email_ibu;
-            $email_ayah = $request->email_ayah;
-            $npsn = $request->npsn;
-            $status_tinggal = $request->status_tinggal;
-            $hafalan = $request->hafalan;
-            $tempat_lahir_ibu = $request->tempat_lahir_ibu;
-            $tgl_lahir_ibu = $request->tgl_lahir_ibu;
-            $pekerjaan_ibu = $request->pekerjaan_ibu;
-            $penghasilan_ibu = $request->penghasilan_ibu;
-            $pendidikan_ibu = $request->pendidikan_ibu;
-            $tempat_lahir_ayah = $request->tempat_lahir_ayah;
-            $tgl_lahir_ayah = $request->tgl_lahir_ayah;
-            $pekerjaan_ayah = $request->pekerjaan_ayah;
-            $penghasilan_ayah = $request->penghasilan_ayah;
-            $pendidikan_ayah = $request->pendidikan_ayah;
-            $tempat_lahir_wali = $request->tempat_lahir_wali;
-            $tgl_lahir_wali = $request->tgl_lahir_wali;
-            $pekerjaan_wali = $request->pekerjaan_wali;
-            $pendidikan_wali = $request->pendidikan_wali;
-            $nama_wali = $request->nama_wali;
-            $hubungan_wali = $request->hubungan_wali;
-            $nama_panggilan = $request->nama_panggilan;
-            $bhs_digunakan = $request->bhs_digunakan;
-            $asal_sekolah = $request->asal_sekolah;
-            $hijayah = $request->hijayah;
-            $alphabet = $request->alphabet;
-            $suka_menulis = $request->suka_menulis;
-            $suka_gambar = $request->suka_gambar;
-            $suka_hafalan = $request->suka_hafalan;
-            $memiliki_hafalan = $request->memiliki_hafalan;
-            $bergaul = $request->bergaul;
-            $prakarya = $request->prakarya;
-            $mengungkapkan = $request->mengungkapkan;
-            $sholat_fardhu = $request->sholat_fardhu;
-            $berbicara_baik = $request->berbicara_baik;
-            $baju_sendiri = $request->baju_sendiri;
-            $simpan_sepatu = $request->simpan_sepatu;
-            $buang_sampah = $request->buang_sampah;
-            $ekspresi_marah = $request->ekspresi_marah;
-            $malu_salah = $request->malu_salah;
-            $ketergantungan = $request->ketergantungan;
-            $merengek = $request->merengek;
-            $mandi_sendiri = $request->mandi_sendiri;
-            $bab_bak_sendiri = $request->bab_bak_sendiri;
-            $habis_waktu = $request->habis_waktu;
-            $kelebihan_ananda = $request->kelebihan_ananda;
-            $welcome_ceremony = $request->welcome_ceremony;
-            $quranic_parenting = $request->quranic_parenting;
-            $temu_wali_kelas = $request->temu_wali_kelas;
-            $hafalan_rumah = $request->hafalan_rumah;
-            $wirausaha = $request->wirausaha;
-            $komunikasi = $request->komunikasi;
-            $biaya_pendidikan = $request->biaya_pendidikan;
+        // Kelompokkan data ke dalam array $data_anak
+        $data_anak = [
+            'nama_lengkap' => $data['nama_lengkap'],
+            'nama_panggilan' => $data['nama_panggilan'],
+            'no_nik' => $data['nik'],
+            'alamat' => $data['alamat'],
+            'provinsi' => $data['provinsi'],
+            'kota' => $data['kota'],
+            'kecamatan' => $data['kecamatan'],
+            'kelurahan' => $data['kelurahan'],
+            'status_tinggal' => $data['status_tinggal'],
+            'anak_ke' => $data['anak_ke'],
+            'jml_sdr' => $data['jumlah_saudara'],
+            'tinggi_badan' => $data['tinggi_badan'],
+            'berat_badan' => $data['berat_badan'],
+            'bahasa' => $data['bhs_digunakan'],
+            'asal_sekolah' => $data['asal_sekolah'],
+            'npsn' => $data['npsn'],
+            'kec_asal_sekolah' => $data['kec_asal_sekolah'],
+            'agama' => $data['agama'],
+            'gol_darah' => $data['gol_darah'],
+            'hafalan' => $data['hafalan'],
+            'riwayat_penyakit' => $data['riwayat_penyakit'],
+            'info_apakah_abk' => $data['info_apakah_abk'],
             
-    
-            $update_data_anak = Pendaftaran::where('id_anak', $id)->update([
-                'no_nik' => $nik,
-                'alamat' => $alamat,
-                'provinsi' => $provinsi,
-                'kota' => $kota,
-                'kecamatan' => $kecamatan,
-                'kelurahan' => $kelurahan,
-                'agama' => $agama,
-                'anak_ke' => $anak_ke,
-                'jml_sdr' => $jumlah_saudara,
-                'tinggi_badan' => $tinggi_badan,
-                'berat_badan' => $berat_badan,
-                'gol_darah' => $gol_darah,
-                'riwayat_penyakit' => $riwayat_penyakit,
-                'hafalan' => $hafalan,
-                'kec_asal_sekolah' => $kec_asal_sekolah,
-                'email_ibu' => $email_ibu,
-                'email_ayah' => $email_ayah,
-                'npsn' => $npsn,
-                'bahasa' => $bhs_digunakan,
-                'nama_panggilan' => $nama_panggilan,
-                'status_tinggal' => $status_tinggal,
-                'asal_sekolah' => $asal_sekolah
-            ]);
+            // Menggabungkan array menjadi string dengan pemisah ;
+            'info_detail_saudara' => isset($data['info_detail_saudara']) ? implode(';', $data['info_detail_saudara']) : '',
+            'info_detail_tempat' => isset($data['info_detail_tempat']) ? implode(';', $data['info_detail_tempat']) : '',
+            'info_detail_khusus' => isset($data['info_detail_khusus']) ? implode(';', $data['info_detail_khusus']) : '',
+        ];
 
-          
-            $update_data_ibu = PendaftaranIbu::where('id_ibu', $id)->update([
-                'tptlahir_ibu' => $tempat_lahir_ibu,
-                'tgllahir_ibu' => $tgl_lahir_ibu,
-                'pekerjaan_jabatan' => $pekerjaan_ibu,
-                'penghasilan' => $penghasilan_ibu,
-                'pendidikan_ibu' => $pendidikan_ibu,
-            ]);
+        // Kelompokkan data ibu ke dalam $data_ibu
+        $data_ibu = [
+            'nama' => $data['nama_ibu'],
+            'email_ibu' => $data['email_ibu'],
+            'tptlahir_ibu' => $data['tempat_lahir_ibu'],
+            'tgllahir_ibu' => $data['tgl_lahir_ibu'],
+            'pekerjaan_jabatan' => $data['pekerjaan_ibu'],
+            'penghasilan' => $data['penghasilan_ibu'],
+            'pendidikan_ibu' => $data['pendidikan_ibu'],
+            'tahun_nikah_ibu' => $data['tahun_nikah_ibu'],
+            'pernikahan_ke_ibu' => $data['pernikahan_ke_ibu'],
+        ];
+        
+        // Kelompokkan data ibu ke dalam $data_ayah
+        $data_ayah = [
+            'nama' => $data['nama_ayah'],
+            'email_ayah' => $data['email_ayah'],
+            'tptlahir_ayah' => $data['tempat_lahir_ayah'],
+            'tgllahir_ayah' => $data['tgl_lahir_ayah'],
+            'pekerjaan_jabatan' => $data['pekerjaan_ayah'],
+            'penghasilan' => $data['penghasilan_ayah'],
+            'pendidikan_ayah' => $data['pendidikan_ayah'],
+            'tahun_nikah_ayah' => $data['tahun_nikah_ayah'],
+            'pernikahan_ke_ayah' => $data['pernikahan_ke_ayah'],
+        ];
+        
+        // Kelompokkan data ibu ke dalam $data_wali
+        $data_wali = [
+            'nama' => $data['nama_wali'],
+            'tptlahir_wali' => $data['tempat_lahir_wali'],
+            'tgllahir_wali' => $data['tgl_lahir_wali'],
+            'pekerjaan_jabatan' => $data['pekerjaan_wali'],
+            'pendidikan_wali' => $data['pendidikan_wali'],
+            'hubungan_wali' => $data['hubungan_wali'],
+        ];
 
-            $update_data_ayah = PendaftaranAyah::where('id_ayah', $id)->update([
-                'tptlahir_ayah' => $tempat_lahir_ayah,
-                'tgllahir_ayah' => $tgl_lahir_ayah,
-                'pekerjaan_jabatan' => $pekerjaan_ayah,
-                'penghasilan' => $penghasilan_ayah,
-                'pendidikan_ayah' => $pendidikan_ayah,
-            ]);
+        // PERTANYAAN PERKEMBANGAN DAN PENGASUHAN
+        // Inisialisasi array untuk menyimpan data yang dikelompokkan
+        $grouped_data = [
+            'perkembangan' => [],
+            'pengasuhan' => [],
+        ];
 
-            $update_data_wali = PendaftaranWali::where('id_wali', $id)->update([
-                'nama' => $nama_wali,
-                'tptlahir_wali' => $tempat_lahir_wali,
-                'tgllahir_wali' => $tgl_lahir_wali,
-                'pekerjaan_jabatan' => $pekerjaan_wali,
-                'pendidikan_wali' => $pendidikan_wali,
-                'hubungan_wali' => $hubungan_wali,
-            ]);
+        foreach ($data as $key => $value) {
+            // Cek apakah key mengandung tipe 'pertanyaan' atau 'pengasuhan'
+            if (strpos($key, 'pertanyaan') === 0 || strpos($key, 'pengasuhan') === 0) {
+                // Extract head_id dan question_id dari key 'pertanyaan_9_50'
+                if (preg_match('/^(pertanyaan|pengasuhan)_(\d+)_(\d+)$/', $key, $matches)) {
+                    $type = $matches[1];  // Tipe (pertanyaan atau pengasuhan)
+                    $head_id = $matches[2]; // Head ID (misalnya 9, 10, 11)
+                    $question_id = $matches[3]; // Question ID (misalnya 50, 51, 52)
 
-            $update_kuesioner = Angket::where('id_anak', $id)->update([
-                'mengenal_hijaiyah' => $hijayah,
-                'mengenal_alphabet' => $alphabet,
-                'suka_menulis' => $suka_menulis,
-                'suka_menggambar' => $suka_gambar,
-                'hafalan_alquran' => $suka_hafalan,
-                'memiliki_hafalan' => $memiliki_hafalan,
-                'senang_bergaul' => $bergaul,
-                'membuat_prakarya' => $prakarya,
-                'ungkapan_keinginan' => $mengungkapkan,
-                'mengikuti_sholat' => $sholat_fardhu,
-                'berbicara_baik' => $berbicara_baik,
-                'memakai_baju_sendiri' => $baju_sendiri,
-                'menyimpan_sepatu' => $simpan_sepatu,
-                'membuang_sampah' => $buang_sampah,
-                'mengekspresikan' => $ekspresi_marah,
-                'melakukan_kesalahan' => $malu_salah,
-                'ketergantungan' => $ketergantungan,
-                'keinginan' => $merengek,
-                'mampu_mandi' => $mandi_sendiri,
-                'mampu_sendiri' => $bab_bak_sendiri,
-                'menghabiskan_waktu' => $habis_waktu,
-                'kelebihan_ananda' => $kelebihan_ananda,
-                'updatedate' => date('Y-m-d H:i:s'),
-            ]);
+                    // Ambil PertanyaanPengasuhan Berdasarkan Head ID dan Question ID
+                    // Ambil data berdasarkan tipe (pertanyaan atau pengasuhan)
+                    if ($type == 'pertanyaan') {
+                        // Jika tipe adalah 'pertanyaan', ambil dari model PertanyaanPerkembangan
+                        $pertanyaan = PertanyaanPerkembangan::where('head_id', $head_id)
+                                                            ->where('id', $question_id)
+                                                            ->first();
+                    } elseif ($type == 'pengasuhan') {
+                        // Jika tipe adalah 'pengasuhan', ambil dari model PertanyaanPengasuhan
+                        $pertanyaan = PertanyaanPengasuhan::where('head_id', $head_id)
+                                                            ->where('id', $question_id)
+                                                            ->first();
+                    }
 
-            $update_kuesionere_ortu = ProgramReg::where('id_anak', $id)->update([
-                'orientasi_peserta_didik' => $welcome_ceremony,
-                'bersedia_mengikuti_qp' => $quranic_parenting,
-                'mengikuti_pertemuan_rutin' => $temu_wali_kelas,
-                'menemani_ananda' => $hafalan_rumah,
-                'kewirausahaan_ananda' => $wirausaha,
-                'kemampuan_komunikasi_aktif_ananda' => $komunikasi,
-                'pembiayaan_pendidikan' => $biaya_pendidikan,
-                'updatedate' => date('Y-m-d H:i:s')
-            ]);
+                    if ($pertanyaan) {
+                        $answer = [
+                            'option_field' => '_',
+                            'option_default' => '_',
+                            'input_field' => $value,
+                        ];
 
-            // update ke qlp
-            $this->update_pendaftaran($id, $nik, $alamat, $provinsi, $kota, $kecamatan, $kelurahan, $agama, $anak_ke, $jumlah_saudara, $npsn,
-            $asal_sekolah, $tinggi_badan, $berat_badan, $gol_darah, $riwayat_penyakit, $kec_asal_sekolah, $hafalan, $email_ayah, $email_ibu, $status_tinggal, 
-            $tempat_lahir_ibu, $tgl_lahir_ibu, $pekerjaan_ibu, $penghasilan_ibu, $pendidikan_ibu, 
-            $tempat_lahir_ayah, $tgl_lahir_ayah, $pekerjaan_ayah, $penghasilan_ayah, $pendidikan_ayah, 
-            $tempat_lahir_wali, $tgl_lahir_wali, $pekerjaan_wali, $pendidikan_wali, $nama_wali, $hubungan_wali, $bhs_digunakan, $nama_panggilan,
-            $hijayah, $alphabet, $suka_menulis, $suka_gambar, $suka_hafalan, $memiliki_hafalan, $bergaul, $prakarya, $mengungkapkan, 
-            $sholat_fardhu, $berbicara_baik, $baju_sendiri, $simpan_sepatu, $buang_sampah, $ekspresi_marah, $malu_salah, $ketergantungan, 
-            $merengek, $mandi_sendiri, $bab_bak_sendiri, $habis_waktu, $kelebihan_ananda,
-            $welcome_ceremony, $quranic_parenting, $temu_wali_kelas, $hafalan_rumah, $wirausaha, $komunikasi, $biaya_pendidikan
-            );
-            $this->update_pendaftaran_baru($id, $nik, $alamat, $provinsi, $kota, $kecamatan, $kelurahan, $agama, $anak_ke, $jumlah_saudara, $npsn,
-            $asal_sekolah, $tinggi_badan, $berat_badan, $gol_darah, $riwayat_penyakit, $kec_asal_sekolah, $hafalan, $email_ayah, $email_ibu, $status_tinggal, 
-            $tempat_lahir_ibu, $tgl_lahir_ibu, $pekerjaan_ibu, $penghasilan_ibu, $pendidikan_ibu, 
-            $tempat_lahir_ayah, $tgl_lahir_ayah, $pekerjaan_ayah, $penghasilan_ayah, $pendidikan_ayah, 
-            $tempat_lahir_wali, $tgl_lahir_wali, $pekerjaan_wali, $pendidikan_wali, $nama_wali, $hubungan_wali, $bhs_digunakan, $nama_panggilan,
-            $hijayah, $alphabet, $suka_menulis, $suka_gambar, $suka_hafalan, $memiliki_hafalan, $bergaul, $prakarya, $mengungkapkan, 
-            $sholat_fardhu, $berbicara_baik, $baju_sendiri, $simpan_sepatu, $buang_sampah, $ekspresi_marah, $malu_salah, $ketergantungan, 
-            $merengek, $mandi_sendiri, $bab_bak_sendiri, $habis_waktu, $kelebihan_ananda,
-            $welcome_ceremony, $quranic_parenting, $temu_wali_kelas, $hafalan_rumah, $wirausaha, $komunikasi, $biaya_pendidikan
-            );
-    
+                        // Cek jika pertanyaan memiliki opsi (need_option)
+                        if ($pertanyaan->need_option) {
+                            if ($value === 'self_fill') {
+                                if ($type == 'pertanyaan') {
+                                    $option_key = $type.'_'.$head_id.'_'. $question_id.'_self_fill';
+                                } else {
+                                    $option_key = $type.'_'.$head_id.'_'. $question_id.'_self_fill_pengasuhan';
+                                }
+                                if (isset($data[$option_key])) {
+                                    $answer['option_field'] = $data[$option_key];  // Set nilai sesuai request
+                                    $answer['option_default'] = $pertanyaan->options_data;  // Ambil data opsi
+                                    $answer['input_field'] = '_';  // Set input field sebagai _
+                                } 
+                            } else {
+                                $answer['option_field'] = $value;  // Set nilai sesuai request
+                                $answer['option_default'] = $pertanyaan->options_data;  // Ambil data opsi
+                                $answer['input_field'] = '_';  // Set input field sebagai _
+                            }
+                        }
+
+                        // Cek jika pertanyaan membutuhkan extra (need_extra)
+                        if ($pertanyaan->need_extra) {
+                            // Ambil data dari request untuk pertanyaan dan extra
+                            $extra_key = $type . '_extra_' .$head_id.'_'. $question_id;
+                            if (isset($data[$extra_key])) {
+                                $answer['option_field'] = $value;
+                                $answer['option_default'] = $pertanyaan->options_data;
+                                $answer['input_field'] = $data[$extra_key];
+                            }
+                        }
+                        
+                        if ($type == 'pertanyaan') $type = 'perkembangan';
+                        $grouped_data[$type][$question_id] = json_encode($answer);  // Simpan dalam format JSON
+                    }
+                }
+            }
+        }
+
+        // Debug: Lihat data yang sudah dikelompokkan
+        // dd($grouped_data, $data_wali, $data_ayah, $data_ibu, $data_anak, $request->all());
+        
+        // Update data anak
+        $update_data_anak = Pendaftaran::where('id_anak', $id)->update($data_anak);
+
+        // Update data ibu
+        $update_data_ibu = PendaftaranIbu::where('id_ibu', $id)->update($data_ibu);
+
+        // Update data ayah
+        $update_data_ibu = PendaftaranAyah::where('id_ayah', $id)->update($data_ayah);
+
+        // Update data wali
+        $update_data_wali = PendaftaranWali::where('id_wali', $id)->update($data_wali);
+
+        $this->update_pendaftaran(
+            //PK
+            $id,
+            // data anak
+            $data_anak['nama_panggilan'], $data_anak['no_nik'], $data_anak['alamat'], $data_anak['provinsi'],$data_anak['kota'], $data_anak['kecamatan'], $data_anak['kelurahan'], $data_anak['status_tinggal'], 
+            $data_anak['anak_ke'], $data_anak['jml_sdr'], $data_anak['tinggi_badan'], $data_anak['berat_badan'], $data_anak['bahasa'], 
+            $data_anak['asal_sekolah'], $data_anak['npsn'], $data_anak['kec_asal_sekolah'], $data_anak['agama'], $data_anak['gol_darah'], $data_anak['hafalan'], $data_anak['riwayat_penyakit'], 
+            $data_anak['info_apakah_abk'], $data_anak['info_detail_saudara'], $data_anak['info_detail_tempat'], $data_anak['info_detail_khusus'],
+            // data ayah
+            $data_ayah['email_ayah'], $data_ayah['tptlahir_ayah'], $data_ayah['tgllahir_ayah'], 
+            $data_ayah['penghasilan'], $data_ayah['pekerjaan_jabatan'], $data_ayah['pendidikan_ayah'], $data_ayah['tahun_nikah_ayah'], $data_ayah['pernikahan_ke_ayah'],
+            // data ibu
+            $data_ibu['email_ibu'], $data_ibu['tptlahir_ibu'], $data_ibu['tgllahir_ibu'], 
+            $data_ibu['penghasilan'], $data_ibu['pekerjaan_jabatan'], $data_ibu['pendidikan_ibu'], $data_ibu['tahun_nikah_ibu'], $data_ibu['pernikahan_ke_ibu'],
+            // data wali
+            $data_wali['nama'], $data_wali['tptlahir_wali'], $data_wali['tgllahir_wali'], $data_wali['pekerjaan_jabatan'], $data_wali['pendidikan_wali'], $data_wali['hubungan_wali']
+        );
+        $this->update_pendaftaran_baru(
+            //PK
+            $id,
+            // data anak
+            $data_anak['nama_panggilan'], $data_anak['no_nik'], $data_anak['alamat'], $data_anak['provinsi'],$data_anak['kota'], $data_anak['kecamatan'], $data_anak['kelurahan'], $data_anak['status_tinggal'], 
+            $data_anak['anak_ke'], $data_anak['jml_sdr'], $data_anak['tinggi_badan'], $data_anak['berat_badan'], $data_anak['bahasa'], 
+            $data_anak['asal_sekolah'], $data_anak['npsn'], $data_anak['kec_asal_sekolah'], $data_anak['agama'], $data_anak['gol_darah'], $data_anak['hafalan'], $data_anak['riwayat_penyakit'], 
+            $data_anak['info_apakah_abk'], $data_anak['info_detail_saudara'], $data_anak['info_detail_tempat'], $data_anak['info_detail_khusus'],
+            // data ayah
+            $data_ayah['email_ayah'], $data_ayah['tptlahir_ayah'], $data_ayah['tgllahir_ayah'], 
+            $data_ayah['penghasilan'], $data_ayah['pekerjaan_jabatan'], $data_ayah['pendidikan_ayah'], $data_ayah['tahun_nikah_ayah'], $data_ayah['pernikahan_ke_ayah'],
+            // data ibu
+            $data_ibu['email_ibu'], $data_ibu['tptlahir_ibu'], $data_ibu['tgllahir_ibu'], 
+            $data_ibu['penghasilan'], $data_ibu['pekerjaan_jabatan'], $data_ibu['pendidikan_ibu'], $data_ibu['tahun_nikah_ibu'], $data_ibu['pernikahan_ke_ibu'],
+            // data wali
+            $data_wali['nama'], $data_wali['tptlahir_wali'], $data_wali['tgllahir_wali'], $data_wali['pekerjaan_jabatan'], $data_wali['pendidikan_wali'], $data_wali['hubungan_wali']
+        );
+        
+        // Iterasi untuk menyimpan data
+        foreach ($grouped_data as $type => $questions) {
+            foreach ($questions as $question_id => $answer_json) {
+                // Tentukan model yang akan digunakan berdasarkan tipe
+                // Simpan atau update data berdasarkan tipe
+                if ($type == 'perkembangan') {
+                    // Cek apakah data sudah ada di HasilPerkembangan
+                    $existing = HasilPerkembangan::where('id_anak', $id)
+                                                ->where('id_pertanyaan', $question_id)
+                                                ->first();
+                    if ($existing) {
+                        // Jika data sudah ada, lakukan update
+                        $existing->update([
+                            'jawaban' => $answer_json,
+                        ]);
+                    } else {
+                        // Jika data belum ada, buat baru
+                        HasilPerkembangan::create([
+                            'id_anak' => $id,
+                            'id_pertanyaan' => $question_id,
+                            'jawaban' => $answer_json,
+                        ]);
+                    }
+                    $this->update_data_pertanyaan($type, $id, $question_id, $answer_json);
+                    $this->update_data_pertanyaan_baru($type, $id, $question_id, $answer_json);
+                } elseif ($type == 'pengasuhan') {
+                    // Cek apakah data sudah ada di HasilPengasuhan
+                    $existing = HasilPengasuhan::where('id_anak', $id)
+                                            ->where('id_pertanyaan', $question_id)
+                                            ->first();
+                    if ($existing) {
+                        // Jika data sudah ada, lakukan update
+                        $existing->update([
+                            'jawaban' => $answer_json,
+                        ]);
+                    } else {
+                        // Jika data belum ada, buat baru
+                        HasilPengasuhan::create([
+                            'id_anak' => $id,
+                            'id_pertanyaan' => $question_id,
+                            'jawaban' => $answer_json,
+                        ]);
+                    }
+                    $this->update_data_pertanyaan($type, $id, $question_id, $answer_json);
+                    $this->update_data_pertanyaan_baru($type, $id, $question_id, $answer_json);
+                }
+            }
+        }
+
             return redirect()->route('pendaftaran')->with('success', 'Data berhasil diupdate');
         } catch (\Throwable $th) {
             throw $th;
         }
     }
+
+    function update_data_pertanyaan($type, $id, $question_id, $answer_json)
+    {
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_regist/simpan_data_pertanyaan.php',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            // CURLOPT_SSL_VERIFYPEER => false,
+            // CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => array(
+                'type' => $type,
+                'id_anak' => $id,
+                'id_pertanyaan' => $question_id,
+                'jawaban' => $answer_json
+            )
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    return ($response);
+	
+    }
+    function update_data_pertanyaan_baru($type, $id, $question_id, $answer_json)
+    {
+	    $curl = curl_init();
+
+		curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/simpan_data_pertanyaan.php',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            // CURLOPT_SSL_VERIFYPEER => false,
+            // CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => array(
+                'type' => $type,
+                'id_anak' => $id,
+                'id_pertanyaan' => $question_id,
+                'jawaban' => $answer_json
+            )
+
+		));
+
+		$response = curl_exec($curl);
+
+		// echo $response;
+		curl_close($curl);
+	    return ($response);
+	}
+
 
     /**
      * Remove the specified resource from storage.
@@ -1049,15 +1237,23 @@ Sekolah Rabbani";
 	    // return ($response);
 	}
 
-    function update_pendaftaran($id, $nik, $alamat, $provinsi, $kota, $kecamatan, $kelurahan, $agama, $anak_ke, $jumlah_saudara, $npsn,
-    $asal_sekolah, $tinggi_badan, $berat_badan, $gol_darah, $riwayat_penyakit, $kec_asal_sekolah, $hafalan, $email_ayah, $email_ibu, $status_tinggal, 
-    $tempat_lahir_ibu, $tgl_lahir_ibu, $pekerjaan_ibu, $penghasilan_ibu, $pendidikan_ibu, 
-    $tempat_lahir_ayah, $tgl_lahir_ayah, $pekerjaan_ayah, $penghasilan_ayah, $pendidikan_ayah, 
-    $tempat_lahir_wali, $tgl_lahir_wali, $pekerjaan_wali, $pendidikan_wali, $nama_wali, $hubungan_wali, $bhs_digunakan, $nama_panggilan,
-    $hijayah, $alphabet, $suka_menulis, $suka_gambar, $suka_hafalan, $memiliki_hafalan, $bergaul, $prakarya, $mengungkapkan, 
-    $sholat_fardhu, $berbicara_baik, $baju_sendiri, $simpan_sepatu, $buang_sampah, $ekspresi_marah, $malu_salah, $ketergantungan, 
-    $merengek, $mandi_sendiri, $bab_bak_sendiri, $habis_waktu, $kelebihan_ananda,
-    $welcome_ceremony, $quranic_parenting, $temu_wali_kelas, $hafalan_rumah, $wirausaha, $komunikasi, $biaya_pendidikan)
+    function update_pendaftaran(
+        //PK
+        $id_anak,
+        // data anak
+        $nama_panggilan, $no_nik, $alamat, $provinsi,$kota, $kecamatan, $kelurahan, $status_tinggal, 
+        $anak_ke, $jml_sdr, $tinggi_badan, $berat_badan, $bhs_digunakan, 
+        $asal_sekolah, $npsn, $kec_asal_sekolah, $agama, $gol_darah, $hafalan, $riwayat_penyakit, 
+        $info_apakah_abk, $info_detail_saudara, $info_detail_tempat, $info_detail_khusus,
+        // data ayah
+        $email_ayah, $tptlahir_ayah, $tgllahir_ayah, 
+        $pengahasilan_ayah, $pekerjaan_ayah, $pendidikan_ayah, $tahun_nikah_ayah, $pernikahan_ke_ayah,
+        // data ibu
+        $email_ibu, $tptlahir_ibu, $tgllahir_ibu, 
+        $pengahasilan_ibu, $pekerjaan_ibu, $pendidikan_ibu, $tahun_nikah_ibu, $pernikahan_ke_ibu,
+        // data wali
+        $nama_wali, $tptlahir_wali, $tgllahir_wali, $pekerjaan_wali, $pendidikan_wali, $hubungan_wali
+    )
     {
 	    $curl = curl_init();
 
@@ -1073,78 +1269,59 @@ Sekolah Rabbani";
 		  // CURLOPT_SSL_VERIFYPEER => false,
 		  // CURLOPT_SSL_VERIFYHOST => false,
 		  CURLOPT_POSTFIELDS => array(
-		  	'id_anak' => $id,
-		  	'id_ibu' => $id,
-		  	'id_ayah' => $id,
-		    'no_nik' => $nik,
+            // PK
+            'id' => $id_anak,
+            // data anak
+            'nama_panggilan' => $nama_panggilan,
+            'no_nik' => $no_nik,
             'alamat' => $alamat,
             'provinsi' => $provinsi,
             'kota' => $kota,
             'kecamatan' => $kecamatan,
             'kelurahan' => $kelurahan,
-            'agama' => $agama,
+            'status_tinggal' => $status_tinggal,
             'anak_ke' => $anak_ke,
-            'jml_sdr' => $jumlah_saudara,
-            'npsn' => $npsn,
+            'jml_sdr' => $jml_sdr,
             'tinggi_badan' => $tinggi_badan,
             'berat_badan' => $berat_badan,
-            'gol_darah' => $gol_darah,
-            'riwayat_penyakit' => $riwayat_penyakit,
-            'hafalan' => $hafalan,
-            'kec_asal_sekolah' => $kec_asal_sekolah,
-            'email_ibu' => $email_ibu,
-            'email_ayah' => $email_ayah,
-            'status_tinggal' => $status_tinggal,
-            'tptlahir_ibu' => $tempat_lahir_ibu,
-            'tgllahir_ibu' => $tgl_lahir_ibu,
-            'pekerjaan_ibu' => $pekerjaan_ibu,
-            'penghasilan_ibu' => $penghasilan_ibu,
-            'pendidikan_ibu' => $pendidikan_ibu,
-            'tptlahir_ayah' => $tempat_lahir_ayah,
-            'tgllahir_ayah' => $tgl_lahir_ayah,
-            'pekerjaan_ayah' => $pekerjaan_ayah,
-            'penghasilan_ayah' => $penghasilan_ayah,
-            'pendidikan_ayah' => $pendidikan_ayah,
-            'nama_wali' => $nama_wali,
-            'tptlahir_wali' => $tempat_lahir_wali,
-            'tgllahir_wali' => $tgl_lahir_wali,
-            'pekerjaan_wali' => $pekerjaan_wali,
-            'pendidikan_wali' => $pendidikan_wali,
-            'hubungan_wali' => $hubungan_wali,
             'bhs_digunakan' => $bhs_digunakan,
             'asal_sekolah' => $asal_sekolah,
-            'nama_panggilan' => $nama_panggilan,
-            'mengenal_hijaiyah' => $hijayah,
-            'mengenal_alphabet' => $alphabet,
-            'suka_menulis' => $suka_menulis,
-            'suka_menggambar' => $suka_gambar,
-            'hafalan_alquran' => $suka_hafalan,
-            'memiliki_hafalan' => $memiliki_hafalan,
-            'senang_bergaul' => $bergaul,
-            'membuat_prakarya' => $prakarya,
-            'ungkapan_keinginan' => $mengungkapkan,
-            'mengikuti_sholat' => $sholat_fardhu,
-            'berbicara_baik' => $berbicara_baik,
-            'memakai_baju_sendiri' => $baju_sendiri,
-            'menyimpan_sepatu' => $simpan_sepatu,
-            'membuang_sampah' => $buang_sampah,
-            'mengekspresikan' => $ekspresi_marah,
-            'melakukan_kesalahan' => $malu_salah,
-            'ketergantungan' => $ketergantungan,
-            'keinginan' => $merengek,
-            'mampu_mandi' => $mandi_sendiri,
-            'mampu_sendiri' => $bab_bak_sendiri,
-            'menghabiskan_waktu' => $habis_waktu,
-            'kelebihan_ananda' => $kelebihan_ananda,
-            'orientasi_peserta_didik' => $welcome_ceremony,
-            'bersedia_mengikuti_qp' => $quranic_parenting,
-            'mengikuti_pertemuan_rutin' => $temu_wali_kelas,
-            'menemani_ananda' => $hafalan_rumah,
-            'kewirausahaan_ananda' => $wirausaha,
-            'kemampuan_komunikasi_aktif_ananda' => $komunikasi,
-            'pembiayaan_pendidikan' => $biaya_pendidikan,
+            'npsn' => $npsn,
+            'kec_asal_sekolah' => $kec_asal_sekolah,
+            'agama' => $agama,
+            'gol_darah' => $gol_darah,
+            'hafalan' => $hafalan,
+            'riwayat_penyakit' => $riwayat_penyakit,
+            'info_apakah_abk' => $info_apakah_abk,
+            'info_detail_saudara' => $info_detail_saudara,
+            'info_detail_tempat' => $info_detail_tempat,
+            'info_detail_khusus' => $info_detail_khusus,
+            // data ayah
+            'email_ayah' => $email_ayah,
+            'tptlahir_ayah' => $tptlahir_ayah,
+            'tgllahir_ayah' => $tgllahir_ayah,
+            'pengahasilan_ayah' => $pengahasilan_ayah,
+            'pekerjaan_ayah' => $pekerjaan_ayah,
+            'pendidikan_ayah' => $pendidikan_ayah,
+            'tahun_nikah_ayah' => $tahun_nikah_ayah,
+            'pernikahan_ke_ayah' => $pernikahan_ke_ayah,
+            // data ibu
+            'email_ibu' => $email_ibu,
+            'tptlahir_ibu' => $tptlahir_ibu,
+            'tgllahir_ibu' => $tgllahir_ibu,
+            'pengahasilan_ibu' => $pengahasilan_ibu,
+            'pekerjaan_ibu' => $pekerjaan_ibu,
+            'pendidikan_ibu' => $pendidikan_ibu,
+            'tahun_nikah_ibu' => $tahun_nikah_ibu,
+            'pernikahan_ke_ibu' => $pernikahan_ke_ibu,
+            // data wali
+            'nama_wali' => $nama_wali,
+            'tptlahir_wali' => $tptlahir_wali,
+            'tgllahir_wali' => $tgllahir_wali,
+            'pekerjaan_wali' => $pekerjaan_wali,
+            'pendidikan_wali' => $pendidikan_wali,
+            'hubungan_wali' => $hubungan_wali
             )
-
 		));
 
 		$response = curl_exec($curl);
@@ -1154,15 +1331,23 @@ Sekolah Rabbani";
 	    return ($response);
 	}
 
-    function update_pendaftaran_baru($id, $nik, $alamat, $provinsi, $kota, $kecamatan, $kelurahan, $agama, $anak_ke, $jumlah_saudara, $npsn,
-    $asal_sekolah, $tinggi_badan, $berat_badan, $gol_darah, $riwayat_penyakit, $kec_asal_sekolah, $hafalan, $email_ayah, $email_ibu, $status_tinggal, 
-    $tempat_lahir_ibu, $tgl_lahir_ibu, $pekerjaan_ibu, $penghasilan_ibu, $pendidikan_ibu, 
-    $tempat_lahir_ayah, $tgl_lahir_ayah, $pekerjaan_ayah, $penghasilan_ayah, $pendidikan_ayah, 
-    $tempat_lahir_wali, $tgl_lahir_wali, $pekerjaan_wali, $pendidikan_wali, $nama_wali, $hubungan_wali, $bhs_digunakan, $nama_panggilan,
-    $hijayah, $alphabet, $suka_menulis, $suka_gambar, $suka_hafalan, $memiliki_hafalan, $bergaul, $prakarya, $mengungkapkan, 
-    $sholat_fardhu, $berbicara_baik, $baju_sendiri, $simpan_sepatu, $buang_sampah, $ekspresi_marah, $malu_salah, $ketergantungan, 
-    $merengek, $mandi_sendiri, $bab_bak_sendiri, $habis_waktu, $kelebihan_ananda,
-    $welcome_ceremony, $quranic_parenting, $temu_wali_kelas, $hafalan_rumah, $wirausaha, $komunikasi, $biaya_pendidikan)
+    function update_pendaftaran_baru(
+        //PK
+        $id_anak,
+        // data anak
+        $nama_panggilan, $no_nik, $alamat, $provinsi,$kota, $kecamatan, $kelurahan, $status_tinggal, 
+        $anak_ke, $jml_sdr, $tinggi_badan, $berat_badan, $bhs_digunakan, 
+        $asal_sekolah, $npsn, $kec_asal_sekolah, $agama, $gol_darah, $hafalan, $riwayat_penyakit, 
+        $info_apakah_abk, $info_detail_saudara, $info_detail_tempat, $info_detail_khusus,
+        // data ayah
+        $email_ayah, $tptlahir_ayah, $tgllahir_ayah, 
+        $pengahasilan_ayah, $pekerjaan_ayah, $pendidikan_ayah, $tahun_nikah_ayah, $pernikahan_ke_ayah,
+        // data ibu
+        $email_ibu, $tptlahir_ibu, $tgllahir_ibu, 
+        $pengahasilan_ibu, $pekerjaan_ibu, $pendidikan_ibu, $tahun_nikah_ibu, $pernikahan_ke_ibu,
+        // data wali
+        $nama_wali, $tptlahir_wali, $tgllahir_wali, $pekerjaan_wali, $pendidikan_wali, $hubungan_wali
+    )
     {
 	    $curl = curl_init();
 
@@ -1178,78 +1363,59 @@ Sekolah Rabbani";
 		  // CURLOPT_SSL_VERIFYPEER => false,
 		  // CURLOPT_SSL_VERIFYHOST => false,
 		  CURLOPT_POSTFIELDS => array(
-		  	'id_anak' => $id,
-		  	'id_ibu' => $id,
-		  	'id_ayah' => $id,
-		    'no_nik' => $nik,
+            // PK
+            'id' => $id_anak,
+            // data anak
+            'nama_panggilan' => $nama_panggilan,
+            'no_nik' => $no_nik,
             'alamat' => $alamat,
             'provinsi' => $provinsi,
             'kota' => $kota,
             'kecamatan' => $kecamatan,
             'kelurahan' => $kelurahan,
-            'agama' => $agama,
+            'status_tinggal' => $status_tinggal,
             'anak_ke' => $anak_ke,
-            'jml_sdr' => $jumlah_saudara,
-            'npsn' => $npsn,
+            'jml_sdr' => $jml_sdr,
             'tinggi_badan' => $tinggi_badan,
             'berat_badan' => $berat_badan,
-            'gol_darah' => $gol_darah,
-            'riwayat_penyakit' => $riwayat_penyakit,
-            'hafalan' => $hafalan,
-            'kec_asal_sekolah' => $kec_asal_sekolah,
-            'email_ibu' => $email_ibu,
-            'email_ayah' => $email_ayah,
-            'status_tinggal' => $status_tinggal,
-            'tptlahir_ibu' => $tempat_lahir_ibu,
-            'tgllahir_ibu' => $tgl_lahir_ibu,
-            'pekerjaan_ibu' => $pekerjaan_ibu,
-            'penghasilan_ibu' => $penghasilan_ibu,
-            'pendidikan_ibu' => $pendidikan_ibu,
-            'tptlahir_ayah' => $tempat_lahir_ayah,
-            'tgllahir_ayah' => $tgl_lahir_ayah,
-            'pekerjaan_ayah' => $pekerjaan_ayah,
-            'penghasilan_ayah' => $penghasilan_ayah,
-            'pendidikan_ayah' => $pendidikan_ayah,
-            'nama_wali' => $nama_wali,
-            'tptlahir_wali' => $tempat_lahir_wali,
-            'tgllahir_wali' => $tgl_lahir_wali,
-            'pekerjaan_wali' => $pekerjaan_wali,
-            'pendidikan_wali' => $pendidikan_wali,
-            'hubungan_wali' => $hubungan_wali,
             'bhs_digunakan' => $bhs_digunakan,
             'asal_sekolah' => $asal_sekolah,
-            'nama_panggilan' => $nama_panggilan,
-            'mengenal_hijaiyah' => $hijayah,
-            'mengenal_alphabet' => $alphabet,
-            'suka_menulis' => $suka_menulis,
-            'suka_menggambar' => $suka_gambar,
-            'hafalan_alquran' => $suka_hafalan,
-            'memiliki_hafalan' => $memiliki_hafalan,
-            'senang_bergaul' => $bergaul,
-            'membuat_prakarya' => $prakarya,
-            'ungkapan_keinginan' => $mengungkapkan,
-            'mengikuti_sholat' => $sholat_fardhu,
-            'berbicara_baik' => $berbicara_baik,
-            'memakai_baju_sendiri' => $baju_sendiri,
-            'menyimpan_sepatu' => $simpan_sepatu,
-            'membuang_sampah' => $buang_sampah,
-            'mengekspresikan' => $ekspresi_marah,
-            'melakukan_kesalahan' => $malu_salah,
-            'ketergantungan' => $ketergantungan,
-            'keinginan' => $merengek,
-            'mampu_mandi' => $mandi_sendiri,
-            'mampu_sendiri' => $bab_bak_sendiri,
-            'menghabiskan_waktu' => $habis_waktu,
-            'kelebihan_ananda' => $kelebihan_ananda,
-            'orientasi_peserta_didik' => $welcome_ceremony,
-            'bersedia_mengikuti_qp' => $quranic_parenting,
-            'mengikuti_pertemuan_rutin' => $temu_wali_kelas,
-            'menemani_ananda' => $hafalan_rumah,
-            'kewirausahaan_ananda' => $wirausaha,
-            'kemampuan_komunikasi_aktif_ananda' => $komunikasi,
-            'pembiayaan_pendidikan' => $biaya_pendidikan,
+            'npsn' => $npsn,
+            'kec_asal_sekolah' => $kec_asal_sekolah,
+            'agama' => $agama,
+            'gol_darah' => $gol_darah,
+            'hafalan' => $hafalan,
+            'riwayat_penyakit' => $riwayat_penyakit,
+            'info_apakah_abk' => $info_apakah_abk,
+            'info_detail_saudara' => $info_detail_saudara,
+            'info_detail_tempat' => $info_detail_tempat,
+            'info_detail_khusus' => $info_detail_khusus,
+            // data ayah
+            'email_ayah' => $email_ayah,
+            'tptlahir_ayah' => $tptlahir_ayah,
+            'tgllahir_ayah' => $tgllahir_ayah,
+            'pengahasilan_ayah' => $pengahasilan_ayah,
+            'pekerjaan_ayah' => $pekerjaan_ayah,
+            'pendidikan_ayah' => $pendidikan_ayah,
+            'tahun_nikah_ayah' => $tahun_nikah_ayah,
+            'pernikahan_ke_ayah' => $pernikahan_ke_ayah,
+            // data ibu
+            'email_ibu' => $email_ibu,
+            'tptlahir_ibu' => $tptlahir_ibu,
+            'tgllahir_ibu' => $tgllahir_ibu,
+            'pengahasilan_ibu' => $pengahasilan_ibu,
+            'pekerjaan_ibu' => $pekerjaan_ibu,
+            'pendidikan_ibu' => $pendidikan_ibu,
+            'tahun_nikah_ibu' => $tahun_nikah_ibu,
+            'pernikahan_ke_ibu' => $pernikahan_ke_ibu,
+            // data wali
+            'nama_wali' => $nama_wali,
+            'tptlahir_wali' => $tptlahir_wali,
+            'tgllahir_wali' => $tgllahir_wali,
+            'pekerjaan_wali' => $pekerjaan_wali,
+            'pendidikan_wali' => $pendidikan_wali,
+            'hubungan_wali' => $hubungan_wali
             )
-
 		));
 
 		$response = curl_exec($curl);
