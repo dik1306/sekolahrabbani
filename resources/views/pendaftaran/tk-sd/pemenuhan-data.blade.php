@@ -416,7 +416,7 @@
 
                                 <div class="mb-3">
                                     <span for="email_ibu" class="form-label">Email Ibu<span style="color: red;">*</span></span>
-                                    <input type="email" name="email_ibu" class="form-control form-control-sm px-3" id="email_ibu" value="{{$get_profile->email_ibu}}" placeholder="Email Ibu" required>
+                                    <input type="email" name="email_ibu" class="form-control form-control-sm px-3" id="email_ibu" value="{{$get_profile_ibu->email_ibu}}" placeholder="Email Ibu" required>
                                 </div>
             
                                 <div class="row mb-3">
@@ -489,7 +489,7 @@
 
                                 <div class="mb-3">
                                     <span for="email_ayah" class="form-label">Email Ayah<span style="color: red;">*</span></span>
-                                    <input type="email" name="email_ayah" class="form-control form-control-sm px-3" id="email_ayah" value="{{$get_profile->email_ayah}}" placeholder="Email Ayah" required>
+                                    <input type="email" name="email_ayah" class="form-control form-control-sm px-3" id="email_ayah" value="{{$get_profile_ayah->email_ayah}}" placeholder="Email Ayah" required>
                                 </div>
             
                                 <div class="row mb-3">
