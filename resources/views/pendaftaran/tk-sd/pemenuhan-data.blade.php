@@ -1272,7 +1272,7 @@
                 var dataPertanyaan = $(this).data('pertanyaan');  // ambil data-pertanyaan dari input
 
                 // Lewati pengecekan jika nama adalah "info_detail_khusus[]"
-                if (name === "info_detail_khusus[]" || name === "asal_sekolah"  || name === "npsm"  || name === "riwayat_penyakit" ||name === "no_hp" || name === "nama_lengkap" || name.endsWith("_self_fill") || name.endsWith("_self_fill_pengasuhan")) {
+                if (name === "info_detail_khusus[]" || name === "asal_sekolah"  || name === "npsn"  || name === "riwayat_penyakit" ||name === "no_hp" || name === "nama_lengkap" || name.endsWith("_self_fill") || name.endsWith("_self_fill_pengasuhan")) {
                     return; // Skip elemen ini
                 }
 
@@ -1322,7 +1322,7 @@
                     continue; // Skip elemen dengan key yang berakhiran "_self_fill" atau "_self_fill_pengasuhan" atau "pengasuhan_extra_"
                 }
 
-                if ((value === "" || value === null) && key !== "info_detail_khusus[]" && key !== "asal_sekolah"  && key !== "npsm"  && key !== "riwayat_penyakit") {
+                if ((value === "" || value === null) && key !== "info_detail_khusus[]" && key !== "asal_sekolah"  && key !== "npsn"  && key !== "riwayat_penyakit") {
                     // Cek apakah input adalah radio dan apakah ada yang dipilih
                     var radioElement = document.querySelector(`[name="${key}"]`);
                     

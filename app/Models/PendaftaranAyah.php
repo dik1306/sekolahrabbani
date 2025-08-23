@@ -13,6 +13,7 @@ class PendaftaranAyah extends Model
     protected $fillable = [
         'id_ayah',
         'nama',
+        'email_ayah'
         'tptlahir_ayah',
         'tgllahir_ayah',
         'pekerjaan_jabatan',
