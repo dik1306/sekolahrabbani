@@ -79,7 +79,12 @@ class PendaftaranController extends Controller
         $tahun_ajaran = TahunAjaranAktif::where('status', 1)->where('status_tampil', 1)->orderBy('id', 'asc')->get();
         // dd('bisa');
         // dd($tahun_ajaran);
-        return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
+        $akses = request()->query('akses'); // atau bisa menggunakan request('akses')
+        if ($akses === 'admindopi') {
+            // Logika jika akses diizinkan
+            return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
+        }
+        return view('pendaftaran.closed');
     }
 
     public function get_jenjang(Request $request) {
