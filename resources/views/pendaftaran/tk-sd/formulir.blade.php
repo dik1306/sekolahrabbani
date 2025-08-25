@@ -224,6 +224,68 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    @if(session('status_daftar') == 3)
+        <script>
+            $(document).ready(function() {
+                // Menampilkan modal jika session status_daftar adalah 3
+                $('#modalKuotaPenuh').modal('show');
+
+                // Menambahkan event listener untuk menghapus session setelah modal ditutup
+                $('#modalKuotaPenuh').on('hidden.bs.modal', function () {
+                    $.ajax({
+                        url: '{{ route('clear.session.form') }}', // Route untuk menghapus session
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}', // Pastikan CSRF token ada
+                        },
+                        success: function(response) {
+                            console.log('Session telah dihapus');
+                        },
+                        error: function(error) {
+                            console.error('Gagal menghapus session');
+                        }
+                    });
+                });
+            });
+        </script>
+    @endif
+    
+    <!-- Modal untuk menampilkan informasi kuota penuh dengan desain lebih menarik -->
+    <div id="modalKuotaPenuh" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                <div class="modal-header" style="background: linear-gradient(90deg, #ffecd2, #fcb69f); border-top-left-radius: 15px; border-top-right-radius: 15px; padding: 20px;">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding: 30px;">
+                    <div class="mb-4">
+                        <svg class="bi bi-exclamation-triangle text-warning" width="50" height="50" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.938 2.016a.13.13 0 0 1 .125.09l7.146 12.24a.133.133 0 0 1-.116.184H.862a.133.133 0 0 1-.116-.184L7.892 2.106a.13.13 0 0 1 .046-.09zm-.146 1.97L1.862 13.5h12.276L7.792 3.986z"/>
+                            <path d="M7.5 11.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 .5.5v.5a.5.5 0 0 1-.5.5h-.5a.5.5 0 0 1-.5-.5v-.5zm0-6a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-.5a.5.5 0 0 1-.5-.5v-3z"/>
+                        </svg>
+                    </div>
+                    <h5 class="modal-title fw-bold mb-3" style="color: #333;">Kuota Penuh</h5>
+                    <p class="text-muted mb-4">
+                        Mohon maaf, pendaftaran di {{ session('lokasi') }} belum dapat diproses karena kuota Sit In Class saat ini telah penuh.
+                    </p>
+                    <p class="text-muted">
+                        Silakan cek halaman ini secara berkala atau hubungi Customer Service di <strong>{{ session('no_ccrs')}}</strong> untuk info pendaftaran berikutnya. Terima kasih, Ayah Bunda!
+                    </p>
+                    <hr style="border-color: #ddd;">
+                    <footer>
+                        <small class="text-muted">
+                            <strong>Sit In Class:</strong> Proses observasi untuk menilai kesiapan calon siswa dalam mengikuti kegiatan sekolah.
+                        </small>
+                    </footer>
+                </div>
+                <div class="modal-footer justify-content-center" style="background: #f8f9fa; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="border-radius: 10px; padding: 10px 20px;">Mengerti</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function validateForm() {
             // Memeriksa apakah ada radio button yang dipilih untuk 'abk_radios'
@@ -368,7 +430,7 @@
             var id_lokasi = document.getElementById("lokasi").value
 
             if (id_lokasi == 'UBR') {
-                $('#form_boarding').show();
+                $('#form_boarding').hide();
                 $('#form_jenjang').hide();
                 // $('#form_kelas').hide();
                 $.ajax({

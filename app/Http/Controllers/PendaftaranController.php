@@ -249,28 +249,55 @@ class PendaftaranController extends Controller
         $id_anak = "PPDB-$tingkat-$lokasi-$now";
         $is_pindahan = $request->is_pindahan;
 
-        // // cek kuota
-        // $cek_kuota = KuotaPPDB::where('id_tahun_ajaran', $tahun_ajaran)->where('lokasi', $lokasi)
-        //                         ->where('tingkat', $tingkat)->where('jenjang', $jenjang)->first();
-        
-        // $kuota = $cek_kuota->kuota;
+        // cek kuota
+        $cek_kuota = KuotaPPDB::where('id_tahun_ajaran', $tahun_ajaran)
+                            ->where('lokasi', $lokasi)
+                            ->where('tingkat', $tingkat)
+                            ->where('jenjang', $jenjang)
+                            ->first();
 
-        // $pendaftar = Pendaftaran::where('tahun_ajaran', $tahun_ajaran)->where('lokasi', $lokasi)
-        //                                 ->where('tingkat', $tingkat)->where('jenjang', $jenjang)
-        //                                 ->where('status_pembayaran', 1)->get();
-        
-        // $count_pendaftar = $pendaftar->count();
+        // Cek jika $cek_kuota tidak null
+        if ($cek_kuota) {
+            $kuota = $cek_kuota->kuota;
+        } else {
+            // Tangani jika $cek_kuota adalah null (misalnya dengan memberi nilai default)
+            $kuota = 0; // atau nilai default lainnya sesuai kebutuhan
+        }
 
-        // if ($kelas == 1 || $kelas == 7 || $kelas == 'tka' || $kelas == 'tkb' || $kelas == 'kober') {
-        //     if ($kuota > $count_pendaftar) {
-        //         $status_daftar = 2 ;
-        //     } else {
-        //         $status_daftar = 3 ;
-        //     }
-        // } else {
-        //     $status_daftar = 2;
-        // }
-        $status_daftar = 2;
+        $pendaftar = Pendaftaran::where('tahun_ajaran', $tahun_ajaran)
+                                ->where('lokasi', $lokasi)
+                                ->where('tingkat', $tingkat)
+                                ->where('jenjang', $jenjang)
+                                ->where('status_pembayaran', 1)
+                                ->get();
+
+        // Cek jika $pendaftar memiliki data
+        $count_pendaftar = $pendaftar ? $pendaftar->count() : 0; // Jika $pendaftar null, set ke 0
+
+        if ($kelas == 1 || $kelas == 7 || $kelas == 'tka' || $kelas == 'tkb' || $kelas == 'kober') {
+            if ($kuota > $count_pendaftar) {
+                $status_daftar = 2;
+            } else {
+                $status_daftar = 3;
+            }
+        } else {
+            $status_daftar = 2;
+        }
+        
+        // TODO: BUAT TESTING
+        $status_daftar = 3;
+
+        // Logika untuk memeriksa kuota, pendaftar, dll.
+        if ($status_daftar == 3) {
+            $lokasi = Lokasi::where('kode_sekolah', $lokasi)->first();
+            $lokasi = $lokasi->nama_sekolah;
+            $contact_ccrs =  ContactPerson::where('id', '16')->first();
+            $contact_ccrs =  $contact_ccrs->telp; 
+            session()->flash('status_daftar', 3);
+            session()->flash('lokasi', $lokasi);  // Menyimpan lokasi di session
+            session()->flash('no_ccrs', $contact_ccrs);  // Menyimpan lokasi di session
+            return redirect()->back();
+        }
 
         // simpan ke tbl_anak
         $pendaftaran_data = Pendaftaran::create([
@@ -316,76 +343,58 @@ class PendaftaranController extends Controller
             'id_anak' => $id_anak
         ]);
 
-        $telp_id = ContactPerson::where('is_aktif', '1')
-            ->where('kode_sekolah', $pendaftaran_data->lokasi)
-            ->where('id_jenjang', $pendaftaran_data->jenjang)
-            ->first()->id;
-        $ajaran_id = TahunAjaranAktif::where('id', $pendaftaran_data->tahun_ajaran)->first()->id;
         
         $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $lokasi)->where('id_jenjang', $jenjang)->first();
         $no_admin = $contact_person->telp;
-        $biaya = BiayaSPMB::where('tahun_ajaran_id', $ajaran_id)
-                ->where('telp_id', $telp_id)
-                ->first()->biaya;
-
-        // $no_rek = $contact_person->norek;
-        // $nama_rek = $contact_person->nama_rek;
+        $biaya = $contact_person->biaya;
+        $no_rek = $contact_person->norek;
+        $nama_rek = $contact_person->nama_rek;
 
         // send ke qlp
         $this->send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
         $this->send_pendaftaran_baru($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
 
-
-        //send notif ke admin (dijadikan komentar saja)
-        //$message_for_admin='Pendaftaran telah berhasil dengan nomor registrasi "'.$id_anak.'". a/n "'.$nama_lengkap.'" ';
-        //$message_for_admin_wl='Pendaftaran telah berhasil dengan nomor registrasi "'.$id_anak.'". a/n "'.$nama_lengkap.'" masuk dalam waiting list';
-        //if ($status_daftar == 3) {
-        //    $this->send_notif($message_for_admin_wl, $no_admin);
-        //} else {
-        //    $this->send_notif($message_for_admin, $no_admin);
-        //}
-
         //send notif ke ortu
         $message_ortu = "
-    Terimakasih *Ayah/Bunda $nama_lengkap* telah mendaftarkan Ananda ke Sekolah Rabbani 🏫 
-    📌 No. Registrasi / Pendaftaran: *$id_anak*
-    Mohon disimpan untuk keperluan pemenuhan data.
+Terimakasih *Ayah/Bunda $nama_lengkap* telah mendaftarkan Ananda ke Sekolah Rabbani 🏫 
+📌 No. Registrasi / Pendaftaran: *$id_anak*
+Mohon disimpan untuk keperluan pemenuhan data.
 
-    💳 Silakan melakukan pembayaran biaya pendaftaran sebesar *Rp ".number_format($biaya)."* _(Belum termasuk biaya admin)_
-    Melalui Laman Pembayaran berikut:
-    https://sekolahrabbani.sch.id/pendaftaran/histori/detail?no_registrasi=$id_anak
+💳 Silakan melakukan pembayaran biaya pendaftaran sebesar *Rp ".number_format($biaya)."* _(Belum termasuk biaya admin)_
+Melalui Laman Pembayaran berikut:
+https://sekolahrabbani.sch.id/pendaftaran/histori/detail?no_registrasi=$id_anak
 
-    Setelah pembayaran dilakukan, status pendaftaran Ananda akan otomatis tercatat di sistem kami dan akan dilanjutkan ke tahap berikutnya.
+Setelah pembayaran dilakukan, status pendaftaran Ananda akan otomatis tercatat di sistem kami dan akan dilanjutkan ke tahap berikutnya.
 
-    📞 Untuk pertanyaan lebih lanjut, silakan hubungi Customer Service kami di ".$no_admin.".
-    Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
-    Kami akan segera menginformasikan proses selanjutnya.
+📞 Untuk pertanyaan lebih lanjut, silakan hubungi Customer Service kami di ".$no_admin.".
+Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
+Kami akan segera menginformasikan proses selanjutnya.
 
-    Balas *Ya* jika data berikut benar, dan silakan mengakses link pembayaran
+Balas *Ya* jika data berikut benar, dan silakan mengakses link pembayaran
 
-    *Hormat kami*,
-    Sekolah Rabbani ✨
+*Hormat kami*,
+Sekolah Rabbani ✨
     ";
 
         $message_waiting_list = "
-    Terimakasih *Ayah/Bunda $nama_lengkap* telah mendaftarkan Ananda ke Sekolah Rabbani 🏫 
-    📌 No. Registrasi / Pendaftaran: *$id_anak*
-    Mohon disimpan untuk keperluan pemenuhan data.
+Terimakasih *Ayah/Bunda $nama_lengkap* telah mendaftarkan Ananda ke Sekolah Rabbani 🏫 
+📌 No. Registrasi / Pendaftaran: *$id_anak*
+Mohon disimpan untuk keperluan pemenuhan data.
 
-    💳 Silakan melakukan pembayaran biaya pendaftaran sebesar *Rp ".number_format($biaya)."* _(Belum termasuk biaya admin)_
-    Melalui Laman Pembayaran berikut:
-    https://sekolahrabbani.sch.id/pendaftaran/histori/detail?no_registrasi=$id_anak
+💳 Silakan melakukan pembayaran biaya pendaftaran sebesar *Rp ".number_format($biaya)."* _(Belum termasuk biaya admin)_
+Melalui Laman Pembayaran berikut:
+https://sekolahrabbani.sch.id/pendaftaran/histori/detail?no_registrasi=$id_anak
 
-    Setelah pembayaran dilakukan, status pendaftaran Ananda akan otomatis tercatat di sistem kami dan akan dilanjutkan ke tahap berikutnya.
+Setelah pembayaran dilakukan, status pendaftaran Ananda akan otomatis tercatat di sistem kami dan akan dilanjutkan ke tahap berikutnya.
 
-    📞 Untuk pertanyaan lebih lanjut, silakan hubungi Customer Service kami di ".$no_admin.".
-    Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
-    Kami akan segera menginformasikan proses selanjutnya.
+📞 Untuk pertanyaan lebih lanjut, silakan hubungi Customer Service kami di ".$no_admin.".
+Terima kasih atas kepercayaan Ayah/Bunda kepada Sekolah Rabbani 🌟
+Kami akan segera menginformasikan proses selanjutnya.
 
-    Balas *Ya* jika data berikut benar, dan silakan mengakses link pembayaran
+Balas *Ya* jika data berikut benar, dan silakan mengakses link pembayaran
 
-    *Hormat kami*,
-    Sekolah Rabbani ✨
+*Hormat kami*,
+Sekolah Rabbani ✨
     ";
 
     if ($status_daftar == 3) {
@@ -400,6 +409,13 @@ class PendaftaranController extends Controller
     return redirect()->route('form.histori.detail', ['no_registrasi' => $id_anak])
         ->with('success', 'Pendaftaran Berhasil.');
        
+    }
+
+    public function clearSessionForm(Request $request)
+    {
+        $request->session()->forget('status_daftar');
+        $request->session()->forget('lokasi');
+        return response()->json(['message' => 'Session cleared'], 200);
     }
 
     public function storePembayaran(Request $request)

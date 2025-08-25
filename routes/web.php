@@ -349,6 +349,8 @@ Route::prefix('pendaftaran')->group(function () {
     Route::get('/histori/detail', [PendaftaranController::class, 'histori_detail'])->name('form.histori.detail');
     Route::get('/invoice/{id_anak}', [InvoiceController::class, 'generateInvoice'])->name('pendaftaran.invoice');
 
+    Route::post('/clear-session-form', [PendaftaranController::class, 'clearSessionForm'])->name('clear.session.form');
+
     Route::get('/formulir/update', [PendaftaranController::class, 'edit'])->name('form.update');
     Route::post('/formulir/update', [PendaftaranController::class, 'forget_no_regis'])->name('forget_no_regis');
     Route::put('/formulir/update/{id}', [PendaftaranController::class, 'update'])->name('form.update.id');
