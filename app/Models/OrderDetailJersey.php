@@ -10,7 +10,6 @@ class OrderDetailJersey extends Model
     use HasFactory;
     protected $table = 't_pesan_jersey_detail';
     protected $primaryKey = 'id';
-    public $timestamps = false; // Menonaktifkan timestamps
 
     protected $fillable = [
         'no_pesanan',

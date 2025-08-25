@@ -542,9 +542,7 @@ class JerseyController extends Controller
                 'persen_diskon' => $diskon,
                 'nama_punggung' => $nama_punggung,
                 'no_punggung' => $no_punggung,
-                'hpp' => $hpp,
-                'created_at' => Carbon::now(), // Menetapkan waktu saat ini untuk created_at
-                'updated_at' => Carbon::now()  // Menetapkan waktu saat ini untuk updated_at
+                'hpp' => $hpp
                 ]);
 
                 $total_harga += $harga_awal * $quantity;
@@ -631,9 +629,7 @@ class JerseyController extends Controller
                 'persen_diskon' => $diskon_now,
                 'nama_punggung' => $nama_punggung_now,
                 'no_punggung' => $no_punggung_now,
-                'hpp' => $hpp_now,
-                'created_at' => Carbon::now(), // Menetapkan waktu saat ini untuk created_at
-                'updated_at' => Carbon::now()  // Menetapkan waktu saat ini untuk updated_at
+                'hpp' => $hpp_now
             ]);
 
             $this->send_pesan_jersey($no_pesanan, $nama_pemesan, $no_hp);
