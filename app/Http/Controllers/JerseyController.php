@@ -51,8 +51,10 @@ class JerseyController extends Controller
                         ->where('t_cart_jersey.status_cart', 0)
                         ->get();
 
-        // KEPERLUAN TESTING
-        if ($user_id == 2035) {
+        // TODO: KEPERLUAN TESTING
+        $akses = request()->query('akses'); // atau bisa menggunakan request('akses')
+        if ($akses === 'admindopi') {
+            // Logika jika akses diizinkan
             return view('ortu.jersey.index', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
                         'jersey_basket', 'jersey_memanah'));
         } else {
@@ -60,8 +62,8 @@ class JerseyController extends Controller
                         'jersey_basket', 'jersey_memanah'));
         }
         // return view('ortu.jersey.index', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
-        //                 'jersey_basket', 'jersey_memanah'));
-        
+        //            'jersey_basket', 'jersey_memanah'));
+
     }
 
     /**
