@@ -84,7 +84,7 @@ class PendaftaranController extends Controller
             // Logika jika akses diizinkan
             return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
         }
-        return view('pendaftaran.closed');
+        return view('pendaftaran.index-close');
     }
 
     public function get_jenjang(Request $request) {
