@@ -507,7 +507,7 @@ class JerseyController extends Controller
                     ->where('t_cart_jersey.status_cart', 0)
                     ->where('t_cart_jersey.is_selected', 1)
                     ->get();
-            dd($order);
+            
             $total_harga = 0;
             $total_diskon =0;
             foreach ($order as $item) {
