@@ -1064,7 +1064,8 @@ class SeragamController extends Controller
                         'tgl_bayar' => $request->settlement_time,
                         'updated_at' => $request->settlement_time
                     ]);
-                    $this->update_status_jersey('success', $mtd_pembayaran, $orderId);
+                    $this->update_status_jersey('success', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, $request->settlement_time);
+                    $this->update_status_jersey_baru('success', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, $request->settlement_time);
                     break;
                 case 'pending':
                     $order_jersey->update([
@@ -1073,7 +1074,8 @@ class SeragamController extends Controller
                         'va_number' => $no_va,
                         'expire_time' => $request->expiry_time
                     ]);
-                    $this->update_status_jersey('pending', $mtd_pembayaran, $orderId);
+                    $this->update_status_jersey('pending', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, null);
+                    $this->update_status_jersey_baru('pending', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, null);
                     break;
                 case 'deny':
                     $order_jersey->update([
@@ -1089,7 +1091,8 @@ class SeragamController extends Controller
                         'metode_pembayaran' => $mtd_pembayaran,
                         'va_number' => $no_va
                     ]);
-                    $this->update_status_jersey('expired', $mtd_pembayaran, $orderId);
+                    $this->update_status_jersey('expired', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, null);
+                    $this->update_status_jersey_baru('expired', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, null);
                     break;
                 case 'cancel':
                     $order_jersey->update([
@@ -2320,7 +2323,7 @@ Sekolah Rabbani ✨
         }
     }
 
-    function update_status_jersey($status, $mtd_pembayaran, $no_pesanan)
+    function update_status_jersey($status, $mtd_pembayaran, $no_pesanan, $total_harga, $va_number, $expire_time, $tgl_bayar)
     {
         {
             $curl = curl_init();
@@ -2340,6 +2343,10 @@ Sekolah Rabbani ✨
                 'status' => $status,
                 'mtd_pembayaran' => $mtd_pembayaran,
                 'no_pesanan' => $no_pesanan,
+                'total_harga' => $total_harga,
+                'va_number' => $va_number,
+                'expire_time' => $expire_time,
+                'tgl_bayar' => $tgl_bayar
                 )
     
             ));
@@ -2352,7 +2359,7 @@ Sekolah Rabbani ✨
         }
     }
 
-    function update_status_jersey_baru($status, $mtd_pembayaran, $no_pesanan)
+    function update_status_jersey_baru($status, $mtd_pembayaran, $no_pesanan, $total_harga, $va_number, $expire_time, $tgl_bayar)
     {
         {
             $curl = curl_init();
@@ -2372,6 +2379,10 @@ Sekolah Rabbani ✨
                 'status' => $status,
                 'mtd_pembayaran' => $mtd_pembayaran,
                 'no_pesanan' => $no_pesanan,
+                'total_harga' => $total_harga,
+                'va_number' => $va_number,
+                'expire_time' => $expire_time,
+                'tgl_bayar' => $tgl_bayar,
                 )
     
             ));
