@@ -97,7 +97,7 @@
 
             <div class="tab-pane fade mb-5" id="nav-jersey" role="tabpanel" aria-labelledby="nav-jersey-tab" tabindex="0">
                 @foreach ($order_jersey as $item)
-                    <a href="{{route('jersey.history.detail', $item->no_pesanan)}}" style="text-decoration: none">
+                    <a href="{{ route('jersey.history.detail', ['id' => $item->no_pesanan]) }}" style="text-decoration: none">
                         <div class="card card-history mt-3">
                             <div class="card-header d-flex" style="justify-content: space-between; font-size: 12px">
                                 <span class=""> No Pesanan </span>
