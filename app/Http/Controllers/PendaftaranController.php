@@ -284,8 +284,8 @@ class PendaftaranController extends Controller
             $status_daftar = 2;
         }
         
-        // TODO: BUAT TESTING
-        $status_daftar = 3;
+        // // TODO: BUAT TESTING
+        // $status_daftar = 3;
 
         // Logika untuk memeriksa kuota, pendaftar, dll.
         if ($status_daftar == 3) {
