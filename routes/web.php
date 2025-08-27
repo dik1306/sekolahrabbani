@@ -173,7 +173,8 @@ Route::group(['middleware' =>['auth']], function () {
     Route::get('download-invoice/{id}', [SeragamController::class, 'download'])->name('download.invoice');
 
     
-    Route::post('/terima-seragam/{no_pemesanan}/{tgl_terima_ortu}', [SeragamController::class, 'terimaSeragam'])->name('terima.seragam');
+    // Route::post('/terima-seragam/{no_pemesanan}/{tgl_terima_ortu}', [SeragamController::class, 'terimaSeragam'])->name('terima.seragam');
+    Route::post('/terima-seragam/{no_pemesanan}/{tgl_terima_ortu}', [SeragamController::class, 'terimaSeragam_baru'])->name('terima.seragam');
 
     Route::get('wishlist', [SeragamController::class, 'wishlist'])->name('seragam.wishlist');
     Route::post('wishlist', [SeragamController::class, 'add_to_wishlist'])->name('wishlist_post');
@@ -241,7 +242,8 @@ Route::group(['middleware' =>['auth']], function () {
         Route::get('riwayat-transaksi/{id}', [JerseyController::class, 'rincian_pesanan'])->name('jersey.history.detail');
         Route::get('download-invoice/{id}', [JerseyController::class, 'download_invoice'])->name('invoice-jersey');
 
-        Route::post('/terima-jersey/{no_pemesanan}/{tgl_terima_ortu}', [JerseyController::class, 'terimaJersey'])->name('terima.jersey');
+        // Route::post('/terima-jersey/{no_pemesanan}/{tgl_terima_ortu}', [JerseyController::class, 'terimaJersey'])->name('terima.jersey');
+        Route::post('/terima-jersey/{no_pemesanan}/{tgl_terima_ortu}', [JerseyController::class, 'terimaJersey_baru'])->name('terima.jersey');
 
     });
 });

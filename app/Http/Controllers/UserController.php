@@ -66,8 +66,11 @@ class UserController extends Controller
     public function get_user_api()
     {
         $client = new Client();
-        $api_ortu = "http://103.135.214.11:81/qlp_system/api_pos/api_data_ortu_siswa_aktif.php?pass=aun64268ubstun4w8nw6busrhbumunfjbuwr868w6aynerysteum7timt";
-        $api_siswa = "http://103.135.214.11:81/qlp_system/api_pos/api_data_siswa_aktif.php?pass=aun64268ubstun4w8nw6busrhbumunfjbuwr868w6aynerysteum7timt";
+        // $api_ortu = "http://103.135.214.11:81/qlp_system/api_pos/api_data_ortu_siswa_aktif.php?pass=aun64268ubstun4w8nw6busrhbumunfjbuwr868w6aynerysteum7timt";
+        $api_ortu = "https://system.sekolahrabbani.sch.id/api_pos/api_data_ortu_siswa_aktif.php?pass=aun64268ubstun4w8nw6busrhbumunfjbuwr868w6aynerysteum7timt";
+
+        // $api_siswa = "http://103.135.214.11:81/qlp_system/api_pos/api_data_siswa_aktif.php?pass=aun64268ubstun4w8nw6busrhbumunfjbuwr868w6aynerysteum7timt";
+        $api_siswa = "https://system.sekolahrabbani.sch.id/api_pos/api_data_siswa_aktif.php?pass=aun64268ubstun4w8nw6busrhbumunfjbuwr868w6aynerysteum7timt";
 
         try {
             $response_ortu = $client->get($api_ortu);
@@ -156,7 +159,8 @@ class UserController extends Controller
     public function get_guru_api()
     {
         $client = new Client();
-        $api_guru = "http://103.135.214.11:81/qlp_system/api_pos/api_data_guru_aktif.php?pass=aun64268ubstun4w8nw6busrhbumunfjbuwr868w6aynerysteum7tim8";
+        // $api_guru = "http://103.135.214.11:81/qlp_system/api_pos/api_data_guru_aktif.php?pass=aun64268ubstun4w8nw6busrhbumunfjbuwr868w6aynerysteum7tim8";
+        $api_guru = "https://system.sekolahrabbani.sch.id/api_pos/api_data_guru_aktif.php?pass=aun64268ubstun4w8nw6busrhbumunfjbuwr868w6aynerysteum7tim8";
 
         try {
             $response_ortu = $client->get($api_guru);

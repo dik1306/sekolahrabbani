@@ -495,7 +495,7 @@ class SeragamController extends Controller
             'nis' => $nis
         ]);
 
-        $this->send_wishlist($produk_id, $user_id, $quantity, $ukuran, $jenis, $nis, $no_hp, $kode_produk);
+        // $this->send_wishlist($produk_id, $user_id, $quantity, $ukuran, $jenis, $nis, $no_hp, $kode_produk);
         $this->send_wishlist_baru($produk_id, $user_id, $quantity, $ukuran, $jenis, $nis, $no_hp, $kode_produk);
 
     
@@ -728,7 +728,7 @@ class SeragamController extends Controller
                 $harga_akhir = $total_harga - $total_diskon;
                 $harga_akhir_format = number_format($harga_akhir);
 
-                $this->send_pesan_seragam_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $produk_id, $jenis_produk, $kode_produk, $ukuran, $quantity, $harga_awal, $diskon/100 * $harga_awal, $diskon, $hpp, $ppn);
+                // $this->send_pesan_seragam_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $produk_id, $jenis_produk, $kode_produk, $ukuran, $quantity, $harga_awal, $diskon/100 * $harga_awal, $diskon, $hpp, $ppn);
                 $this->send_pesan_seragam_detail_baru($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $produk_id, $jenis_produk, $kode_produk, $ukuran, $quantity, $harga_awal, $diskon/100 * $harga_awal, $diskon, $hpp, $ppn);
                 
                 $this->update_cart_status($user_id, $kode_produk);
@@ -745,7 +745,7 @@ class SeragamController extends Controller
             ]);
 
 
-            $this->send_pesan_seragam($no_pesanan, $nama_pemesan, $no_hp);
+            // $this->send_pesan_seragam($no_pesanan, $nama_pemesan, $no_hp);
             $this->send_pesan_seragam_baru($no_pesanan, $nama_pemesan, $no_hp);
 
             // Set your Merchant Server Key
@@ -800,11 +800,11 @@ class SeragamController extends Controller
                 'jenis_produk_id' => $jenis_produk_now,
                 'p_diskon' => $diskon_persen_now
             ]);
-            $this->send_pesan_seragam($no_pesanan, $nama_pemesan, $no_hp);
+            // $this->send_pesan_seragam($no_pesanan, $nama_pemesan, $no_hp);
             $this->send_pesan_seragam_baru($no_pesanan, $nama_pemesan, $no_hp);
 
 
-            $this->send_pesan_seragam_detail($no_pesanan, $nama_siswa_now, $sekolah_id_now, $nama_kelas_now, $produk_id_now, $jenis_produk_now, $kode_produk_now, $ukuran_now, $quantity_now, $harga_awal_now, $diskon_now, $diskon_persen_now, $hpp_now, $ppn_now);
+            // $this->send_pesan_seragam_detail($no_pesanan, $nama_siswa_now, $sekolah_id_now, $nama_kelas_now, $produk_id_now, $jenis_produk_now, $kode_produk_now, $ukuran_now, $quantity_now, $harga_awal_now, $diskon_now, $diskon_persen_now, $hpp_now, $ppn_now);
             $this->send_pesan_seragam_detail_baru($no_pesanan, $nama_siswa_now, $sekolah_id_now, $nama_kelas_now, $produk_id_now, $jenis_produk_now, $kode_produk_now, $ukuran_now, $quantity_now, $harga_awal_now, $diskon_now, $diskon_persen_now, $hpp_now, $ppn_now);
 
                 // Set your Merchant Server Key
@@ -948,7 +948,8 @@ class SeragamController extends Controller
                         $quantity = $item->quantity;
     
                     };
-                    $this->update_status_seragam('success', $mtd_pembayaran, $orderId);
+                    // $this->update_status_seragam('success', $mtd_pembayaran, $orderId);
+                    $this->update_status_seragam_baru('success', $mtd_pembayaran, $orderId);
                     break;
                 case 'pending':
                     $order->update([
@@ -975,7 +976,8 @@ class SeragamController extends Controller
     
                         $this->update_stok($kode_produk, $quantity);
                     }
-                    $this->update_status_seragam('pending', $mtd_pembayaran, $orderId);
+                    // $this->update_status_seragam('pending', $mtd_pembayaran, $orderId);
+                    $this->update_status_seragam_baru('pending', $mtd_pembayaran, $orderId);
                     break;
                 case 'deny':
                     $order->update([
@@ -1014,7 +1016,8 @@ class SeragamController extends Controller
     
                         $this->return_stock($kode_produk, $quantity);
                     }
-                    $this->update_status_seragam('expired', $mtd_pembayaran, $orderId);
+                    // $this->update_status_seragam('expired', $mtd_pembayaran, $orderId);
+                    $this->update_status_seragam_baru('expired', $mtd_pembayaran, $orderId);
                     break;
                 case 'cancel':
                     $order->update([
@@ -1064,7 +1067,7 @@ class SeragamController extends Controller
                         'tgl_bayar' => $request->settlement_time,
                         'updated_at' => $request->settlement_time
                     ]);
-                    $this->update_status_jersey('success', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, $request->settlement_time);
+                    // $this->update_status_jersey('success', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, $request->settlement_time);
                     $this->update_status_jersey_baru('success', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, $request->settlement_time);
                     break;
                 case 'pending':
@@ -1074,7 +1077,7 @@ class SeragamController extends Controller
                         'va_number' => $no_va,
                         'expire_time' => $request->expiry_time
                     ]);
-                    $this->update_status_jersey('pending', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, null);
+                    // $this->update_status_jersey('pending', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, null);
                     $this->update_status_jersey_baru('pending', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, null);
                     break;
                 case 'deny':
@@ -1091,7 +1094,7 @@ class SeragamController extends Controller
                         'metode_pembayaran' => $mtd_pembayaran,
                         'va_number' => $no_va
                     ]);
-                    $this->update_status_jersey('expired', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, null);
+                    // $this->update_status_jersey('expired', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, null);
                     $this->update_status_jersey_baru('expired', $mtd_pembayaran, $orderId, $request->gross_amount, $no_va, $request->expiry_time, null);
                     break;
                 case 'cancel':
@@ -1135,7 +1138,8 @@ class SeragamController extends Controller
                         'va_number' => $no_va,
                         'updated_at' => $request->settlement_time
                     ]);
-                    $this->update_status_merchandise('success', $mtd_pembayaran, $orderId);
+                    // $this->update_status_merchandise('success', $mtd_pembayaran, $orderId);
+                    $this->update_status_merchandise_baru('success', $mtd_pembayaran, $orderId);
                     break;
                 case 'pending':
                     $order_merch->update([
@@ -1144,7 +1148,8 @@ class SeragamController extends Controller
                         'va_number' => $no_va,
                         'expire_time' => $request->expiry_time
                     ]);
-                    $this->update_status_merchandise('pending', $mtd_pembayaran, $orderId);
+                    // $this->update_status_merchandise('pending', $mtd_pembayaran, $orderId);
+                    $this->update_status_merchandise_baru('pending', $mtd_pembayaran, $orderId);
                     break;
                 case 'deny':
                     $order_merch->update([
@@ -1160,7 +1165,8 @@ class SeragamController extends Controller
                         'metode_pembayaran' => $mtd_pembayaran,
                         'va_number' => $no_va
                     ]);
-                    $this->update_status_merchandise('expired', $mtd_pembayaran, $orderId);
+                    // $this->update_status_merchandise('expired', $mtd_pembayaran, $orderId);
+                    $this->update_status_merchandise_baru('expired', $mtd_pembayaran, $orderId);
                     break;
                 case 'cancel':
                     $order_merch->update([
@@ -1197,7 +1203,7 @@ class SeragamController extends Controller
                                 'updatedate' => $request->settlement_time,
                             ]);
                             $data_anak = Pendaftaran::where('order_id', $orderId)->first();
-                            $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
+                            // $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
                             $this->update_status_pendaftaran_siswa_baru('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
 
                             $data_anak = Pendaftaran::where('order_id', $orderId)->first();
@@ -1291,7 +1297,7 @@ Sekolah Rabbani ✨
                         'tgl_bayar' => $request->settlement_time,
                         'updatedate' => $request->settlement_time,
                     ]);
-                    $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
+                    // $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
                     $this->update_status_pendaftaran_siswa_baru('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
                     
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
@@ -1382,7 +1388,7 @@ Sekolah Rabbani ✨
                         'expire_time' => $request->expiry_time
                     ]);
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
-                    $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $data_anak->id_anak, $orderId, null);
+                    // $this->update_status_pendaftaran_siswa('pending', $mtd_pembayaran, $data_anak->id_anak, $orderId, null);
                     $this->update_status_pendaftaran_siswa_baru('pending', $mtd_pembayaran, $data_anak->id_anak, $orderId, null);
                     break;
                 case 'deny':
@@ -1399,7 +1405,7 @@ Sekolah Rabbani ✨
                         'va_number' => $no_va
                     ]);
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
-                    $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $data_anak->id_anak, $orderId, null);
+                    // $this->update_status_pendaftaran_siswa('expired', $mtd_pembayaran, $data_anak->id_anak, $orderId, null);
                     $this->update_status_pendaftaran_siswa_baru('expired', $mtd_pembayaran, $data_anak->id_anak, $orderId, null);
 
                     $data_anak = Pendaftaran::where('order_id', $orderId)->first();
@@ -1559,6 +1565,68 @@ Sekolah Rabbani ✨
 
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => 'http://103.135.214.11:81/qlp_system/api_bisnis/update_pesanan_seragam_terima_tu.php',
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array(
+                        'no_pemesanan' => $no_pemesanan,
+                        'tgl_terima_ortu' => $tgl_terima_ortu
+                    )
+                ));
+
+                // Eksekusi cURL request dan ambil respons
+                $response = curl_exec($curl);
+
+                // Cek error jika ada
+                if(curl_errno($curl)) {
+                    curl_close($curl);
+                    return response()->json(['error' => 'Terjadi kesalahan pada koneksi server: ' . curl_error($curl)], 500);
+                }
+
+                // Tutup koneksi cURL
+                curl_close($curl);
+
+                // Mengembalikan respons sukses
+                return response()->json(['message' => 'Tanggal terima seragam berhasil diperbarui.']);
+            } else {
+                return response()->json(['error' => 'Detail pesanan tidak ditemukan.'], 404);
+            }
+        } else {
+            return response()->json(['error' => 'Order tidak ditemukan atau Anda tidak memiliki akses ke order ini.'], 404);
+        }
+    }
+
+    public function terimaSeragam_baru($no_pemesanan, $tgl_terima_ortu) { 
+        // Ambil ID pengguna yang sedang login
+        $user_id = auth()->user()->id;
+
+        // Cari order berdasarkan no_pemesanan dan user_id yang sesuai dengan yang login
+        $order = OrderSeragam::where('no_pemesanan', $no_pemesanan)
+                            ->where('user_id', $user_id)
+                            ->first();
+        
+        // Jika order ditemukan
+        if ($order) {
+            // Cari semua detail order berdasarkan no_pemesanan
+            $order_details = OrderDetailSeragam::where('no_pemesanan', $no_pemesanan)->get();
+            
+            // Pastikan ada detail pesanan
+            if ($order_details->isNotEmpty()) {
+                // Update tgl_terima_ortu untuk setiap detail order
+                foreach ($order_details as $order_detail) {
+                    $order_detail->tgl_terima_ortu = $tgl_terima_ortu;
+                    $order_detail->save();  // Simpan perubahan untuk setiap item
+                }
+
+                // Kirim permintaan cURL ke API eksternal
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_bisnis/update_pesanan_seragam_terima_tu.php',
                     CURLOPT_RETURNTRANSFER => 1,
                     CURLOPT_ENCODING => '',
                     CURLOPT_MAXREDIRS => 10,
@@ -1969,7 +2037,7 @@ Sekolah Rabbani ✨
 	    $curl = curl_init();
 
 		curl_setopt_array($curl, array(
-		  CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/simpan_wishlist.php',
+		  CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/simpan_wishlist.php',
 		  CURLOPT_RETURNTRANSFER => 1,
 		  CURLOPT_ENCODING => '',
 		  CURLOPT_MAXREDIRS => 10,
@@ -2031,7 +2099,7 @@ Sekolah Rabbani ✨
 	    $curl = curl_init();
 
 		curl_setopt_array($curl, array(
-		  CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/simpan_pesan_seragam.php',
+		  CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/simpan_pesan_seragam.php',
 		  CURLOPT_RETURNTRANSFER => 1,
 		  CURLOPT_ENCODING => '',
 		  CURLOPT_MAXREDIRS => 10,
@@ -2099,7 +2167,7 @@ Sekolah Rabbani ✨
 	    $curl = curl_init();
 
 		curl_setopt_array($curl, array(
-		  CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/simpan_pesan_seragam_detail.php',
+		  CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/simpan_pesan_seragam_detail.php',
 		  CURLOPT_RETURNTRANSFER => 1,
 		  CURLOPT_ENCODING => '',
 		  CURLOPT_MAXREDIRS => 10,
@@ -2173,7 +2241,7 @@ Sekolah Rabbani ✨
             $curl = curl_init();
     
             curl_setopt_array($curl, array(
-              CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/update_pesan_seragam.php',
+              CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/update_pesan_seragam.php',
               CURLOPT_RETURNTRANSFER => 1,
               CURLOPT_ENCODING => '',
               CURLOPT_MAXREDIRS => 10,
@@ -2297,7 +2365,7 @@ Sekolah Rabbani ✨
             $curl = curl_init();
     
             curl_setopt_array($curl, array(
-              CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/update_pesan_merchandise.php',
+              CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/update_pesan_merchandise.php',
               CURLOPT_RETURNTRANSFER => 1,
               CURLOPT_ENCODING => '',
               CURLOPT_MAXREDIRS => 10,
@@ -2365,7 +2433,7 @@ Sekolah Rabbani ✨
             $curl = curl_init();
     
             curl_setopt_array($curl, array(
-              CURLOPT_URL => 'https://system.rabbani.sch.id/api_regist/update_pesan_jersey.php',
+              CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_regist/update_pesan_jersey.php',
               CURLOPT_RETURNTRANSFER => 1,
               CURLOPT_ENCODING => '',
               CURLOPT_MAXREDIRS => 10,

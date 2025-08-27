@@ -351,7 +351,7 @@ class PendaftaranController extends Controller
         $nama_rek = $contact_person->nama_rek;
 
         // send ke qlp
-        $this->send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
+        // $this->send_pendaftaran($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
         $this->send_pendaftaran_baru($id_anak, $nama_lengkap, $jenis_kelamin, $tempat_lahir, $tgl_lahir, $lokasi, $kelas, $jenjang, $tingkat, $no_hp_ayah, $no_hp_ibu, $nama_ayah, $nama_ibu, $sumber_ppdb, $tahun_ajaran, $asal_sekolah, $status_daftar, $is_pindahan, $info_apakah_abk);
 
         //send notif ke ortu
@@ -906,23 +906,23 @@ Sekolah Rabbani ✨
         // Update data wali
         $update_data_wali = PendaftaranWali::where('id_wali', $id)->update($data_wali);
 
-        $this->update_pendaftaran(
-            //PK
-            $id,
-            // data anak
-            $data_anak['nama_panggilan'], $data_anak['no_nik'], $data_anak['alamat'], $data_anak['provinsi'],$data_anak['kota'], $data_anak['kecamatan'], $data_anak['kelurahan'], $data_anak['status_tinggal'], 
-            $data_anak['anak_ke'], $data_anak['jml_sdr'], $data_anak['tinggi_badan'], $data_anak['berat_badan'], $data_anak['bahasa'], 
-            $data_anak['asal_sekolah'], $data_anak['npsn'], $data_anak['kec_asal_sekolah'], $data_anak['agama'], $data_anak['gol_darah'], $data_anak['hafalan'], $data_anak['riwayat_penyakit'], 
-            $data_anak['info_apakah_abk'], $data_anak['info_detail_saudara'], $data_anak['info_detail_tempat'], $data_anak['info_detail_khusus'],
-            // data ayah
-            $data_ayah['email_ayah'], $data_ayah['tptlahir_ayah'], $data_ayah['tgllahir_ayah'], 
-            $data_ayah['penghasilan'], $data_ayah['pekerjaan_jabatan'], $data_ayah['pendidikan_ayah'], $data_ayah['tahun_nikah_ayah'], $data_ayah['pernikahan_ke_ayah'],
-            // data ibu
-            $data_ibu['email_ibu'], $data_ibu['tptlahir_ibu'], $data_ibu['tgllahir_ibu'], 
-            $data_ibu['penghasilan'], $data_ibu['pekerjaan_jabatan'], $data_ibu['pendidikan_ibu'], $data_ibu['tahun_nikah_ibu'], $data_ibu['pernikahan_ke_ibu'],
-            // data wali
-            $data_wali['nama'], $data_wali['tptlahir_wali'], $data_wali['tgllahir_wali'], $data_wali['pekerjaan_jabatan'], $data_wali['pendidikan_wali'], $data_wali['hubungan_wali']
-        );
+        // $this->update_pendaftaran(
+        //     //PK
+        //     $id,
+        //     // data anak
+        //     $data_anak['nama_panggilan'], $data_anak['no_nik'], $data_anak['alamat'], $data_anak['provinsi'],$data_anak['kota'], $data_anak['kecamatan'], $data_anak['kelurahan'], $data_anak['status_tinggal'], 
+        //     $data_anak['anak_ke'], $data_anak['jml_sdr'], $data_anak['tinggi_badan'], $data_anak['berat_badan'], $data_anak['bahasa'], 
+        //     $data_anak['asal_sekolah'], $data_anak['npsn'], $data_anak['kec_asal_sekolah'], $data_anak['agama'], $data_anak['gol_darah'], $data_anak['hafalan'], $data_anak['riwayat_penyakit'], 
+        //     $data_anak['info_apakah_abk'], $data_anak['info_detail_saudara'], $data_anak['info_detail_tempat'], $data_anak['info_detail_khusus'],
+        //     // data ayah
+        //     $data_ayah['email_ayah'], $data_ayah['tptlahir_ayah'], $data_ayah['tgllahir_ayah'], 
+        //     $data_ayah['penghasilan'], $data_ayah['pekerjaan_jabatan'], $data_ayah['pendidikan_ayah'], $data_ayah['tahun_nikah_ayah'], $data_ayah['pernikahan_ke_ayah'],
+        //     // data ibu
+        //     $data_ibu['email_ibu'], $data_ibu['tptlahir_ibu'], $data_ibu['tgllahir_ibu'], 
+        //     $data_ibu['penghasilan'], $data_ibu['pekerjaan_jabatan'], $data_ibu['pendidikan_ibu'], $data_ibu['tahun_nikah_ibu'], $data_ibu['pernikahan_ke_ibu'],
+        //     // data wali
+        //     $data_wali['nama'], $data_wali['tptlahir_wali'], $data_wali['tgllahir_wali'], $data_wali['pekerjaan_jabatan'], $data_wali['pendidikan_wali'], $data_wali['hubungan_wali']
+        // );
         $this->update_pendaftaran_baru(
             //PK
             $id,
@@ -964,7 +964,7 @@ Sekolah Rabbani ✨
                             'jawaban' => $answer_json,
                         ]);
                     }
-                    $this->update_data_pertanyaan($type, $id, $question_id, $answer_json);
+                    // $this->update_data_pertanyaan($type, $id, $question_id, $answer_json);
                     $this->update_data_pertanyaan_baru($type, $id, $question_id, $answer_json);
                 } elseif ($type == 'pengasuhan') {
                     // Cek apakah data sudah ada di HasilPengasuhan
@@ -984,7 +984,7 @@ Sekolah Rabbani ✨
                             'jawaban' => $answer_json,
                         ]);
                     }
-                    $this->update_data_pertanyaan($type, $id, $question_id, $answer_json);
+                    // $this->update_data_pertanyaan($type, $id, $question_id, $answer_json);
                     $this->update_data_pertanyaan_baru($type, $id, $question_id, $answer_json);
                 }
             }
@@ -1167,7 +1167,7 @@ Sampai jumpa di kelas, dan mari bersama ciptakan pengalaman belajar yang menyena
 Sekolah Rabbani";
 
          // send ke qlp
-         $this->send_trial_class($nama_anak, $tgl_lahir, $no_wa, $lokasi, $jenjang_id, $asal_sekolah, $th_ajaran_now);
+        //  $this->send_trial_class($nama_anak, $tgl_lahir, $no_wa, $lokasi, $jenjang_id, $asal_sekolah, $th_ajaran_now);
          $this->send_trial_class_baru($nama_anak, $tgl_lahir, $no_wa, $lokasi, $jenjang_id, $asal_sekolah, $th_ajaran_now);
 
         if ($add_trial) {

@@ -770,7 +770,7 @@ class PalestineDayController extends Controller
                 $harga_akhir = $total_harga - $total_diskon;
                 $harga_akhir_format = number_format($harga_akhir);
 
-                $this->send_pesan_merchandise_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $merchandise_id, $warna, $template, $kategori, $desgin, $ukuran, $quantity, $harga, $diskon, $harga_pokok);
+                // $this->send_pesan_merchandise_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $merchandise_id, $warna, $template, $kategori, $desgin, $ukuran, $quantity, $harga, $diskon, $harga_pokok);
                 $this->send_pesan_merchandise_detail_baru($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $merchandise_id, $warna, $template, $kategori, $desgin, $ukuran, $quantity, $harga, $diskon, $harga_pokok);
                 $this->update_cart_status($user_id, $merchandise_id);
             }
@@ -784,7 +784,7 @@ class PalestineDayController extends Controller
                 'user_id' => $user_id
             ]);
 
-            $this->send_pesan_merchandise($no_pesanan, $nama_pemesan, $no_hp);
+            // $this->send_pesan_merchandise($no_pesanan, $nama_pemesan, $no_hp);
             $this->send_pesan_merchandise_baru($no_pesanan, $nama_pemesan, $no_hp);
 
                 // Set your Merchant Server Key
@@ -840,11 +840,11 @@ class PalestineDayController extends Controller
                 'hpp' => $hpp_now
             ]);
 
-            $this->send_pesan_merchandise($no_pesanan, $nama_pemesan, $no_hp);
+            // $this->send_pesan_merchandise($no_pesanan, $nama_pemesan, $no_hp);
             $this->send_pesan_merchandise_baru($no_pesanan, $nama_pemesan, $no_hp);
 
 
-            $this->send_pesan_merchandise_detail($no_pesanan, $nama_siswa_now, $sekolah_id_now, $kelas_now, $merchandise_id_now, $warna_now, $template_now, $kategori_now, $design_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now);
+            // $this->send_pesan_merchandise_detail($no_pesanan, $nama_siswa_now, $sekolah_id_now, $kelas_now, $merchandise_id_now, $warna_now, $template_now, $kategori_now, $design_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now);
             $this->send_pesan_merchandise_detail_baru($no_pesanan, $nama_siswa_now, $sekolah_id_now, $kelas_now, $merchandise_id_now, $warna_now, $template_now, $kategori_now, $design_now, $ukuran_now, $quantity_now, $total_harga_now, $diskon_now, $hpp_now);
 
                // Set your Merchant Server Key

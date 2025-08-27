@@ -551,7 +551,7 @@ class JerseyController extends Controller
                 $total_diskon += $nilai_diskon;
                 $harga_akhir = $total_harga - $total_diskon;
 
-                $this->send_pesan_jersey_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga_awal, $diskon, $hpp, $no_punggung, $nama_punggung);
+                // $this->send_pesan_jersey_detail($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga_awal, $diskon, $hpp, $no_punggung, $nama_punggung);
                 $this->send_pesan_jersey_detail_baru($no_pesanan, $nama_siswa, $lokasi, $nama_kelas, $jersey_id, $ukuran, $quantity, $harga_awal, $diskon, $hpp, $no_punggung, $nama_punggung);
                 $this->update_cart_status($user_id, $jersey_id);
             }
@@ -565,7 +565,7 @@ class JerseyController extends Controller
                 'user_id' => $user_id
             ]);
 
-            $this->send_pesan_jersey($no_pesanan, $nama_pemesan, $no_hp);
+            // $this->send_pesan_jersey($no_pesanan, $nama_pemesan, $no_hp);
             $this->send_pesan_jersey_baru($no_pesanan, $nama_pemesan, $no_hp);
 
                 // Set your Merchant Server Key
@@ -634,10 +634,10 @@ class JerseyController extends Controller
                 'hpp' => $hpp_now
             ]);
 
-            $this->send_pesan_jersey($no_pesanan, $nama_pemesan, $no_hp);
+            // $this->send_pesan_jersey($no_pesanan, $nama_pemesan, $no_hp);
             $this->send_pesan_jersey_baru($no_pesanan, $nama_pemesan, $no_hp);
 
-            $this->send_pesan_jersey_detail($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $get_jersey->harga_awal, $diskon_now, $hpp_now, $no_punggung_now, $nama_punggung_now);
+            // $this->send_pesan_jersey_detail($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $get_jersey->harga_awal, $diskon_now, $hpp_now, $no_punggung_now, $nama_punggung_now);
             $this->send_pesan_jersey_detail_baru($no_pesanan, $nama_lengkap, $sekolah_id, $nama_kelas, $jersey_id_now, $ukuran_now, $quantity_now, $get_jersey->harga_awal, $diskon_now, $hpp_now, $no_punggung_now, $nama_punggung_now);
 
                // Set your Merchant Server Key
@@ -692,6 +692,70 @@ class JerseyController extends Controller
         // dd($tglUpdateBaru);
 
         return view('ortu.jersey.rincian-pesan', compact( 'order', 'order_detail', 'orderStatus', 'tglUpdateBaru'));
+    }
+
+    public function terimaJersey_baru($no_pemesanan, $tgl_terima_ortu) { 
+        // Ambil ID pengguna yang sedang login
+        $user_id = auth()->user()->id;
+
+        // Cari order berdasarkan no_pemesanan dan user_id yang sesuai dengan yang login
+        $order = OrderJersey::where('no_pesanan', $no_pemesanan)
+                            ->where('user_id', $user_id)
+                            ->first();
+        
+        // Jika order ditemukan
+        if ($order) {
+            // Cari semua detail order berdasarkan no_pemesanan
+            $order_details = OrderDetailJersey::where('no_pesanan', $no_pemesanan)->get();
+            
+            // Pastikan ada detail pesanan
+            if ($order_details->isNotEmpty()) {
+                
+
+                // Kirim permintaan cURL ke API eksternal
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://system.sekolahrabbani.sch.id/api_bisnis/update_pesanan_seragam_terima_tu.php',
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array(
+                        'no_pemesanan' => $no_pemesanan,
+                        'tgl_terima_ortu' => $tgl_terima_ortu
+                    )
+                ));
+
+                // Eksekusi cURL request dan ambil respons
+                $response = curl_exec($curl);
+
+                // Cek error jika ada
+                if(curl_errno($curl)) {
+                    curl_close($curl);
+                    return response()->json(['error' => 'Terjadi kesalahan pada koneksi server: ' . curl_error($curl)], 500);
+                }
+
+                // Tutup koneksi cURL
+                curl_close($curl);
+
+                // Update tgl_terima_ortu untuk setiap detail order
+                foreach ($order_details as $order_detail) {
+                    $order_detail->tgl_terima_ortu = $tgl_terima_ortu;
+                    $order_detail->save();  // Simpan perubahan untuk setiap item
+                }
+
+                // Mengembalikan respons sukses
+                return response()->json(['message' => 'Tanggal terima seragam berhasil diperbarui.']);
+            } else {
+                return response()->json(['error' => 'Detail pesanan tidak ditemukan.'], 404);
+            }
+        } else {
+            return response()->json(['error' => 'Order tidak ditemukan atau Anda tidak memiliki akses ke order ini.'], 404);
+        }
     }
 
     public function terimaJersey($no_pemesanan, $tgl_terima_ortu) { 
