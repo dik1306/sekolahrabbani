@@ -59,33 +59,33 @@
             </div>
 
             <div class="tab-pane fade mb-5" id="nav-merch" role="tabpanel" aria-labelledby="nav-merch-tab" tabindex="0">
-                @foreach ($order_detail_merch as $item)
-                    <a href="{{route('merchandise.history.detail', $item->no_pesanan)}}" style="text-decoration: none">
+                @foreach ($order_detail_merch as $item_merch)
+                    <a href="{{route('merchandise.history.detail', $item_merch->no_pesanan)}}" style="text-decoration: none">
                         <div class="card card-history mt-3">
                             <div class="card-header d-flex" style="justify-content: space-between; font-size: 12px">
                                 <span class=""> No Pesanan </span>
-                                <span > {{$item->no_pesanan}} </span>
+                                <span > {{$item_merch->no_pesanan}} </span>
                             </div>
                             <div class="card-body d-flex">
                                 <div class="frame-bayar">
-                                    <img src="{{asset('storage/'.$item->image_1)}}" width="100%" style="height: 100%; object-fit:cover; border-radius:1rem">
+                                    <img src="{{asset('storage/'.$item_merch->image_1)}}" width="100%" style="height: 100%; object-fit:cover; border-radius:1rem">
                                 </div>
                                 <div class="d-flex mx-2">
                                     <div class="" style="width: 150px">
-                                        <p class="mb-0" style="font-size: 14px;"> {{$item->nama_produk}} </p>
-                                        <p class="mb-0 price-diskon"> <b> Rp. {{number_format((($item->total_harga))) }} </b> </p>
-                                        <p class="mb-0" style="font-size: 8px">Waktu Pesan: {{$item->created_at}} </p>
+                                        <p class="mb-0" style="font-size: 14px;"> {{$item_merch->nama_produk}} </p>
+                                        <p class="mb-0 price-diskon"> <b> Rp. {{number_format((($item_merch->total_harga))) }} </b> </p>
+                                        <p class="mb-0" style="font-size: 8px">Waktu Pesan: {{$item_merch->created_at}} </p>
                 
                                     </div>
                                 </div>
                                 <div class="status" style="margin-left: auto">
-                                    @if ($item->status == 'success')
-                                        <span class="badge bg-success" style="font-size: 12px"> {{$item->status}} </span>
+                                    @if ($item_merch->status == 'success')
+                                        <span class="badge bg-success" style="font-size: 12px"> {{$item_merch->status}} </span>
         
-                                    @elseif($item->status == 'pending')
+                                    @elseif($item_merch->status == 'pending')
                                         <span class="badge bg-warning" style="font-size: 12px"> Menunggu </span>
         
-                                    @elseif($item->status == 'cancel' || $item->status == 'failed' || $item->status == 'expired' )
+                                    @elseif($item_merch->status == 'cancel' || $item_merch->status == 'failed' || $item_merch->status == 'expired' )
                                         <span class="badge bg-danger" style="font-size: 12px"> Gagal </span>
                                     @endif
                                 </div>
@@ -96,33 +96,33 @@
             </div>
 
             <div class="tab-pane fade mb-5" id="nav-jersey" role="tabpanel" aria-labelledby="nav-jersey-tab" tabindex="0">
-                @foreach ($order_jersey as $item)
-                    <a href="{{ route('jersey.history.detail', ['id' => $item->no_pesanan]) }}" style="text-decoration: none">
+                @foreach ($order_jersey as $item_jersey)
+                    <a href="{{ route('jersey.history.detail', ['id' => $item_jersey->no_pesanan]) }}" style="text-decoration: none">
                         <div class="card card-history mt-3">
                             <div class="card-header d-flex" style="justify-content: space-between; font-size: 12px">
                                 <span class=""> No Pesanan </span>
-                                <span > {{$item->no_pesanan}} </span>
+                                <span > {{$item_jersey->no_pesanan}} </span>
                             </div>
                             <div class="card-body d-flex">
                                 <div class="frame-bayar">
-                                    <img src="{{asset('storage/'.$item->image_1)}}" width="100%" style="height: 100%; object-fit:cover; border-radius:1rem">
+                                    <img src="{{asset('storage/'.$item_jersey->image_1)}}" width="100%" style="height: 100%; object-fit:cover; border-radius:1rem">
                                 </div>
                                 <div class="d-flex mx-2">
                                     <div class="" style="width: 150px">
-                                        <p class="mb-0" style="font-size: 14px;"> {{$item->nama_jersey}} </p>
-                                        <p class="mb-0 price-diskon"> <b> Rp. {{number_format((($item->total_harga))) }} </b> </p>
-                                        <p class="mb-0" style="font-size: 8px">Waktu Pesan: {{$item->created_at}} </p>
+                                        <p class="mb-0" style="font-size: 14px;"> {{$item_jersey->nama_jersey}} </p>
+                                        <p class="mb-0 price-diskon"> <b> Rp. {{number_format((($item_jersey->total_harga))) }} </b> </p>
+                                        <p class="mb-0" style="font-size: 8px">Waktu Pesan: {{$item_jersey->created_at}} </p>
                 
                                     </div>
                                 </div>
                                 <div class="status" style="margin-left: auto">
-                                    @if ($item->status == 'success')
-                                        <span class="badge bg-success" style="font-size: 12px"> {{$item->status}} </span>
+                                    @if ($item_jersey->status == 'success')
+                                        <span class="badge bg-success" style="font-size: 12px"> {{$item_jersey->status}} </span>
         
-                                    @elseif($item->status == 'pending')
+                                    @elseif($item_jersey->status == 'pending')
                                         <span class="badge bg-warning" style="font-size: 12px"> Menunggu </span>
         
-                                    @elseif($item->status == 'cancel' || $item->status == 'failed' || $item->status == 'expired' )
+                                    @elseif($item_jersey->status == 'cancel' || $item_jersey->status == 'failed' || $item_jersey->status == 'expired' )
                                         <span class="badge bg-danger" style="font-size: 12px"> Gagal </span>
                                     @endif
                                 </div>
