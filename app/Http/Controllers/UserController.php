@@ -15,13 +15,14 @@ class UserController extends Controller
     public function index()
     {
         // TODO: UJI COBA TUTUP SEMENTARA HALAMAN PENDAFTARAN
-        $akses = request()->query('akses'); // atau bisa menggunakan request('akses')
-        if ($akses === 'admindopi') {
-            // Logika jika akses diizinkan
-            return view('auth.login_v2');
-        }
+        // $akses = request()->query('akses'); // atau bisa menggunakan request('akses')
+        // if ($akses === 'admindopi') {
+        //     // Logika jika akses diizinkan
+        //     return view('auth.login_v2');
+        // }
+        // return view('auth.login_v2-closed');
         
-        return view('auth.login_v2-closed');
+        return view('auth.login_v2');
     }
 
     public function list_user()

@@ -52,19 +52,19 @@ class JerseyController extends Controller
                         ->get();
 
         // TODO: KEPERLUAN TESTING
-        $akses = request()->query('akses'); // atau bisa menggunakan request('akses')
-        if ($akses === 'admindopi') {
-            // Logika jika akses diizinkan
-            return view('ortu.jersey.index', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
-                        'jersey_basket', 'jersey_memanah'));
-        } else {
-            return view('ortu.jersey.closed', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
-                        'jersey_basket', 'jersey_memanah'));
-        }
+        // $akses = request()->query('akses'); // atau bisa menggunakan request('akses')
+        // if ($akses === 'admindopi') {
+        //     // Logika jika akses diizinkan
+        //     return view('ortu.jersey.index', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
+        //                 'jersey_basket', 'jersey_memanah'));
+        // } else {
+        //     return view('ortu.jersey.closed', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
+        //                 'jersey_basket', 'jersey_memanah'));
+        // }
 
         // HALAMAN SEBENARNYA
-        // return view('ortu.jersey.index', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
-        //            'jersey_basket', 'jersey_memanah'));
+        return view('ortu.jersey.index', compact('menubar', 'jenjang', 'list_jersey', 'cart_detail', 'jersey_futsal', 'jersey_badminton',
+                   'jersey_basket', 'jersey_memanah'));
 
     }
 
