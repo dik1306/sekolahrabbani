@@ -910,6 +910,12 @@ class SeragamController extends Controller
         $order_merch = OrderMerchandise::where('no_pesanan', $orderId)->first();
         $order_jersey = OrderJersey::where('no_pesanan', $orderId)->first();
         $pendaftaran_siswa = Pendaftaran::where('order_id', $orderId)->first();
+
+        // Format angka menjadi format uang Rupiah
+        $biaya_gross_amount = number_format($request->gross_amount, 0, ',', '.');
+
+        // Tambahkan simbol mata uang dan strip di akhir
+        $biaya_gross_amount = $biaya_gross_amount . ',-';
        
         if (!$order && !$order_merch && !$order_jersey && !$pendaftaran_siswa) {
             return response()->json(['message' => 'Order not found'], 404);
@@ -1222,7 +1228,7 @@ Telah diterima pembayaran biaya pendaftaran:
 
 📌 No. Registrasi: '.$data_anak->id_anak.'
 👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+💳 Jumlah Bayar: Rp '.$biaya_gross_amount.'
 ⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
 Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
@@ -1232,7 +1238,7 @@ Telah diterima pembayaran biaya pendaftaran:
 
 📌 No. Registrasi: '.$data_anak->id_anak.'
 👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+💳 Jumlah Bayar: Rp '.$biaya_gross_amount.'
 ⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
 Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
@@ -1242,7 +1248,7 @@ Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui 
 ✅ Pembayaran Pendaftaran Berhasil
 
 Terima kasih Ayah/Bunda $data_anak->nama_lengkap 🙏
-Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$request->gross_amount* untuk:
+Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$biaya_gross_amount* untuk:
 
 📌 No. Registrasi / Pendaftaran: *$data_anak->id_anak*
 📌 Nama Ananda: *$data_anak->nama_lengkap*
@@ -1261,7 +1267,7 @@ Sekolah Rabbani ✨
 ✅ Pembayaran Pendaftaran Berhasil
 
 Terima kasih Ayah/Bunda $data_anak->nama_lengkap 🙏
-Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$request->gross_amount* untuk:
+Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$biaya_gross_amount* untuk:
 
 📌 No. Registrasi / Pendaftaran: *$data_anak->id_anak*
 📌 Nama Ananda: *$data_anak->nama_lengkap*
@@ -1316,7 +1322,7 @@ Telah diterima pembayaran biaya pendaftaran:
 
 📌 No. Registrasi: '.$data_anak->id_anak.'
 👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+💳 Jumlah Bayar: Rp '.$biaya_gross_amount.'
 ⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
 Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
@@ -1326,7 +1332,7 @@ Telah diterima pembayaran biaya pendaftaran:
 
 📌 No. Registrasi: '.$data_anak->id_anak.'
 👤 Nama Ananda: '.$data_anak->nama_lengkap.'
-💳 Jumlah Bayar: Rp '.$request->gross_amount.'
+💳 Jumlah Bayar: Rp '.$biaya_gross_amount.'
 ⏰ Waktu Pembayaran: '.$request->settlement_time.'
 
 Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui dashboard.';
@@ -1336,7 +1342,7 @@ Status pendaftaran sudah otomatis tercatat di sistem dan dapat dipantau melalui 
 ✅ Pembayaran Pendaftaran Berhasil
 
 Terima kasih Ayah/Bunda $data_anak->nama_lengkap 🙏
-Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$request->gross_amount* untuk:
+Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$biaya_gross_amount* untuk:
 
 📌 No. Registrasi / Pendaftaran: *$data_anak->id_anak*
 📌 Nama Ananda: *$data_anak->nama_lengkap*
@@ -1355,7 +1361,7 @@ Sekolah Rabbani ✨
 ✅ Pembayaran Pendaftaran Berhasil
 
 Terima kasih Ayah/Bunda $data_anak->nama_lengkap 🙏
-Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$request->gross_amount* untuk:
+Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$biaya_gross_amount* untuk:
 
 📌 No. Registrasi / Pendaftaran: *$data_anak->id_anak*
 📌 Nama Ananda: *$data_anak->nama_lengkap*
@@ -1420,7 +1426,7 @@ Sekolah Rabbani ✨
 ❌ Pembayaran Pendaftaran Telah Kedaluwarsa
 
 Mohon Maaf Ayah/Bunda *$data_anak->nama_lengkap* 🙏
-Pembayaran biaya pendaftaran sebesar *Rp$request->gross_amount* untuk:
+Pembayaran biaya pendaftaran sebesar *Rp$biaya_gross_amount* untuk:
 
 📌 No. Registrasi / Pendaftaran: *$data_anak->id_anak*
 📌 Nama Ananda: *$data_anak->nama_lengkap*
@@ -1437,7 +1443,7 @@ Sekolah Rabbani ✨
 ❌ Pembayaran Pendaftaran Telah Kedaluwarsa
 
 Mohon Maaf Ayah/Bunda *$data_anak->nama_lengkap* 🙏
-Pembayaran biaya pendaftaran sebesar *Rp$request->gross_amount* untuk:
+Pembayaran biaya pendaftaran sebesar *R$biaya_gross_amount* untuk:
 
 📌 No. Registrasi / Pendaftaran: *$data_anak->id_anak*
 📌 Nama Ananda: *$data_anak->nama_lengkap*
