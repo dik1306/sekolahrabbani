@@ -47,13 +47,14 @@ class PendaftaranController extends Controller
         $contact_person = ContactPerson::where('is_aktif', 1)->get();
 
         // TODO: UJI COBA TUTUP SEMENTARA HALAMAN PENDAFTARAN
-        $akses = request()->query('akses'); // atau bisa menggunakan request('akses')
-        if ($akses === 'admindopi') {
-            // Logika jika akses diizinkan
-            return view('pendaftaran.index', compact('contact_person'));
-        }
+        // $akses = request()->query('akses'); // atau bisa menggunakan request('akses')
+        // if ($akses === 'admindopi') {
+        //     // Logika jika akses diizinkan
+        //     return view('pendaftaran.index', compact('contact_person'));
+        // }
         
         return view('pendaftaran.index-close', compact('contact_person'));
+        // return view('pendaftaran.index', compact('contact_person'));
         
     }
 
@@ -80,11 +81,13 @@ class PendaftaranController extends Controller
         // dd('bisa');
         // dd($tahun_ajaran);
         $akses = request()->query('akses'); // atau bisa menggunakan request('akses')
-        if ($akses === 'admindopi') {
-            // Logika jika akses diizinkan
-            return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
-        }
+        // if ($akses === 'admindopi') {
+        //     // Logika jika akses diizinkan
+        //     return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
+        // }
+
         return view('pendaftaran.index-close');
+        // return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
     }
 
     public function get_jenjang(Request $request) {
