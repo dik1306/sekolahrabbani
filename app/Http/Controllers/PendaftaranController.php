@@ -267,15 +267,13 @@ class PendaftaranController extends Controller
             $kuota = 0; // atau nilai default lainnya sesuai kebutuhan
         }
 
-        $pendaftar = Pendaftaran::where('tahun_ajaran', $tahun_ajaran)
+        $count_pendaftar = Pendaftaran::where('tahun_ajaran', $tahun_ajaran)
                                 ->where('lokasi', $lokasi)
                                 ->where('tingkat', $tingkat)
                                 ->where('jenjang', $jenjang)
                                 ->where('status_pembayaran', 1)
-                                ->get();
-
-        // Cek jika $pendaftar memiliki data
-        $count_pendaftar = $pendaftar ? $pendaftar->count() : 0; // Jika $pendaftar null, set ke 0
+                                ->where('status_daftar', '!=', 5)
+                                ->count();
 
         if ($kelas == 1 || $kelas == 7 || $kelas == 'tka' || $kelas == 'tkb' || $kelas == 'kober') {
             if ($kuota > $count_pendaftar) {
