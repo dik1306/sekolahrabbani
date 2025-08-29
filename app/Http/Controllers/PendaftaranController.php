@@ -465,8 +465,8 @@ Sekolah Rabbani ✨
             }
 
             
-            // // TODO: UNTUK TESTING AJA
-            // $totalAmount = 100;
+            // TODO: UNTUK TESTING AJA
+            $totalAmount = 100;
 
             \Midtrans\Config::$serverKey = config('midtrans.serverKey');
             \Midtrans\Config::$isProduction = config('midtrans.isProduction');
