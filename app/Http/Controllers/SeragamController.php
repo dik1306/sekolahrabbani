@@ -1303,10 +1303,11 @@ Sekolah Rabbani ✨
                         'tgl_bayar' => $request->settlement_time,
                         'updatedate' => $request->settlement_time,
                     ]);
+                    $data_anak = Pendaftaran::where('order_id', $orderId)->first();
+                    
                     // $this->update_status_pendaftaran_siswa('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
                     $this->update_status_pendaftaran_siswa_baru('success', $mtd_pembayaran, $data_anak->id_anak, $orderId, $request->settlement_time);
                     
-                    $data_anak = Pendaftaran::where('order_id', $orderId)->first();
                     
                     $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
                     $no_admin = $contact_person->telp;
