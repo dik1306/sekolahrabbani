@@ -63,7 +63,7 @@
                                 <th>Stok </th>
                                 @if ($id_role == 1)
                                     <th>Action</th>
-                                @endif
+                            @endif
                             </tr>
                         </thead>
                         <tbody>

@@ -53,8 +53,8 @@ class PendaftaranController extends Controller
         //     return view('pendaftaran.index', compact('contact_person'));
         // }
         
-        return view('pendaftaran.index-close', compact('contact_person'));
-        // return view('pendaftaran.index', compact('contact_person'));
+        // return view('pendaftaran.index-close', compact('contact_person'));
+        return view('pendaftaran.index', compact('contact_person'));
         
     }
 
@@ -86,8 +86,8 @@ class PendaftaranController extends Controller
         //     return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
         // }
 
-        return view('pendaftaran.index-close');
-        // return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
+        // return view('pendaftaran.index-close');
+        return view('pendaftaran.tk-sd.formulir', compact('lokasi', 'jenjang_per_sekolah', 'tahun_ajaran', 'ppdb_now_id'));
     }
 
     public function get_jenjang(Request $request) {
