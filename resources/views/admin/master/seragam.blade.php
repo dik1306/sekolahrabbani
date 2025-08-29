@@ -61,7 +61,7 @@
                                 <th>Diskon (%)</th>
                                 <th>Harga Setelah Diskon</th>
                                 <th>Stok </th>
-                                @if ($id_role == 1)
+                                @if ($id_role == 1 || $id_role == 2)
                                     <th>Action</th>
                                 @endif
                             </tr>
