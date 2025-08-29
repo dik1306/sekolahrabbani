@@ -61,7 +61,7 @@
                                 <th>Diskon (%)</th>
                                 <th>Harga Setelah Diskon</th>
                                 <th>Stok </th>
-                                @if ($id_role == 1 || $id_role == 2)
+                                @if ($id_role == 1)
                                     <th>Action</th>
                                 @endif
                             </tr>
@@ -78,7 +78,7 @@
                                     <td>{{$item->diskon}}</td>
                                     <td>Rp. {{ number_format($item->harga - ($item->harga * $item->diskon / 100)) }}</td>
                                     <td>{{$item->qty}}</td>
-                                    @if ($id_role == 1 || $id_role == 2)
+                                    @if ($id_role == 1)
                                         <td class="d-flex">
                                             <button class="btn btn-sm btn-warning" title="Edit" onclick="edit_data('{{$item->id}}')" data-bs-toggle="modal" data-bs-target="#edit_seragam">
                                                 <i class="fa-solid fa-pencil"></i>
