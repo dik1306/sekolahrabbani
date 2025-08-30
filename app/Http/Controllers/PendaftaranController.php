@@ -456,7 +456,7 @@ Sekolah Rabbani ✨
             if ($adminId == 'qris') {
                 $totalAmount = $biaya + ($biaya * 0.007);
             } elseif ($adminId == 'va') {
-                $totalAmount = $biaya + (5000 * 0.11);
+                $totalAmount = $biaya + 5000 + (5000 * 0.11);
             } elseif ($adminId == 'deeplink') {
                 $totalAmount = $biaya + ($biaya * 0.02);
             } else if ($biaya == 0){
