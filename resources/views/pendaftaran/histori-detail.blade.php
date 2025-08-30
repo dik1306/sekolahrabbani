@@ -497,12 +497,12 @@
                         <div class="payment-options">
                             <div class="payment-option">
                                 <img src="{{ asset('assets/images/_other_assets/payment_icons/gopay.png') }}" alt="GoPay">
-                                <input type="radio" id="gopay" name="paymentMethod" value="gopay" data-adminID="qris">
+                                <input type="radio" id="gopay" name="paymentMethod" value="gopay" data-adminID="gopay">
                                 <label for="gopay">GoPay</label>
                             </div>
                             <div class="payment-option">
                                 <img src="{{ asset('assets/images/_other_assets/payment_icons/shopeepay.png') }}" alt="ShopeePay">
-                                <input type="radio" id="shopeepay" name="paymentMethod" value="shopeepay" data-adminID="qris">
+                                <input type="radio" id="shopeepay" name="paymentMethod" value="shopeepay" data-adminID="shopeepay">
                                 <label for="shopeepay">ShopeePay</label>
                             </div>
                         </div>
@@ -623,7 +623,7 @@
                     if (adminId === 'qris') {
                         totalAmount = baseAmount + (baseAmount * 0.007); // +0.7% fee
                     } else if (adminId === 'va') {
-                        totalAmount = baseAmount + 4400; // +4400 fixed fee
+                        totalAmount = (baseAmount + 5000) * 0.11; // +4400 fixed fee
                     } else if (adminId === 'deeplink') {
                         totalAmount = baseAmount + (baseAmount * 0.02); // +2% fee
                     }
