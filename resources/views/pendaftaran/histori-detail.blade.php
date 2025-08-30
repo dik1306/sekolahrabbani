@@ -623,7 +623,7 @@
                     if (adminId === 'qris') {
                         totalAmount = baseAmount + (baseAmount * 0.007); // +0.7% fee
                     } else if (adminId === 'va') {
-                        totalAmount = (baseAmount + 5000) * 0.11; // +4400 fixed fee
+                        totalAmount = baseAmount + ((baseAmount + 5000) * 0.11); // +4400 fixed fee
                     } else if (adminId === 'deeplink') {
                         totalAmount = baseAmount + (baseAmount * 0.02); // +2% fee
                     }
