@@ -483,16 +483,16 @@
                     </div>
 
                     <!-- QRIS -->
-                    <div class="payment-section">
+                    {{-- <div class="payment-section">
                         <div class="payment-option">
                             <img src="{{ asset('assets/images/_other_assets/payment_icons/qris.png') }}" alt="QRIS">
                             <input type="radio" id="qris" name="paymentMethod" value="other_qris" data-adminID="qris">
                             <label for="qris">QRIS</label>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- E-Wallet -->
-                    <div class="payment-section">
+                    {{-- <div class="payment-section">
                         <div class="section-title" onclick="toggleSection(this)">E-Wallet</div>
                         <div class="payment-options">
                             <div class="payment-option">
@@ -506,7 +506,7 @@
                                 <label for="shopeepay">ShopeePay</label>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Virtual Account -->
                     <div class="payment-section">
