@@ -473,7 +473,7 @@
 
                                 <div class="mb-3">
                                     <span for="pernikahan_ke_ibu" class="form-label">Pernikahan Ke<span style="color: red;">*</span></span>
-                                    <input type="number" name="pernikahan_ke_ibu" class="form-control form-control-sm px-3" id="tahun_nikah_ibu" value="{{$get_profile_ibu->tahun_nikah_ibu}}" placeholder="Tahun Menikah" required>
+                                    <input type="number" name="pernikahan_ke_ibu" class="form-control form-control-sm px-3" id="tahun_nikah_ibu" value="{{$get_profile_ibu->tahun_nikah_ibu}}" placeholder="Pernikahan ke" required>
                                 </div>
 
                                 <a style="float: right" id="next-ayah" class="btn btn-primary btn-sm px-3">Next</a>
@@ -546,7 +546,7 @@
 
                                 <div class="mb-3">
                                     <span for="pernikahan_ke_ayah" class="form-label">Pernikahan Ke<span style="color: red;">*</span></span>
-                                    <input type="number" name="pernikahan_ke_ayah" class="form-control form-control-sm px-3" id="pernikahan_ke_ayah" value="{{$get_profile_ayah->pernikahan_ke_ayah}}" placeholder="Tahun Menikah" required>
+                                    <input type="number" name="pernikahan_ke_ayah" class="form-control form-control-sm px-3" id="pernikahan_ke_ayah" value="{{$get_profile_ayah->pernikahan_ke_ayah}}" placeholder="Pernikahan ke" required>
                                 </div>
 
                                 <a style="float: right" id="next-wali" class="btn btn-primary btn-sm px-3">Next</a>
