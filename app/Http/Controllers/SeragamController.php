@@ -1216,6 +1216,14 @@ class SeragamController extends Controller
                             $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
                             $no_admin = $contact_person->telp;
 
+                            $contact_keuangan =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->whereNotNull('telp_keuangan')->first();
+                            if ($contact_keuangan) {
+                                $no_keuangan = $contact_keuangan->telp_keuangan;
+                            } else {
+                                // Tangani jika tidak ada data ditemukan
+                                $no_keuangan = null; // atau beri nilai default sesuai kebutuhan
+                            }
+
                             $contact_ccrs =  ContactPerson::where('id', '16')->first();
                             $contact_ccrs =  $contact_ccrs->telp;
                             
@@ -1284,10 +1292,16 @@ Sekolah Rabbani ✨
                     
                             if ($data_anak->status_daftar == 3) {
                                 $this->send_notif_new($message_for_admin_wl, $no_admin);
+                                if ($no_keuangan) { // Pastikan $no_keuangan tidak null
+                                    $this->send_notif_new($message_for_admin_wl, $no_keuangan);
+                                }
                                 $this->send_notif_new($message_waiting_list, $no_hp_ayah);
                                 $this->send_notif_new($message_waiting_list, $no_hp_ibu);
                             } else {
                                 $this->send_notif_new($message_for_admin, $no_admin);
+                                if ($no_keuangan) { // Pastikan $no_keuangan tidak null
+                                    $this->send_notif_new($message_for_admin, $no_keuangan);
+                                }
                                 $this->send_notif_new($message_ortu, $no_hp_ayah);
                                 $this->send_notif_new($message_ortu, $no_hp_ibu);
                             }
@@ -1311,6 +1325,15 @@ Sekolah Rabbani ✨
                     
                     $contact_person =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->first();
                     $no_admin = $contact_person->telp;
+                    
+                    $contact_keuangan =  ContactPerson::where('is_aktif', '1')->where('kode_sekolah', $data_anak->lokasi)->where('id_jenjang', $data_anak->jenjang)->whereNotNull('telp_keuangan')->first();
+                    if ($contact_keuangan) {
+                        $no_keuangan = $contact_keuangan->telp_keuangan;
+                    } else {
+                        // Tangani jika tidak ada data ditemukan
+                        $no_keuangan = null; // atau beri nilai default sesuai kebutuhan
+                    }
+
                     $contact_ccrs =  ContactPerson::where('id', '16')->first();
                     $contact_ccrs =  $contact_ccrs->telp;
                     
@@ -1379,10 +1402,16 @@ Sekolah Rabbani ✨
                     
                     if ($data_anak->status_daftar == 3) {
                         $this->send_notif_new($message_for_admin_wl, $no_admin);
+                        if ($no_keuangan) { // Pastikan $no_keuangan tidak null
+                            $this->send_notif_new($message_for_admin_wl, $no_keuangan);
+                        }
                         $this->send_notif_new($message_waiting_list, $no_hp_ayah);
                         $this->send_notif_new($message_waiting_list, $no_hp_ibu);
                     } else {
                         $this->send_notif_new($message_for_admin, $no_admin);
+                        if ($no_keuangan) { // Pastikan $no_keuangan tidak null
+                            $this->send_notif_new($message_for_admin, $no_keuangan);
+                        }
                         $this->send_notif_new($message_ortu, $no_hp_ayah);
                         $this->send_notif_new($message_ortu, $no_hp_ibu);
                     }
