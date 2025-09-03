@@ -49,32 +49,32 @@
                             <div class="tab-pane fade show active" id="nav-data-anak" role="tabpanel" aria-labelledby="nav-data-anak-tab" tabindex="0">
                                 <div class="my-3">
                                     <span for="nama_lengkap" class="form-label">Nama Lengkap<span style="color: red;">*</span></span>
-                                    <input type="text" name="nama_lengkap" class="form-control form-control-sm px-3" id="nama_lengkap" value="{{$get_profile->nama_lengkap }}" readonly>
+                                    <input type="text" name="nama_lengkap"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="nama_lengkap" value="{{$get_profile->nama_lengkap }}" readonly>
                                 </div>
             
                                 <div class="mb-3">
                                     <span for="tempat_tanggal_lahir" class="form-label">Tempat, Tanggal Lahir<span style="color: red;">*</span></span>
-                                    <input type="text" name="tempat_tanggal_lahir" id="tempat_tanggal_lahir" class="form-control form-control-sm px-3" value="{{$get_profile->tempat_lahir}}, {{date('d F Y', strtotime($get_profile->tgl_lahir))}}"  readonly>
+                                    <input type="text" name="tempat_tanggal_lahir"  data-tab="Data Anak" id="tempat_tanggal_lahir" class="form-control form-control-sm px-3" value="{{$get_profile->tempat_lahir}}, {{date('d F Y', strtotime($get_profile->tgl_lahir))}}"  readonly>
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="nama_panggilan" class="form-label">Nama Panggilan<span style="color: red;">*</span></span>
-                                    <input type="text" name="nama_panggilan" class="form-control form-control-sm px-3" id="nama_panggilan" value="{{$get_profile->nama_panggilan }}" required>
+                                    <input type="text" name="nama_panggilan"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="nama_panggilan" value="{{$get_profile->nama_panggilan }}" required>
                                 </div>
             
                                 <div class="mb-3">
                                     <span for="nik" class="form-label">Nomor Induk Kependudukan (NIK)<span style="color: red;">*</span></span>
-                                    <input type="tel" name="nik" class="form-control form-control-sm px-3" id="nik" onkeypress="return /[0-9]/i.test(event.key)" minlength="16" value="{{$get_profile->no_nik }}" placeholder="Masukkan No NIK" required>
+                                    <input type="tel" name="nik"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="nik" onkeypress="return /[0-9]/i.test(event.key)" minlength="16" value="{{$get_profile->no_nik }}" placeholder="Masukkan No NIK" required>
                                 </div>
             
                                 <div class="mb-3">
                                     <span for="alamat" class="form-label">Alamat Sekarang<span style="color: red;">*</span></span>
-                                    <input type="text" name="alamat" class="form-control form-control-sm px-3" id="alamat" value="{{$get_profile->alamat}}" placeholder="Jalan, No. RT/RW" required>
+                                    <input type="text" name="alamat"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="alamat" value="{{$get_profile->alamat}}" placeholder="Jalan, No. RT/RW" required>
                                 </div>
                                 
                                 <div class="mb-3">
                                     <span for="provinsi" class="form-label">Provinsi<span style="color: red;">*</span></span>
-                                    <select id="provinsi" name="provinsi" class="select form-control form-control-sm px-3"  onchange="getKota()" required>
+                                    <select id="provinsi" name="provinsi"  data-tab="Data Anak" class="select form-control form-control-sm px-3"  onchange="getKota()" required>
                                         <option value="" disabled selected>-- Pilih Provinsi--</option>
                                         @foreach ($provinsi as $item)
                                             <option value="{{ $item->id }}" {{($get_profile->provinsi == $item->id) ? 'selected' : ''}} >{{ $item->provinsi }}</option>
@@ -84,7 +84,7 @@
 
                                 <div class="mb-3">
                                     <span for="kota" class="form-label">Kabupaten/Kota<span style="color: red;">*</span></span>
-                                    <select id="kota" name="kota" class="select form-control form-control-sm px-3" onchange="getKecamatan()" required>
+                                    <select id="kota" name="kota"  data-tab="Data Anak" class="select form-control form-control-sm px-3" onchange="getKecamatan()" required>
                                         @if ($get_profile->kota == null)
                                             <option disabled selected>-- Pilih Kota--</option>
                                         @else
@@ -97,7 +97,7 @@
 
                                 <div class="mb-3">
                                     <span for="kecamatan" class="form-label">Kecamatan<span style="color: red;">*</span></span>
-                                    <select id="kecamatan" name="kecamatan" class="select form-control form-control-sm px-3" onchange="getKelurahan()" required>
+                                    <select id="kecamatan" name="kecamatan"  data-tab="Data Anak" class="select form-control form-control-sm px-3" onchange="getKelurahan()" required>
                                         @if ($get_profile->kecamatan == null)
                                             <option value="" disabled selected>-- Pilih Kecamatan--</option>
                                         @else 
@@ -110,7 +110,7 @@
 
                                 <div class="mb-3">
                                     <span for="kelurahan" class="form-label">Desa/Kelurahan<span style="color: red;">*</span></span>
-                                    <select id="kelurahan" name="kelurahan" class="select form-control form-control-sm px-3">
+                                    <select id="kelurahan" name="kelurahan"  data-tab="Data Anak" class="select form-control form-control-sm px-3">
                                         @if ($get_profile->kelurahan == null)
                                             <option value="" disabled selected>-- Pilih Desa/Kelurahan --</option>
                                         @else
@@ -123,7 +123,7 @@
 
                                 <div class="mb-3">
                                     <span for="status_tinggal" class="form-label">Status Tinggal<span style="color: red;">*</span></span>
-                                    <select id="status_tinggal" name="status_tinggal" class="select form-control form-control-sm px-3" required>
+                                    <select id="status_tinggal" name="status_tinggal"  data-tab="Data Anak" class="select form-control form-control-sm px-3" required>
                                         <option value="" disabled selected>-- Pilih Status Tinggal Bersama --</option>
                                         <option value="Orang Tua" {{($get_profile->status_tinggal == 'Orang Tua') ? 'selected' : ''}} >Orang Tua</option>
                                         <option value="Wali" {{($get_profile->status_tinggal == 'Wali') ? 'selected' : ''}} >Wali</option>
@@ -138,28 +138,28 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <span for="anak_ke" class="form-label">Anak Ke<span style="color: red;">*</span></span>
-                                        <input type="number" class="form-control form-control-sm px-3" id="anak_ke" name="anak_ke" value="{{$get_profile->anak_ke}}"  placeholder="Anak Ke" required >
+                                        <input type="number" class="form-control form-control-sm px-3" id="anak_ke" name="anak_ke"  data-tab="Data Anak" value="{{$get_profile->anak_ke}}"  placeholder="Anak Ke" required >
                                     </div>
                                     <div class="col-md-6">
                                         <span for="jumlah_saudara" class="form-label">Dari Jumlah Saudara<span style="color: red;">*</span></span>
-                                        <input type="number" type="text" class="form-control form-control-sm px-3" id="jumlah_saudara" name="jumlah_saudara" value="{{$get_profile->jml_sdr}}"  placeholder="dari berapa saudara" required >
+                                        <input type="number" type="text" class="form-control form-control-sm px-3" id="jumlah_saudara" name="jumlah_saudara"  data-tab="Data Anak" value="{{$get_profile->jml_sdr}}"  placeholder="dari berapa saudara" required >
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="tinggi_badan" class="form-label">Tinggi Badan (cm)<span style="color: red;">*</span></span>
-                                    <input type="number" name="tinggi_badan" class="form-control form-control-sm px-3" id="tinggi_badan" value="{{$get_profile->tinggi_badan}}"  placeholder="xxx" required>
+                                    <input type="number" name="tinggi_badan"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="tinggi_badan" value="{{$get_profile->tinggi_badan}}"  placeholder="xxx" required>
                                 </div>
             
                                 <div class="mb-3">
                                     <span for="berat_badan" class="form-label">Berat Badan (kg)<span style="color: red;">*</span></span>
-                                    <input type="number" name="berat_badan" class="form-control form-control-sm px-3" id="berat_badan" value="{{$get_profile->berat_badan}}"  placeholder="xx" required>
+                                    <input type="number" name="berat_badan"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="berat_badan" value="{{$get_profile->berat_badan}}"  placeholder="xx" required>
                                 </div>
                                 
 
                                 <div class="mb-3">
                                     <span for="bhs_digunakan" class="form-label">Bahasa yang Digunakan<span style="color: red;">*</span></span>
-                                    <select id="bhs_digunakan" name="bhs_digunakan" class="select form-control form-control-sm px-3">
+                                    <select id="bhs_digunakan" name="bhs_digunakan"  data-tab="Data Anak" class="select form-control form-control-sm px-3">
                                         <option value="" disabled selected>-- Pilih Bahasa --</option>
                                         <option value="bhs_indo" {{($get_profile->bahasa == 'bhs_indo') ? 'selected' : ''}}>Bahasa Indonesia</option>
                                         <option value="bhs_inggris" {{($get_profile->bahasa == 'bhs_inggris') ? 'selected' : ''}}>Bahasa Inggris</option>
@@ -172,17 +172,17 @@
 
                                 <div class="mb-3">
                                     <span for="asal_sekolah" class="form-label">Asal Sekolah</span>
-                                    <input class="form-control form-control-sm px-3" id="asal_sekolah" name="asal_sekolah" value="{{ $get_profile->asal_sekolah ? $get_profile->asal_sekolah : '-' }}" placeholder="Sekolah Sebelumnya" required readonly>
+                                    <input class="form-control form-control-sm px-3" id="asal_sekolah" name="asal_sekolah"  data-tab="Data Anak" value="{{ $get_profile->asal_sekolah ? $get_profile->asal_sekolah : '-' }}" placeholder="Sekolah Sebelumnya" required readonly>
                                 </div>
                              
                                 <div class="mb-3">
                                     <span for="npsn" class="form-label">NPSN</span>
-                                    <input class="form-control form-control-sm px-3" id="npsn" name="npsn" value="{{$get_profile->npsn}}"  placeholder="Nomor Pokok Siswa Nasional"  >
+                                    <input class="form-control form-control-sm px-3" id="npsn" name="npsn"  data-tab="Data Anak" value="{{$get_profile->npsn}}"  placeholder="Nomor Pokok Siswa Nasional"  >
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="kec_asal_sekolah" class="form-label">Kecamatan Asal Sekolah</span>
-                                    <select id="kec_asal_sekolah" name="kec_asal_sekolah" class="select2 form-control form-control-sm px-3">
+                                    <select id="kec_asal_sekolah" name="kec_asal_sekolah"  data-tab="Data Anak" class="select2 form-control form-control-sm px-3">
                                         <option value="" disabled selected>-- Pilih Kecamatan Asal Sekolah--</option>
                                         @foreach ($kecamatan_asal_sekolah as $item)
                                             <option value="{{ $item->id_kecamatan }}" {{($get_profile->kec_asal_sekolah == $item->id_kecamatan) ? 'selected' : '' }} >{{ $item->kecamatan }} - {{ $item->kabupaten_kota }} </option>
@@ -192,12 +192,12 @@
             
                                 <div class="mb-3">
                                     <span for="agama" class="form-label">Agama<span style="color: red;">*</span></span>
-                                    <input type="text" name="agama" class="form-control form-control-sm px-3" id="agama" value="{{$get_profile->agama}}" placeholder="Agama" required>
+                                    <input type="text" name="agama"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="agama" value="{{$get_profile->agama}}" placeholder="Agama" required>
                                 </div>
             
                                 <div class="mb-3">
                                     <span for="gol_darah" class="form-label">Golongan Darah<span style="color: red;">*</span></span>
-                                    <select id="gol_darah" name="gol_darah" class="select form-control form-control-sm px-3" required>
+                                    <select id="gol_darah" name="gol_darah"  data-tab="Data Anak" class="select form-control form-control-sm px-3" required>
                                         <option value="" disabled selected>-- Pilih Golongan Darah --</option>
                                         <option value="A" {{($get_profile->gol_darah == 'A') ? 'selected' : ''}}>A</option>
                                         <option value="B" {{($get_profile->gol_darah == 'B') ? 'selected' : ''}}>B</option>
@@ -208,14 +208,14 @@
             
                                 <div class="mb-3">
                                     <span for="hafalan" class="form-label">Hafalan Juz<span style="color: red;">*</span></span>
-                                    <input type="number" name="hafalan" class="form-control form-control-sm px-3" id="hafalan" value="{{$get_profile->hafalan}}" placeholder="Sudah hafal berapa juz" required>
+                                    <input type="number" name="hafalan"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="hafalan" value="{{$get_profile->hafalan}}" placeholder="Sudah hafal berapa juz" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="riwayat_penyakit" class="form-label">Riwayat Kesehatan (Jika Ada)</span>
                                     <br><small class="text-muted">Riwayat Dirawat di RS (Tahun Berapa) - Sakit Apa - Lama Dirawat - Intervensi yang Dilakukan - Keterangan</small>
                                     <br><small class="text-muted"><strong>Contoh:</strong> 2021 - Tipes - 5 hari - Rawat inap dan infus - Sembuh total, kontrol 2 minggu</small>
-                                    <input type="text" name="riwayat_penyakit" class="form-control form-control-sm px-3" value="{{$get_profile->riwayat_penyakit}}" id="riwayat_penyakit" placeholder="Riwayat Penyakit" required>
+                                    <input type="text" name="riwayat_penyakit"  data-tab="Data Anak" class="form-control form-control-sm px-3" value="{{$get_profile->riwayat_penyakit}}" id="riwayat_penyakit" placeholder="Riwayat Penyakit" required>
                                 </div>
 
                                  <div class="my-3">
@@ -234,6 +234,7 @@
                                                     class="form-control form-control-sm" 
                                                     placeholder="Nama-Usia-Jenis Kelamin-Keterangan"
                                                     data-pertanyaan="Data Saudara"
+                                                     data-tab="Data Anak"
                                                     value="{{ $saudara }}">
                                                 @if ($loop->count > 1)
                                                     <button type="button" 
@@ -272,6 +273,7 @@
                                                     class="form-control form-control-sm" 
                                                     placeholder="Nama - Keterangan"
                                                     data-pertanyaan="Informasi Tempat Tinggal"
+                                                     data-tab="Data Anak" 
                                                     value="{{$tinggal}}"
                                                 >
                                                 @if ($loop->count > 1)
@@ -303,6 +305,8 @@
                                             <input 
                                                 type="radio" 
                                                 name="info_apakah_abk" 
+                                                 data-tab="Data Anak" 
+                                                data-pertanyaan="Kebutuhan Khusus dan Terapi"
                                                 id="info_apakah_abk_ya" 
                                                 class="form-check-input" 
                                                 value="ya" 
@@ -316,6 +320,8 @@
                                             <input 
                                                 type="radio" 
                                                 name="info_apakah_abk" 
+                                                data-pertanyaan="Kebutuhan Khusus dan Terapi"
+                                                 data-tab="Data Anak" 
                                                 id="info_apakah_abk_tidak" 
                                                 class="form-check-input" 
                                                 value="tidak" 
@@ -338,6 +344,8 @@
                                                     <div class="input-group mb-2" style="max-width: 500px; border: none;">
                                                         <input type="text" 
                                                             name="info_detail_khusus[]"
+                                                            data-pertanyaan="Kebutuhan Khusus dan Terapi"
+                                                            data-tab="Data Anak" 
                                                             class="form-control form-control-sm"
                                                             placeholder="Jenis Terapi - Tempat Terapi - Frekuensi Terapi - Dilaksanakan pada tahun - Hasil terapi"
                                                             value="{{$khusus}}"
@@ -375,6 +383,8 @@
                                                     <div class="input-group mb-2" style="max-width: 500px; border: none;">
                                                         <input type="text" 
                                                             name="info_detail_khusus[]"
+                                                            data-pertanyaan="Kebutuhan Khusus dan Terapi"
+                                                             data-tab="Data Anak" 
                                                             class="form-control form-control-sm"
                                                             placeholder="Jenis Terapi - Tempat Terapi - Frekuensi Terapi - Dilaksanakan pada tahun - Hasil terapi"
                                                             value="{{$khusus}}"
@@ -411,28 +421,28 @@
                             <div class="tab-pane fade" id="nav-data-ibu" role="tabpanel" aria-labelledby="nav-data-ibu-tab" tabindex="0">
                                 <div class="my-3">
                                     <span for="nama_ibu" class="form-label">Nama Lengkap Ibu<span style="color: red;">*</span></span>
-                                    <input type="text" name="nama_ibu" class="form-control form-control-sm px-3" id="nama_ibu" placeholder="Nama Ibu"  value="{{$get_profile_ibu != null ? $get_profile_ibu->nama : ''}}" readonly>
+                                    <input type="text" name="nama_ibu" data-tab="Data Ibu" class="form-control form-control-sm px-3" id="nama_ibu" placeholder="Nama Ibu"  value="{{$get_profile_ibu != null ? $get_profile_ibu->nama : ''}}" readonly>
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="email_ibu" class="form-label">Email Ibu<span style="color: red;">*</span></span>
-                                    <input type="email" name="email_ibu" class="form-control form-control-sm px-3" id="email_ibu" value="{{$get_profile_ibu->email_ibu}}" placeholder="Email Ibu" required>
+                                    <input type="email" name="email_ibu" data-tab="Data Ibu" class="form-control form-control-sm px-3" id="email_ibu" value="{{$get_profile_ibu->email_ibu}}" placeholder="Email Ibu" required>
                                 </div>
             
                                 <div class="row mb-3">
                                     <div class=" col-md-6">
                                         <span for="tempat_lahir_ibu" class="form-label">Tempat Lahir<span style="color: red;">*</span></span>
-                                        <input class="form-control form-control-sm px-3" id="tempat_lahir_ibu" name="tempat_lahir_ibu" value="{{$get_profile_ibu->tptlahir_ibu}}" placeholder="Tempat Lahir" required  >
+                                        <input class="form-control form-control-sm px-3" id="tempat_lahir_ibu" data-tab="Data Ibu" name="tempat_lahir_ibu" value="{{$get_profile_ibu->tptlahir_ibu}}" placeholder="Tempat Lahir" required  >
                                     </div>
                                     <div class=" col-md-6">
                                         <span for="tgl_lahir_ibu" class="form-label">Tanggal Lahir<span style="color: red;">*</span></span>
-                                        <input type="date" class="form-control form-control-sm px-3" id="tgl_lahir_ibu" name="tgl_lahir_ibu" value="{{$get_profile_ibu->tgllahir_ibu}}" placeholder="Tanggal Lahir" required >
+                                        <input type="date" class="form-control form-control-sm px-3" id="tgl_lahir_ibu" data-tab="Data Ibu" name="tgl_lahir_ibu" value="{{$get_profile_ibu->tgllahir_ibu}}" placeholder="Tanggal Lahir" required >
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="pekerjaan_ibu" class="form-label">Pekerjaan Ibu<span style="color: red;">*</span></span>
-                                    <select id="pekerjaan_ibu" name="pekerjaan_ibu" class="select form-control form-control-sm px-3" required>
+                                    <select id="pekerjaan_ibu" name="pekerjaan_ibu" data-tab="Data Ibu" class="select form-control form-control-sm px-3" required>
                                         <option value="" disabled selected>-- Pilih Pekerjaan --</option>
                                         @foreach ($list_pekerjaan_ibu as $item)
                                             <option value="{{ $item->id }}" {{($get_profile_ibu->pekerjaan_jabatan == $item->id) ? 'selected' : ''}} >{{ $item->pekerjaan }}</option>
@@ -442,7 +452,7 @@
 
                                 <div class="mb-3">
                                     <span for="penghasilan_ibu" class="form-label">Penghasilan Ibu<span style="color: red;">*</span></span>
-                                    <select id="penghasilan_ibu" name="penghasilan_ibu" class="select form-control form-control-sm px-3" required>
+                                    <select id="penghasilan_ibu" name="penghasilan_ibu" data-tab="Data Ibu" class="select form-control form-control-sm px-3" required>
                                         <option value="" disabled selected>-- Pilih Penghasilan --</option>
                                         <option value="1" {{($get_profile_ibu->penghasilan == '1') ? 'selected' : ''}} >< Rp. 3.000.000</option>
                                         <option value="2" {{($get_profile_ibu->penghasilan == '2') ? 'selected' : ''}} >Rp. 3.000.000 - Rp. 5.000.000</option>
@@ -455,7 +465,7 @@
 
                                 <div class="mb-3">
                                     <span for="pendidikan_ibu" class="form-label">Pendidikan Terakhir Ibu<span style="color: red;">*</span></span>
-                                    <select id="pendidikan_ibu" name="pendidikan_ibu" class="select form-control form-control-sm px-3" required>
+                                    <select id="pendidikan_ibu" name="pendidikan_ibu" data-tab="Data Ibu" class="select form-control form-control-sm px-3" required>
                                         <option value="" disabled selected>-- Pilih Pendidikan --</option>
                                         <option value="SMP" {{($get_profile_ibu->pendidikan_ibu == 'SMP') ? 'selected' : ''}} >SMP</option>
                                         <option value="SMA" {{($get_profile_ibu->pendidikan_ibu == 'SMA') ? 'selected' : ''}} >SMA</option>
@@ -468,12 +478,12 @@
 
                                 <div class="mb-3">
                                     <span for="tahun_nikah_ibu" class="form-label">Tahun Menikah<span style="color: red;">*</span></span>
-                                    <input type="number" name="tahun_nikah_ibu" class="form-control form-control-sm px-3" id="tahun_nikah_ibu" value="{{$get_profile_ibu->tahun_nikah_ibu}}" placeholder="Tahun Menikah" required>
+                                    <input type="number" name="tahun_nikah_ibu" data-tab="Data Ibu" class="form-control form-control-sm px-3" id="tahun_nikah_ibu" value="{{$get_profile_ibu->tahun_nikah_ibu}}" placeholder="Tahun Menikah" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="pernikahan_ke_ibu" class="form-label">Pernikahan Ke<span style="color: red;">*</span></span>
-                                    <input type="number" name="pernikahan_ke_ibu" class="form-control form-control-sm px-3" id="tahun_nikah_ibu" value="{{$get_profile_ibu->tahun_nikah_ibu}}" placeholder="Pernikahan ke" required>
+                                    <input type="number" name="pernikahan_ke_ibu" data-tab="Data Ibu" class="form-control form-control-sm px-3" id="tahun_nikah_ibu" value="{{$get_profile_ibu->tahun_nikah_ibu}}" placeholder="Pernikahan ke" required>
                                 </div>
 
                                 <a style="float: right" id="next-ayah" class="btn btn-primary btn-sm px-3">Next</a>
@@ -484,28 +494,28 @@
                             <div class="tab-pane fade" id="nav-data-ayah" role="tabpanel" aria-labelledby="nav-data-ayah-tab" tabindex="0">
                                 <div class="my-3">
                                     <span for="nama_ayah" class="form-label">Nama Lengkap ayah<span style="color: red;">*</span></span>
-                                    <input type="text" name="nama_ayah" class="form-control form-control-sm px-3" id="nama_ayah" value="{{$get_profile_ayah != null ? $get_profile_ayah->nama : ''}}" readonly>
+                                    <input type="text" name="nama_ayah" data-tab="Data Ayah" class="form-control form-control-sm px-3" id="nama_ayah" value="{{$get_profile_ayah != null ? $get_profile_ayah->nama : ''}}" readonly>
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="email_ayah" class="form-label">Email Ayah<span style="color: red;">*</span></span>
-                                    <input type="email" name="email_ayah" class="form-control form-control-sm px-3" id="email_ayah" value="{{$get_profile_ayah->email_ayah}}" placeholder="Email Ayah" required>
+                                    <input type="email" name="email_ayah" data-tab="Data Ayah" class="form-control form-control-sm px-3" id="email_ayah" value="{{$get_profile_ayah->email_ayah}}" placeholder="Email Ayah" required>
                                 </div>
             
                                 <div class="row mb-3">
                                     <div class=" col-md-6">
                                         <span for="tempat_lahir_ayah" class="form-label">Tempat Lahir<span style="color: red;">*</span></span>
-                                        <input class="form-control form-control-sm px-3" id="tempat_lahir_ayah" name="tempat_lahir_ayah" value="{{$get_profile_ayah->tptlahir_ayah}}" placeholder="Tempat Lahir" required >
+                                        <input class="form-control form-control-sm px-3" id="tempat_lahir_ayah" name="tempat_lahir_ayah" data-tab="Data Ayah" value="{{$get_profile_ayah->tptlahir_ayah}}" placeholder="Tempat Lahir" required >
                                     </div>
                                     <div class=" col-md-6">
                                         <span for="tgl_lahir_ayah" class="form-label">Tanggal Lahir<span style="color: red;">*</span></span>
-                                        <input type="date" class="form-control form-control-sm px-3" id="tgl_lahir_ayah" name="tgl_lahir_ayah" value="{{$get_profile_ayah->tgllahir_ayah}}" placeholder="Tanggal Lahir" required >
+                                        <input type="date" class="form-control form-control-sm px-3" id="tgl_lahir_ayah" name="tgl_lahir_ayah" data-tab="Data Ayah" value="{{$get_profile_ayah->tgllahir_ayah}}" placeholder="Tanggal Lahir" required >
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="pekerjaan_ayah" class="form-label">Pekerjaan ayah<span style="color: red;">*</span></span>
-                                    <select id="pekerjaan_ayah" name="pekerjaan_ayah" class="select form-control form-control-sm px-3" required>
+                                    <select id="pekerjaan_ayah" name="pekerjaan_ayah" data-tab="Data Ayah" class="select form-control form-control-sm px-3" required>
                                         <option value="" disabled selected>-- Pilih Pekerjaan --</option>
                                         @foreach ($list_pekerjaan_ayah as $item)
                                             <option value="{{ $item->id }}" {{($get_profile_ayah->pekerjaan_jabatan == $item->id) ? 'selected' : ''}} >{{ $item->pekerjaan }}</option>
@@ -515,7 +525,7 @@
 
                                 <div class="mb-3">
                                     <span for="penghasilan_ayah" class="form-label">Penghasilan ayah<span style="color: red;">*</span></span>
-                                    <select id="penghasilan_ayah" name="penghasilan_ayah" class="select form-control form-control-sm px-3" required>
+                                    <select id="penghasilan_ayah" name="penghasilan_ayah" data-tab="Data Ayah" class="select form-control form-control-sm px-3" required>
                                         <option value="" disabled selected>-- Pilih Penghasilan --</option>
                                         <option value="1" {{($get_profile_ayah->penghasilan == '1') ? 'selected' : ''}} >< Rp. 3.000.000</option>
                                         <option value="2" {{($get_profile_ayah->penghasilan == '2') ? 'selected' : ''}} >Rp. 3.000.000 - Rp. 5.000.000</option>
@@ -528,7 +538,7 @@
 
                                 <div class="mb-3">
                                     <span for="pendidikan_ayah" class="form-label">Pendidikan Terakhir ayah<span style="color: red;">*</span></span>
-                                    <select id="pendidikan_ayah" name="pendidikan_ayah" class="select form-control form-control-sm px-3" required>
+                                    <select id="pendidikan_ayah" name="pendidikan_ayah" data-tab="Data Ayah" class="select form-control form-control-sm px-3" required>
                                         <option value="" disabled selected>-- Pilih Pendidikan --</option>
                                         <option value="SMP" {{($get_profile_ayah->pendidikan_ayah == 'SMP') ? 'selected' : ''}} >SMP</option>
                                         <option value="SMA" {{($get_profile_ayah->pendidikan_ayah == 'SMA') ? 'selected' : ''}} >SMA</option>
@@ -541,12 +551,12 @@
 
                                 <div class="mb-3">
                                     <span for="tahun_nikah_ayah" class="form-label">Tahun Menikah<span style="color: red;">*</span></span>
-                                    <input type="number" name="tahun_nikah_ayah" class="form-control form-control-sm px-3" id="tahun_nikah_ayah" value="{{$get_profile_ayah->tahun_nikah_ayah}}" placeholder="Tahun Menikah" required>
+                                    <input type="number" name="tahun_nikah_ayah" data-tab="Data Ayah" class="form-control form-control-sm px-3" id="tahun_nikah_ayah" value="{{$get_profile_ayah->tahun_nikah_ayah}}" placeholder="Tahun Menikah" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="pernikahan_ke_ayah" class="form-label">Pernikahan Ke<span style="color: red;">*</span></span>
-                                    <input type="number" name="pernikahan_ke_ayah" class="form-control form-control-sm px-3" id="pernikahan_ke_ayah" value="{{$get_profile_ayah->pernikahan_ke_ayah}}" placeholder="Pernikahan ke" required>
+                                    <input type="number" name="pernikahan_ke_ayah"  data-tab="Data Ayah" class="form-control form-control-sm px-3" id="pernikahan_ke_ayah" value="{{$get_profile_ayah->pernikahan_ke_ayah}}" placeholder="Pernikahan ke" required>
                                 </div>
 
                                 <a style="float: right" id="next-wali" class="btn btn-primary btn-sm px-3">Next</a>
@@ -556,24 +566,24 @@
                             {{-- NAV DATA WALI --}}
                             <div class="tab-pane fade" id="nav-data-wali" role="tabpanel" aria-labelledby="nav-data-wali-tab" tabindex="0">
                                 <div class="my-3">
-                                    <span for="nama_wali" class="form-label">Nama Lengkap Wali<span style="color: red;">*</span></span>
-                                    <input type="text" name="nama_wali" class="form-control form-control-sm px-3" id="nama_wali" value="{{$get_profile_wali != null ? $get_profile_wali->nama : ''}}" placeholder="Nama wali" required>
+                                    <span for="nama_wali" class="form-label">Nama Lengkap Wali</span>
+                                    <input type="text" name="nama_wali" class="form-control form-control-sm px-3" id="nama_wali"  data-tab="Data Wali" value="{{$get_profile_wali != null ? $get_profile_wali->nama : ''}}" placeholder="Nama wali" required>
                                 </div>
             
                                 <div class="row mb-3">
                                     <div class=" col-md-6">
-                                        <span for="tempat_lahir_wali" class="form-label">Tempat Lahir<span style="color: red;">*</span></span>
-                                        <input class="form-control form-control-sm px-3" id="tempat_lahir_wali" name="tempat_lahir_wali" value="{{$get_profile_wali !=null ? $get_profile_wali->tptlahir_wali : ''}}" placeholder="Tempat Lahir"  >
+                                        <span for="tempat_lahir_wali" class="form-label">Tempat Lahir</span>
+                                        <input class="form-control form-control-sm px-3" id="tempat_lahir_wali" name="tempat_lahir_wali"  data-tab="Data Wali" value="{{$get_profile_wali !=null ? $get_profile_wali->tptlahir_wali : ''}}" placeholder="Tempat Lahir"  >
                                     </div>
                                     <div class=" col-md-6">
-                                        <span for="tgl_lahir_wali" class="form-label">Tanggal Lahir<span style="color: red;">*</span></span>
-                                        <input type="date" class="form-control form-control-sm px-3" id="tgl_lahir_wali" name="tgl_lahir_wali" value="{{$get_profile_wali !=null ? $get_profile_wali->tgllahir_wali : ''}}" placeholder="Tanggal Lahir"  >
+                                        <span for="tgl_lahir_wali" class="form-label">Tanggal Lahir</span>
+                                        <input type="date" class="form-control form-control-sm px-3" id="tgl_lahir_wali" name="tgl_lahir_wali"  data-tab="Data Wali" value="{{$get_profile_wali !=null ? $get_profile_wali->tgllahir_wali : ''}}" placeholder="Tanggal Lahir"  >
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <span for="pekerjaan_wali" class="form-label">Pekerjaan wali<span style="color: red;">*</span></span>
-                                    <select id="pekerjaan_wali" name="pekerjaan_wali" class="select form-control form-control-sm px-3">
+                                    <span for="pekerjaan_wali" class="form-label">Pekerjaan wali</span>
+                                    <select id="pekerjaan_wali" name="pekerjaan_wali" data-tab="Data Wali" class="select form-control form-control-sm px-3">
                                         <option value="" disabled selected>-- Pilih Pekerjaan --</option>
                                         <option value="PNS" {{($get_profile_wali !=null ? $get_profile_wali->pekerjaan_jabatan : '' == 'PNS') ? 'selected' : ''}} >PNS</option>
                                         <option value="Karyawan BUMN/BUMD" {{($get_profile_wali !=null ? $get_profile_wali->pekerjaan_jabatan : '' == 'Karyawan BUMN/BUMD') ? 'selected' : ''}}>Karyawan BUMN/BUMD</option>
@@ -586,8 +596,8 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <span for="pendidikan_wali" class="form-label">Pendidikan Terakhir wali<span style="color: red;">*</span></span>
-                                    <select id="pendidikan_wali" name="pendidikan_wali" class="select form-control form-control-sm px-3">
+                                    <span for="pendidikan_wali" class="form-label">Pendidikan Terakhir wali</span>
+                                    <select id="pendidikan_wali" name="pendidikan_wali" data-tab="Data Wali" class="select form-control form-control-sm px-3">
                                         <option value="" disabled selected>-- Pilih Pendidikan --</option>
                                         <option value="SMP" {{($get_profile_wali !=null ? $get_profile_wali->pendidikan_wali : '' == 'SMP') ? 'selected' : ''}} >SMP</option>
                                         <option value="SMA" {{($get_profile_wali !=null ? $get_profile_wali->pendidikan_wali : '' == 'SMA') ? 'selected' : ''}} >SMA</option>
@@ -599,8 +609,8 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <span for="hubungan_wali" class="form-label">Hubungan Wali dan Peserta Didik<span style="color: red;">*</span></span>
-                                    <select id="hubungan_wali" name="hubungan_wali" class="select form-control form-control-sm px-3">
+                                    <span for="hubungan_wali" class="form-label">Hubungan Wali dan Peserta Didik</span>
+                                    <select id="hubungan_wali" name="hubungan_wali" data-tab="Data Wali" class="select form-control form-control-sm px-3">
                                         <option value="" disabled selected>-- Pilih Hubungan Wali --</option>
                                         <option value="kakek/nenek" {{ (isset($get_profile_wali) && $get_profile_wali->hubungan_wali == 'kakek/nenek') ? 'selected' : '' }}>Kakek / Nenek</option>
                                         <option value="paman/bibi" {{ (isset($get_profile_wali) && $get_profile_wali->hubungan_wali == 'paman/bibi') ? 'selected' : '' }}>Paman / Bibi</option>
@@ -657,7 +667,8 @@
                                                                                 name="pertanyaan_{{$pertanyaan->head_id}}_{{$pertanyaan->id}}" 
                                                                                 id="pertanyaan_{{$pertanyaan->head_id}}_{{$pertanyaan->id}}_{{$loop->index}}" 
                                                                                 class="form-check-input" 
-                                                                                data-pertanyaan="{{$pertanyaan->pertanyaan}}" 
+                                                                                data-pertanyaan="{{$pertanyaan->pertanyaan}}"
+                                                                                data-tab="Perkembangan Anak 1" 
                                                                                 value="{{ $option }}" 
                                                                                 required
                                                                                 @if ($jawaban && (
@@ -673,7 +684,8 @@
                                                                                     name="pertanyaan_{{$pertanyaan->head_id}}_{{$pertanyaan->id}}_self_fill" 
                                                                                     id="pertanyaan_{{$pertanyaan->head_id}}_{{$pertanyaan->id}}_self_fill" 
                                                                                     class="form-control form-control-sm" 
-                                                                                    data-pertanyaan="{{$pertanyaan->pertanyaan}}" 
+                                                                                    data-pertanyaan="{{$pertanyaan->pertanyaan}}"
+                                                                                    data-tab="Perkembangan Anak 1" 
                                                                                     placeholder="Silakan isi..." 
                                                                                     style="margin-left: 2px; display: inline-block; width: auto;"
                                                                                     @if ($jawaban && $jawaban['option_field'] != '_' && (
@@ -699,6 +711,7 @@
                                                                     type="text" 
                                                                     name="pertanyaan_{{$pertanyaan->head_id}}_{{$pertanyaan->id}}"
                                                                     data-pertanyaan="{{$pertanyaan->pertanyaan}}"
+                                                                    data-tab="Perkembangan Anak 1"
                                                                     class="form-control form-control-sm px-3"
                                                                     style="margin-left: 15px;" 
                                                                     id="pertanyaan_{{$pertanyaan->head_id}}_{{$pertanyaan->id}}" 
@@ -766,6 +779,7 @@
                                                                             class="form-check-input" 
                                                                             value="{{ $option }}" 
                                                                             data-pertanyaan="{{$pertanyaan->pertanyaan}}"
+                                                                            data-tab="Perkembangan Anak 2 " 
                                                                             required
                                                                             @if ($jawaban && (
                                                                                 ($jawaban['option_field'] == $option) || 
@@ -782,6 +796,7 @@
                                                                                 class="form-control form-control-sm" 
                                                                                 placeholder="Silakan isi..." 
                                                                                 data-pertanyaan="{{$pertanyaan->pertanyaan}}"
+                                                                                data-tab="Perkembangan Anak 2 " 
                                                                                 style="margin-left: 2px; display: inline-block; width: auto;"
                                                                                 @if ($jawaban && $jawaban['option_field'] != '_' && (
                                                                                     !in_array($jawaban['option_field'], $options) || 
@@ -811,6 +826,7 @@
                                                                 value="{{ $jawaban ? $jawaban['input_field'] : '' }}" 
                                                                 placeholder="Silakan isi.." 
                                                                 data-pertanyaan="{{$pertanyaan->pertanyaan}}"
+                                                                data-tab="Perkembangan Anak 2 " 
                                                                 required
                                                             >
                                                         @endif
@@ -867,6 +883,7 @@
                                                                     class="form-check-input" 
                                                                     value="{{ $option }}" 
                                                                     data-pertanyaan="{{$pertanyaan->pertanyaan}}"
+                                                                    data-tab="Pengasuhan" 
                                                                     required
                                                                     @if ($jawaban && (
                                                                         ($jawaban['option_field'] == $option) || 
@@ -883,6 +900,7 @@
                                                                         id="pengasuhan_{{$pertanyaan->head_id}}_{{$pertanyaan->id}}_self_fill_pengasuhan" 
                                                                         class="form-control form-control-sm" 
                                                                         data-pertanyaan="{{$pertanyaan->pertanyaan}}"
+                                                                        data-tab="Pengasuhan"
                                                                         placeholder="Silakan isi..." 
                                                                         style="margin-left: 2px; display: inline-block; width: auto;" 
                                                                         @if ($jawaban && $jawaban['option_field'] != '_' && (
@@ -909,7 +927,8 @@
                                                                 id="pengasuhan_extra_{{$pertanyaan->head_id}}_{{$pertanyaan->id}}" 
                                                                 class="form-control form-control-sm"
                                                                 data-is-extra-required="{{$pertanyaan->is_extra_required}}" 
-                                                                data-pertanyaan="{{$pertanyaan->extra_data}}"
+                                                                data-pertanyaan="{{$pertanyaan->pertanyaan}}"
+                                                                data-tab="Pengasuhan"
                                                                 placeholder= "{{$pertanyaan->extra_data}}" 
                                                                 style="margin-left: 15px; display: inline-block;"
                                                                 @if ($jawaban && $jawaban['option_field'] != '_' && $jawaban['input_field'] != '_' ) 
@@ -927,6 +946,7 @@
                                                         style="margin-left: 15px;" 
                                                         id="pengasuhan_{{$pertanyaan->head_id}}_{{$pertanyaan->id}}" 
                                                         data-pertanyaan="{{$pertanyaan->pertanyaan}}"
+                                                        data-tab="Pengasuhan"
                                                         placeholder="Silakan isi.." 
                                                         required
                                                         value="{{ $jawaban ? $jawaban['input_field'] : '' }}" 
@@ -1226,31 +1246,31 @@
             var penghasilan_ayah = $('#penghasilan_ayah').val();
             var pendidikan_ayah = $('#pendidikan_ayah').val();
 
-            var pekerjaan_wali = $('#pekerjaan_wali').val();
-            var pendidikan_wali = $('#pendidikan_wali').val();
-            var hubungan_wali = $('#hubungan_wali').val();
+            // var pekerjaan_wali = $('#pekerjaan_wali').val();
+            // var pendidikan_wali = $('#pendidikan_wali').val();
+            // var hubungan_wali = $('#hubungan_wali').val();
 
             var berat_badan = parseFloat($('#berat_badan').val()) || 0;
             var tinggi_badan = parseFloat($('#tinggi_badan').val()) || 0;
             var hafalan = parseFloat($('#hafalan').val()) || 0;
 
             // Validasi input satu-satu
-            if (!provinsi) return alert('Mohon cek kembali inputan provinsi, Pastikan Semua Data Sudah Terisi');
-            if (!kota) return alert('Mohon cek kembali inputan kota, Pastikan Semua Data Sudah Terisi');
-            if (!kecamatan) return alert('Mohon cek kembali inputan kecamatan, Pastikan Semua Data Sudah Terisi');
-            if (!kelurahan) return alert('Mohon cek kembali inputan kelurahan, Pastikan Semua Data Sudah Terisi');
-            if (!status_tinggal) return alert('Mohon cek kembali inputan status tinggal, Pastikan Semua Data Sudah Terisi');
-            if (!bhs_digunakan) return alert('Mohon cek kembali inputan bahasa yang digunakan, Pastikan Semua Data Sudah Terisi');
-            if (!gol_darah) return alert('Mohon cek kembali inputan golongan darah, Pastikan Semua Data Sudah Terisi');
-            if (!pekerjaan_ibu) return alert('Mohon cek kembali inputan pekerjaan ibu, Pastikan Semua Data Sudah Terisi');
-            if (!penghasilan_ibu) return alert('Mohon cek kembali inputan penghasilan ibu, Pastikan Semua Data Sudah Terisi');
-            if (!pendidikan_ibu) return alert('Mohon cek kembali inputan pendidikan ibu, Pastikan Semua Data Sudah Terisi');
-            if (!pekerjaan_ayah) return alert('Mohon cek kembali inputan pekerjaan ayah, Pastikan Semua Data Sudah Terisi');
-            if (!penghasilan_ayah) return alert('Mohon cek kembali inputan penghasilan ayah, Pastikan Semua Data Sudah Terisi');
-            if (!pendidikan_ayah) return alert('Mohon cek kembali inputan pendidikan ayah, Pastikan Semua Data Sudah Terisi');
-            if (!pekerjaan_wali) return alert('Mohon cek kembali inputan pekerjaan wali, Pastikan Semua Data Sudah Terisi');
-            if (!pendidikan_wali) return alert('Mohon cek kembali inputan pendidikan wali, Pastikan Semua Data Sudah Terisi');
-            if (!hubungan_wali) return alert('Mohon cek kembali inputan hubungan wali, Pastikan Semua Data Sudah Terisi');
+            // if (!provinsi) return alert('Mohon cek kembali inputan provinsi, Pastikan Semua Data Sudah Terisi');
+            // if (!kota) return alert('Mohon cek kembali inputan kota, Pastikan Semua Data Sudah Terisi');
+            // if (!kecamatan) return alert('Mohon cek kembali inputan kecamatan, Pastikan Semua Data Sudah Terisi');
+            // if (!kelurahan) return alert('Mohon cek kembali inputan kelurahan, Pastikan Semua Data Sudah Terisi');
+            // if (!status_tinggal) return alert('Mohon cek kembali inputan status tinggal, Pastikan Semua Data Sudah Terisi');
+            // if (!bhs_digunakan) return alert('Mohon cek kembali inputan bahasa yang digunakan, Pastikan Semua Data Sudah Terisi');
+            // if (!gol_darah) return alert('Mohon cek kembali inputan golongan darah, Pastikan Semua Data Sudah Terisi');
+            // if (!pekerjaan_ibu) return alert('Mohon cek kembali inputan pekerjaan ibu, Pastikan Semua Data Sudah Terisi');
+            // if (!penghasilan_ibu) return alert('Mohon cek kembali inputan penghasilan ibu, Pastikan Semua Data Sudah Terisi');
+            // if (!pendidikan_ibu) return alert('Mohon cek kembali inputan pendidikan ibu, Pastikan Semua Data Sudah Terisi');
+            // if (!pekerjaan_ayah) return alert('Mohon cek kembali inputan pekerjaan ayah, Pastikan Semua Data Sudah Terisi');
+            // if (!penghasilan_ayah) return alert('Mohon cek kembali inputan penghasilan ayah, Pastikan Semua Data Sudah Terisi');
+            // if (!pendidikan_ayah) return alert('Mohon cek kembali inputan pendidikan ayah, Pastikan Semua Data Sudah Terisi');
+            // if (!pekerjaan_wali) return alert('Mohon cek kembali inputan pekerjaan wali, Pastikan Semua Data Sudah Terisi');
+            // if (!pendidikan_wali) return alert('Mohon cek kembali inputan pendidikan wali, Pastikan Semua Data Sudah Terisi');
+            // if (!hubungan_wali) return alert('Mohon cek kembali inputan hubungan wali, Pastikan Semua Data Sudah Terisi');
 
             // Validasi berat badan, tinggi badan, hafalan
             if (tinggi_badan < 0 || tinggi_badan > 300) {
@@ -1264,43 +1284,98 @@
 
             // Validasi kuesioner anak
             let unanswered = new Set();
+            let unansweredTab = new Set();
+            let firstUnansweredElement = null;
+            let firstUnansweredElementTab = null;
+            let targetTab = null;
 
             // Cek untuk semua elemen input radio dan teks
             $('input[type="radio"], input[type="text"]').each(function () {
-                var name = $(this).attr('name');  // ambil name dari input
-                var value = $(this).val();  // ambil value dari input
-                var dataPertanyaan = $(this).data('pertanyaan');  // ambil data-pertanyaan dari input
+                var name = $(this).attr('name');
+                var value = $(this).val();
+                var dataPertanyaan = $(this).data('pertanyaan');
+                var dataTab = $(this).data('tab');
+                var targetTabId = $(this).closest('.tab-pane').attr('id'); // Menemukan tab yang mengandung elemen ini
 
                 // Lewati pengecekan jika nama adalah "info_detail_khusus[]"
-                if (name === "info_detail_khusus[]" || name === "asal_sekolah"  || name === "npsn"  || name === "riwayat_penyakit" ||name === "no_hp" || name === "nama_lengkap" || name.endsWith("_self_fill") || name.endsWith("_self_fill_pengasuhan")) {
+                if (name === "info_detail_khusus[]" || name === "asal_sekolah" || name === "npsn" || name === "riwayat_penyakit" || name === "no_hp" || name === "nama_lengkap" || name.endsWith("_self_fill") || name.endsWith("_self_fill_pengasuhan") || name.endsWith("_wali")) {
                     return; // Skip elemen ini
                 }
 
-
                 // Cek jika tipe input adalah radio
                 if ($(this).attr('type') === 'radio') {
-                    // Cek apakah ada radio button yang terpilih pada grup radio yang sama
                     var isChecked = $(`input[name="${name}"]:checked`).val();
                     if (!isChecked) {
                         unanswered.add(dataPertanyaan || name); // Jika tidak ada yang dipilih, tambahkan ke unanswered
+                        unansweredTab.add(dataTab); // Jika tidak ada yang dipilih, tambahkan ke unanswered
+                        if (!firstUnansweredElement) {
+                            firstUnansweredElement = $(this); // Ambil elemen pertama yang tidak terisi
+                            targetTab = targetTabId; // Ambil ID tab untuk elemen ini
+                        }
                     }
                 }
                 // Cek untuk input teks
                 else if ($(this).attr('type') === 'text' && !value) {
-                    unanswered.add(dataPertanyaan || name);  // Tambahkan ke unanswered jika input teks kosong
+                    unanswered.add(dataPertanyaan || name); // Tambahkan ke unanswered jika input teks kosong
+                    unansweredTab.add(dataTab);
+                    if (!firstUnansweredElement) {
+                        firstUnansweredElement = $(this); // Ambil elemen pertama yang tidak terisi
+                        targetTab = targetTabId; // Ambil ID tab untuk elemen ini
+                    }
                 }
             });
 
             // Jika ada pertanyaan yang belum dijawab, tampilkan menggunakan SweetAlert
             if (unanswered.size > 0) {
                 var unansweredList = Array.from(unanswered).join('<br>'); // Menggabungkan pertanyaan dengan baris baru
+                var unansweredTabList = Array.from(unansweredTab).join('<br>'); // Menggabungkan pertanyaan dengan baris baru
+                
+
+                var firstUnansweredQuestion = unansweredList.split('<br>')[0];
+                var firstUnansweredQuestionTab = unansweredTabList.split('<br>')[0];
 
                 // Gunakan SweetAlert untuk menampilkan daftar pertanyaan
                 Swal.fire({
-                    title: 'Mohon lengkapi pertanyaan berikut:',
-                    html: `<div style="text-align: left; direction: ltr;">${unansweredList}</div>`, // Inline style untuk teks rata kiri
+                    title: 'Mohon lengkapi pertanyaan pada bagian tab "'+firstUnansweredQuestionTab+'" ',
+                    html: `<div style="text-align: left; direction: ltr;">Terdapat pertanyaan berikut: <br> ${firstUnansweredQuestion} <br><br> <em>Pastikan Semua Data Sudah Terisi</em></div>`, // Inline style untuk teks rata kiri
                     icon: 'warning',
                     confirmButtonText: 'OK'
+                }).then(() => {
+                    // Setelah SweetAlert ditutup, aktifkan tab yang sesuai dan scroll ke elemen pertama yang belum terisi
+                    // if (targetTab) {
+                    //     // Aktifkan tab yang sesuai
+                    //     $('#nav-tab a[href="#' + targetTab + '"]').tab('show');
+
+                    //     // Setelah tab aktif, scroll ke elemen yang belum terisi
+                    //     $('html, body').animate({
+                    //         scrollTop: firstUnansweredElement.offset().top - 100
+                    //     }, 1000);
+
+                    //     // Highlight elemen dengan border merah
+                    //     firstUnansweredElement.css('border', '2px solid red');
+                    // }
+                    if (firstUnansweredElement && targetTab) {
+                        // Dapatkan ID elemen
+                        var elementId = firstUnansweredElement.attr('id');
+
+                        // Fokus ke elemen (akan mengaktifkan tab yang sesuai secara otomatis)
+                        $(`#${elementId}`).focus();
+
+                        // Gulir ke elemen dengan animasi
+                        // $('html, body').animate({
+                        //     scrollTop: $(`#${elementId}`).offset().top - 100
+                        // }, 500); // Animasi pengguliran selama 500ms
+
+                        // Highlight elemen dengan border merah
+                        $(`#${elementId}`).css('border', '2px solid red');
+
+                        // Hapus highlight setelah 3 detik (opsional)
+                        setTimeout(() => {
+                            $(`#${elementId}`).css('border', '');
+                        }, 3000);
+                    } else {
+                        console.error('Target tab atau elemen tidak ditemukan:', targetTab, firstUnansweredElement);
+                    }
                 });
 
                 return;

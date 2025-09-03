@@ -974,7 +974,7 @@ class SeragamController extends Controller
                             'kd_gudang' => 'YYS',
                             'kd_barang' => $kode_produk,
                             'stok_awal' => $stok_awal->qty,
-                            'qty' => $quantity,
+                            'qty' => -abs($quantity), // selalu minus
                             'stok_akhir' => $stok_awal->qty - $quantity,
                             'proses' => 'penjualan',
                             'no_proses' => $orderId
