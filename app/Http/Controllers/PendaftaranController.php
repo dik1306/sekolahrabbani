@@ -649,6 +649,7 @@ Sekolah Rabbani ✨
             $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
             $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
             $get_profile_wali = PendaftaranWali::get_profile($no_registrasi);
+            
         }
         
 
@@ -659,8 +660,10 @@ Sekolah Rabbani ✨
 
         if ($get_profile) {
             $tingkat = strtolower($get_profile->tingkat);
+            $is_lunas = $get_profile->status_pembayaran;
         } else {
             $tingkat = null;
+            $is_lunas = null;
         }
 
         if (($tingkat == 'kober' || $tingkat == 'tka' || $tingkat == 'tkb')) {
@@ -722,7 +725,7 @@ Sekolah Rabbani ✨
 
         return view('pendaftaran.tk-sd.pemenuhan-data', compact('provinsi', 'kecamatan', 'kecamatan_asal_sekolah', 'kelurahan', 'kota', 
         'get_profile',  'get_profile_ibu',  'get_profile_ayah', 'get_profile_wali', 'no_registrasi', 'list_pekerjaan_ayah', 'list_pekerjaan_ibu', 
-        'head_perkembangan', 'pertanyaan_perkembangan','head_pengasuhan', 'pertanyaan_pengasuhan', 'jawaban_perkembangan', 'jawaban_pengasuhan'));
+        'head_perkembangan', 'pertanyaan_perkembangan','head_pengasuhan', 'pertanyaan_pengasuhan', 'jawaban_perkembangan', 'jawaban_pengasuhan', 'is_lunas'));
     }
 
     public function find(Request $request, Pendaftaran $pendaftaran)

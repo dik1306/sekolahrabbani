@@ -28,7 +28,7 @@
                     </div>
                     <small> Lupa No Registrasi/Pendaftaran ? <a href="#" data-bs-toggle="modal" data-bs-target="#lupa_no_regis"> Klik Disini </a> </small>
                 </form>
-                @if ($get_profile != null)
+                @if ($get_profile != null && $is_lunas == 1)
                     <form action="{{route('form.update.id', $get_profile->id_anak)}}" id="update_data_pendaftaran"  method="post">
                         @csrf @method('PUT')
                         <nav>
@@ -969,8 +969,22 @@
                         {{-- END TAB CONTENT --}}
                         </div>
                     </form>
-                @else 
-                    <div> 
+                @elseif($get_profile != null && $is_lunas == 0)
+                    <div class="text-center mt-5 p-4" style="background-color: #f8f9fa; border-radius: 15px; border: 1px solid #dee2e6;">
+                        <img src="{{ asset('assets/images/_other_assets/payment_ilustrasi.png') }}" alt="Ilustrasi Pembayaran" class="img-fluid mb-4" style="max-width: 200px;">
+                        <h4 class="fw-bold" style="color: #0056b3;">Selesaikan Pembayaran Terlebih Dahulu</h4>
+                        <p class="text-muted mt-3">
+                            Terima kasih telah melakukan pendaftaran. Untuk melanjutkan ke tahap pemenuhan data, silakan selesaikan pembayaran biaya pendaftaran terlebih dahulu.
+                        </p>
+                        <p class="text-muted">
+                            Setelah pembayaran berhasil, Anda dapat kembali ke halaman ini untuk melengkapi data Ananda.
+                        </p>
+                        <a href="{{ route('form.histori.detail', ['no_registrasi' => $no_registrasi]) }}" class="btn btn-primary btn-lg mt-3 px-5 shadow-sm">
+                            <i class="fas fa-wallet me-2"></i> Lanjutkan Pembayaran
+                        </a>
+                    </div>
+                @elseif($no_registrasi != null)
+                    <div class="mt-4"> 
                         <h3 class="center"> Data Tidak Ditemukan </h3>
                     </div>
                 @endif
@@ -1558,4 +1572,3 @@
     </div>
     
 @endsection
-
