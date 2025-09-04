@@ -971,7 +971,7 @@
                     </form>
                 @elseif($get_profile != null && $is_lunas == 0)
                     <div class="text-center mt-5 p-4" style="background-color: #f8f9fa; border-radius: 15px; border: 1px solid #dee2e6;">
-                        <img src="{{ asset('assets/images/_other_assets/payment_ilustrasi.png') }}" alt="Ilustrasi Pembayaran" class="img-fluid mb-4" style="max-width: 200px;">
+                        <img src="{{ asset('assets/images/_other_assets/payment_ilustrasi.png') }}" alt="Ilustrasi Pembayaran" class="img-fluid mb-4" style="max-width: 600px;">
                         <h4 class="fw-bold" style="color: #0056b3;">Selesaikan Pembayaran Terlebih Dahulu</h4>
                         <p class="text-muted mt-3">
                             Terima kasih telah melakukan pendaftaran. Untuk melanjutkan ke tahap pemenuhan data, silakan selesaikan pembayaran biaya pendaftaran terlebih dahulu.
