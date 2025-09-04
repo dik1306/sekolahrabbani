@@ -22,7 +22,7 @@
                 <form action="{{route('form.update')}}"  method="GET">
                     <div class="form-group">
                     <div class="d-flex">
-                        <input type="text" name="no_registrasi" id="no_registrasi" class="form-control form-control-sm px-3" aria-label=".form-control-sm px-3 example" value="{{$no_registrasi}}" placeholder="Masukkan No Registrasi/Pendaftaran">
+                        <input type="text" name="no_registrasi" data-pertanyaan="No Registrasi/Pendaftaran" data-tab="Data Anak" id="no_registrasi" class="form-control form-control-sm px-3" aria-label=".form-control-sm px-3 example" value="{{$no_registrasi}}" placeholder="Masukkan No Registrasi/Pendaftaran">
                         <button type="submit" class="btn btn-primary mx-3"> Cari </button>
                     </div>
                     </div>
@@ -59,22 +59,22 @@
 
                                 <div class="mb-3">
                                     <span for="nama_panggilan" class="form-label">Nama Panggilan<span style="color: red;">*</span></span>
-                                    <input type="text" name="nama_panggilan"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="nama_panggilan" value="{{$get_profile->nama_panggilan }}" required>
+                                    <input type="text" name="nama_panggilan" data-pertanyaan="Nama Panggilan" data-tab="Data Anak" class="form-control form-control-sm px-3" id="nama_panggilan" value="{{$get_profile->nama_panggilan }}" required>
                                 </div>
             
                                 <div class="mb-3">
                                     <span for="nik" class="form-label">Nomor Induk Kependudukan (NIK)<span style="color: red;">*</span></span>
-                                    <input type="tel" name="nik"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="nik" onkeypress="return /[0-9]/i.test(event.key)" minlength="16" value="{{$get_profile->no_nik }}" placeholder="Masukkan No NIK" required>
+                                    <input type="tel" name="nik" data-pertanyaan="NIK"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="nik" onkeypress="return /[0-9]/i.test(event.key)" minlength="16" value="{{$get_profile->no_nik }}" placeholder="Masukkan No NIK" required>
                                 </div>
             
                                 <div class="mb-3">
                                     <span for="alamat" class="form-label">Alamat Sekarang<span style="color: red;">*</span></span>
-                                    <input type="text" name="alamat"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="alamat" value="{{$get_profile->alamat}}" placeholder="Jalan, No. RT/RW" required>
+                                    <input type="text" name="alamat" data-pertanyaan="Alamat Sekarang"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="alamat" value="{{$get_profile->alamat}}" placeholder="Jalan, No. RT/RW" required>
                                 </div>
                                 
                                 <div class="mb-3">
                                     <span for="provinsi" class="form-label">Provinsi<span style="color: red;">*</span></span>
-                                    <select id="provinsi" name="provinsi"  data-tab="Data Anak" class="select form-control form-control-sm px-3"  onchange="getKota()" required>
+                                    <select id="provinsi" name="provinsi" data-pertanyaan="Provinsi" data-tab="Data Anak" class="select form-control form-control-sm px-3"  onchange="getKota()" required>
                                         <option value="" disabled selected>-- Pilih Provinsi--</option>
                                         @foreach ($provinsi as $item)
                                             <option value="{{ $item->id }}" {{($get_profile->provinsi == $item->id) ? 'selected' : ''}} >{{ $item->provinsi }}</option>
@@ -84,7 +84,7 @@
 
                                 <div class="mb-3">
                                     <span for="kota" class="form-label">Kabupaten/Kota<span style="color: red;">*</span></span>
-                                    <select id="kota" name="kota"  data-tab="Data Anak" class="select form-control form-control-sm px-3" onchange="getKecamatan()" required>
+                                    <select id="kota" name="kota" data-pertanyaan="Kabupaten/Kota" data-tab="Data Anak" class="select form-control form-control-sm px-3" onchange="getKecamatan()" required>
                                         @if ($get_profile->kota == null)
                                             <option disabled selected>-- Pilih Kota--</option>
                                         @else
@@ -97,7 +97,7 @@
 
                                 <div class="mb-3">
                                     <span for="kecamatan" class="form-label">Kecamatan<span style="color: red;">*</span></span>
-                                    <select id="kecamatan" name="kecamatan"  data-tab="Data Anak" class="select form-control form-control-sm px-3" onchange="getKelurahan()" required>
+                                    <select id="kecamatan" name="kecamatan" data-pertanyaan="Kecamatan" data-tab="Data Anak" class="select form-control form-control-sm px-3" onchange="getKelurahan()" required>
                                         @if ($get_profile->kecamatan == null)
                                             <option value="" disabled selected>-- Pilih Kecamatan--</option>
                                         @else 
@@ -110,7 +110,7 @@
 
                                 <div class="mb-3">
                                     <span for="kelurahan" class="form-label">Desa/Kelurahan<span style="color: red;">*</span></span>
-                                    <select id="kelurahan" name="kelurahan"  data-tab="Data Anak" class="select form-control form-control-sm px-3">
+                                    <select id="kelurahan" name="kelurahan" data-pertanyaan="Desa/Kelurahan" data-tab="Data Anak" class="select form-control form-control-sm px-3">
                                         @if ($get_profile->kelurahan == null)
                                             <option value="" disabled selected>-- Pilih Desa/Kelurahan --</option>
                                         @else
@@ -123,7 +123,7 @@
 
                                 <div class="mb-3">
                                     <span for="status_tinggal" class="form-label">Status Tinggal<span style="color: red;">*</span></span>
-                                    <select id="status_tinggal" name="status_tinggal"  data-tab="Data Anak" class="select form-control form-control-sm px-3" required>
+                                    <select id="status_tinggal" name="status_tinggal" data-pertanyaan="Status Tinggal" data-tab="Data Anak" class="select form-control form-control-sm px-3" required>
                                         <option value="" disabled selected>-- Pilih Status Tinggal Bersama --</option>
                                         <option value="Orang Tua" {{($get_profile->status_tinggal == 'Orang Tua') ? 'selected' : ''}} >Orang Tua</option>
                                         <option value="Wali" {{($get_profile->status_tinggal == 'Wali') ? 'selected' : ''}} >Wali</option>
@@ -138,28 +138,28 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <span for="anak_ke" class="form-label">Anak Ke<span style="color: red;">*</span></span>
-                                        <input type="number" class="form-control form-control-sm px-3" id="anak_ke" name="anak_ke"  data-tab="Data Anak" value="{{$get_profile->anak_ke}}"  placeholder="Anak Ke" required >
+                                        <input type="number" class="form-control form-control-sm px-3" id="anak_ke" name="anak_ke" data-pertanyaan="Anak Ke"  data-tab="Data Anak" value="{{$get_profile->anak_ke}}"  placeholder="Anak Ke" required >
                                     </div>
                                     <div class="col-md-6">
                                         <span for="jumlah_saudara" class="form-label">Dari Jumlah Saudara<span style="color: red;">*</span></span>
-                                        <input type="number" type="text" class="form-control form-control-sm px-3" id="jumlah_saudara" name="jumlah_saudara"  data-tab="Data Anak" value="{{$get_profile->jml_sdr}}"  placeholder="dari berapa saudara" required >
+                                        <input type="number" type="text" class="form-control form-control-sm px-3" id="jumlah_saudara" name="jumlah_saudara"  data-pertanyaan="Dari Jumlah Saudara" data-tab="Data Anak" value="{{$get_profile->jml_sdr}}"  placeholder="dari berapa saudara" required >
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <span for="tinggi_badan" class="form-label">Tinggi Badan (cm)<span style="color: red;">*</span></span>
-                                    <input type="number" name="tinggi_badan"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="tinggi_badan" value="{{$get_profile->tinggi_badan}}"  placeholder="xxx" required>
+                                    <input type="number" name="tinggi_badan" data-pertanyaan="Tinggi Badan"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="tinggi_badan" value="{{$get_profile->tinggi_badan}}"  placeholder="xxx" required>
                                 </div>
             
                                 <div class="mb-3">
                                     <span for="berat_badan" class="form-label">Berat Badan (kg)<span style="color: red;">*</span></span>
-                                    <input type="number" name="berat_badan"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="berat_badan" value="{{$get_profile->berat_badan}}"  placeholder="xx" required>
+                                    <input type="number" name="berat_badan" data-pertanyaan="Berat Badan"  data-tab="Data Anak" class="form-control form-control-sm px-3" id="berat_badan" value="{{$get_profile->berat_badan}}"  placeholder="xx" required>
                                 </div>
                                 
 
                                 <div class="mb-3">
                                     <span for="bhs_digunakan" class="form-label">Bahasa yang Digunakan<span style="color: red;">*</span></span>
-                                    <select id="bhs_digunakan" name="bhs_digunakan"  data-tab="Data Anak" class="select form-control form-control-sm px-3">
+                                    <select id="bhs_digunakan" name="bhs_digunakan" data-pertanyaan="Bahasa yang Digunakan"  data-tab="Data Anak" class="select form-control form-control-sm px-3">
                                         <option value="" disabled selected>-- Pilih Bahasa --</option>
                                         <option value="bhs_indo" {{($get_profile->bahasa == 'bhs_indo') ? 'selected' : ''}}>Bahasa Indonesia</option>
                                         <option value="bhs_inggris" {{($get_profile->bahasa == 'bhs_inggris') ? 'selected' : ''}}>Bahasa Inggris</option>
@@ -172,7 +172,7 @@
 
                                 <div class="mb-3">
                                     <span for="asal_sekolah" class="form-label">Asal Sekolah</span>
-                                    <input class="form-control form-control-sm px-3" id="asal_sekolah" name="asal_sekolah"  data-tab="Data Anak" value="{{ $get_profile->asal_sekolah ? $get_profile->asal_sekolah : '-' }}" placeholder="Sekolah Sebelumnya" required readonly>
+                                    <input class="form-control form-control-sm px-3" id="asal_sekolah" d name="asal_sekolah"  data-tab="Data Anak" value="{{ $get_profile->asal_sekolah ? $get_profile->asal_sekolah : '-' }}" placeholder="Sekolah Sebelumnya" required readonly>
                                 </div>
                              
                                 <div class="mb-3">
@@ -384,7 +384,7 @@
                                                         <input type="text" 
                                                             name="info_detail_khusus[]"
                                                             data-pertanyaan="Kebutuhan Khusus dan Terapi"
-                                                             data-tab="Data Anak" 
+                                                            data-tab="Data Anak" 
                                                             class="form-control form-control-sm"
                                                             placeholder="Jenis Terapi - Tempat Terapi - Frekuensi Terapi - Dilaksanakan pada tahun - Hasil terapi"
                                                             value="{{$khusus}}"
@@ -717,7 +717,6 @@
                                                                     id="pertanyaan_{{$pertanyaan->head_id}}_{{$pertanyaan->id}}" 
                                                                     value="{{ $jawaban ? $jawaban['input_field'] : '' }}"
                                                                     placeholder="Silakan isi.."
-                                                                    data-pertanyaan="{{$pertanyaan->pertanyaan}}" 
                                                                     required
                                                                 >
                                                             @endif
@@ -996,7 +995,7 @@
             newInputGroup.style.maxWidth = '500px';
             newInputGroup.style.border = 'none';
             newInputGroup.innerHTML = `
-                <input type="text" name="info_detail_tempat[]" class="form-control form-control-sm" placeholder="Nama - Keterangan">
+                <input type="text" name="info_detail_tempat[]" data-pertanyaan="Detail Tempat Tinggal" data-tab="Data Anak" class="form-control form-control-sm" placeholder="Nama - Keterangan">
                 <button type="button" class="btn btn-outline-danger btn-sm ms-2" style="border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;" onclick="removeInput(this)">
                     <i class="fas fa-trash"></i>
                 </button>
@@ -1047,7 +1046,7 @@
             newInputGroup.style.maxWidth = '500px';
             newInputGroup.style.border = 'none';
             newInputGroup.innerHTML = `
-                <input type="text" name="info_detail_saudara[]" class="form-control form-control-sm" placeholder="Nama-Usia-Jenis Kelamin-Keterangan">
+                <input type="text" name="info_detail_saudara[]" data-pertanyaan="Data Saudara" data-tab="Data Anak" class="form-control form-control-sm" placeholder="Nama-Usia-Jenis Kelamin-Keterangan">
                 <button type="button" class="btn btn-outline-danger btn-sm ms-2" style="border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;" onclick="removeInputSaudara(this)">
                     <i class="fas fa-trash"></i>
                 </button>
@@ -1112,7 +1111,7 @@
             newInputGroup.style.maxWidth = '900px';
             newInputGroup.style.border = 'none';
             newInputGroup.innerHTML = `
-                <input type="text" name="info_detail_khusus[]" class="form-control form-control-sm" placeholder="Jenis Terapi - Tempat Terapi - Frekuensi Terapi - Dilaksanakan pada tahun - Hasil terapi">
+                <input type="text" name="info_detail_khusus[]" data-pertanyaan="Info Kebutuhan Khusus" data-tab="Data Anak" class="form-control form-control-sm" placeholder="Jenis Terapi - Tempat Terapi - Frekuensi Terapi - Dilaksanakan pada tahun - Hasil terapi">
                 <button type="button" class="btn btn-outline-danger btn-sm ms-2" style="border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;" onclick="removeInputKhusus(this)">
                     <i class="fas fa-trash"></i>
                 </button>
@@ -1337,7 +1336,7 @@
                 // Gunakan SweetAlert untuk menampilkan daftar pertanyaan
                 Swal.fire({
                     title: 'Mohon lengkapi pertanyaan pada bagian tab "'+firstUnansweredQuestionTab+'" ',
-                    html: `<div style="text-align: left; direction: ltr;">Terdapat pertanyaan berikut: <br> ${firstUnansweredQuestion} <br><br> <em>Pastikan Semua Data Sudah Terisi</em></div>`, // Inline style untuk teks rata kiri
+                    html: `<div style="text-align: left; direction: ltr;">Terdapat pertanyaan berikut: <br> ${  } <br><br> <em style:"font-size:10px;">Pastikan Semua Data Sudah Terisi</em></div>`, // Inline style untuk teks rata kiri
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 }).then(() => {
@@ -1407,10 +1406,11 @@
                         if (!isChecked) {
                             var pertanyaanElement = document.querySelector(`[name="${key}"]`);
                             var pertanyaan = pertanyaanElement ? pertanyaanElement.getAttribute('data-pertanyaan') : key;
+                            var tab = pertanyaanElement ? pertanyaanElement.getAttribute('data-tab') : key;
                             // Gunakan SweetAlert untuk menampilkan daftar pertanyaan
                             Swal.fire({
-                                title: 'Mohon cek kembali bagian:',
-                                html: `<div style="text-align: left; direction: ltr;">${(pertanyaan || key)}<br>Pastikan Semua Data Sudah Terisi</div>`, // Inline style untuk teks rata kiri
+                                title: 'Mohon cek kembali bagian Tab "'+tab+'"',
+                                html: `<div style="text-align: left; direction: ltr;">Cek pada isian ${(pertanyaan || key)}<br>Pastikan Semua Data Sudah Terisi</div>`, // Inline style untuk teks rata kiri
                                 icon: 'warning',
                                 confirmButtonText: 'OK'
                             });
@@ -1421,9 +1421,10 @@
                     else if (radioElement && value === "") {
                         var pertanyaanElement = document.querySelector(`[name="${key}"]`);
                         var pertanyaan = pertanyaanElement ? pertanyaanElement.getAttribute('data-pertanyaan') : key;
+                         var tab = pertanyaanElement ? pertanyaanElement.getAttribute('data-tab') : key;
                         Swal.fire({
-                            title: 'Mohon cek kembali bagian:',
-                            html: `<div style="text-align: left; direction: ltr;">${(pertanyaan || key)}<br>Pastikan Semua Data Sudah Terisi</div>`, // Inline style untuk teks rata kiri
+                            title: 'Mohon cek kembali bagian Tab "'+tab+'"',
+                            html: `<div style="text-align: left; direction: ltr;">Cek pada isian ${(pertanyaan || key)}<br>Pastikan Semua Data Sudah Terisi</div>`, // Inline style untuk teks rata kiri
                             icon: 'warning',
                             confirmButtonText: 'OK'
                         });
