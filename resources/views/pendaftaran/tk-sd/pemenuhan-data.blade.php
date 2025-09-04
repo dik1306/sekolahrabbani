@@ -341,7 +341,7 @@
                                                     $khususList = !empty($get_profile->info_detail_khusus) ? explode(';', $get_profile->info_detail_khusus) : [''];
                                                 @endphp
                                                 @foreach ($khususList as $index => $khusus)
-                                                    <div class="input-group mb-2" style="max-width: 500px; border: none;">
+                                                    <div class="input-group mb-2" style="max-width: 900px; border: none;">
                                                         <input type="text" 
                                                             name="info_detail_khusus[]"
                                                             data-pertanyaan="Kebutuhan Khusus dan Terapi"
@@ -380,7 +380,7 @@
                                                     $khususList = !empty($get_profile->info_detail_khusus) ? explode(';', $get_profile->info_detail_khusus) : [''];
                                                 @endphp
                                                 @foreach ($khususList as $index => $khusus)
-                                                    <div class="input-group mb-2" style="max-width: 500px; border: none;">
+                                                    <div class="input-group mb-2" style="max-width: 900px; border: none;">
                                                         <input type="text" 
                                                             name="info_detail_khusus[]"
                                                             data-pertanyaan="Kebutuhan Khusus dan Terapi"
