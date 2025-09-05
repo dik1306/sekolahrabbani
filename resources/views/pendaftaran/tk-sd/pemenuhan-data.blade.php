@@ -1350,7 +1350,7 @@
                 // Gunakan SweetAlert untuk menampilkan daftar pertanyaan
                 Swal.fire({
                     title: 'Mohon lengkapi pertanyaan pada bagian tab "'+firstUnansweredQuestionTab+'" ',
-                    html: `<div style="text-align: left; direction: ltr;">Terdapat pertanyaan berikut: <br> ${  } <br><br> <em style:"font-size:10px;">Pastikan Semua Data Sudah Terisi</em></div>`, // Inline style untuk teks rata kiri
+                    html: `<div style="text-align: left; direction: ltr;">Terdapat pertanyaan berikut: <br> ${firstUnansweredQuestion} <br><br> <em style:"font-size:10px;">Pastikan Semua Data Sudah Terisi</em></div>`, // Inline style untuk teks rata kiri
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 }).then(() => {
