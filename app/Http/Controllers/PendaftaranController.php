@@ -516,6 +516,48 @@ Sekolah Rabbani ✨
         }
     }
 
+    private function createNewMidtransOrder(string $no_registrasi, $data_pendaftaran, int $biaya): void
+    {
+        // order_id sederhana: idAnak + timestamp
+        $order_id = $no_registrasi . '-' . time();
+
+        $custName  = trim(($data_pendaftaran->nama_lengkap ?? '') ?: ($data_pendaftaran->nama_anak ?? 'Calon Siswa'));
+        $custEmail = $data_pendaftaran->email ?? 'no-reply@example.com';
+        $custPhone = $data_pendaftaran->no_telepon ?? '081234567890';
+
+        $params = [
+            'transaction_details' => [
+                'order_id'     => $order_id,
+                'gross_amount' => max(1, (int) $biaya), // gross_amount tidak boleh 0
+            ],
+            'customer_details' => [
+                'first_name' => $custName,
+                'email'      => $custEmail,
+                'phone'      => $custPhone,
+            ],
+        ];
+
+        try {
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+            Pendaftaran::where('id_anak', $no_registrasi)->update([
+                'order_id'    => $order_id,
+                'snap_token'  => $snapToken,
+                'expire_time' => now()->addHours(24), // contoh expire 24 jam
+                'total_harga' => (int) $biaya,
+            ]);
+        } catch (\Throwable $e) {
+            report($e);
+            Pendaftaran::where('id_anak', $no_registrasi)->update([
+                'order_id'    => null,
+                'snap_token'  => null,
+                'expire_time' => null,
+                'total_harga' => 0,
+            ]);
+        }
+    }
+
+
 
     
     public function cekStatusPembayaran(Request $request)
@@ -536,71 +578,93 @@ Sekolah Rabbani ✨
     {
         $no_registrasi = $request->no_registrasi ?? null;
 
-        // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = config('midtrans.isProduction');
-        // Set sanitization on (default)
-        \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
-        \Midtrans\Config::$is3ds = true;
-        
-        if ($request->has('no_registrasi')) {
-            $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
-            $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
-            $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
+        // Midtrans config
+        \Midtrans\Config::$serverKey   = config('midtrans.serverKey');
+        \Midtrans\Config::$isProduction = (bool) config('midtrans.isProduction', false);
+        \Midtrans\Config::$isSanitized  = true;
+        \Midtrans\Config::$is3ds        = true;
 
-            
-            if($data_pendaftaran) {
-                $telp_id = ContactPerson::where('is_aktif', '1')
-                    ->where('kode_sekolah', $data_pendaftaran->lokasi)
-                    ->where('id_jenjang', $data_pendaftaran->jenjang)
-                    ->first()->id;
-                $ajaran_id = TahunAjaranAktif::where('id', $data_pendaftaran->tahun_ajaran)->first()->id;
-                $biaya = BiayaSPMB::where('tahun_ajaran_id', $ajaran_id)
-                    ->where('telp_id', $telp_id)
-                    ->first()->biaya;
-                    
-                $lokasi = Lokasi::where('kode_sekolah', $data_pendaftaran->lokasi)->first();
-                $lokasi = $lokasi->nama_sekolah;
-            } else {
+        // Ambil profil dasar
+        $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
+        $get_profile_ibu  = PendaftaranIbu::get_profile($no_registrasi);
+        $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
+
+        // Default lokasi & biaya
+        $lokasi = 'Tidak ditemukan';
+        $biaya  = 0;
+
+        if ($data_pendaftaran) {
+            // Hitung/ambil biaya & lokasi
+            try {
+                $telp_id   = optional(
+                    ContactPerson::where('is_aktif', '1')
+                        ->where('kode_sekolah', $data_pendaftaran->lokasi)
+                        ->where('id_jenjang', $data_pendaftaran->jenjang)
+                        ->first()
+                )->id;
+
+                $ajaran_id = optional(
+                    TahunAjaranAktif::where('id', $data_pendaftaran->tahun_ajaran)->first()
+                )->id;
+
+                $biaya = (int) optional(
+                    BiayaSPMB::where('tahun_ajaran_id', $ajaran_id)
+                        ->where('telp_id', $telp_id)
+                        ->first()
+                )->biaya ?? 0;
+
+                $lokasiModel = Lokasi::where('kode_sekolah', $data_pendaftaran->lokasi)->first();
+                $lokasi = $lokasiModel ? $lokasiModel->nama_sekolah : 'Tidak ditemukan';
+            } catch (\Throwable $e) {
                 $lokasi = 'Tidak ditemukan';
-                $biaya = 0;
+                $biaya  = 0;
             }
 
-            // $transaction = \Midtrans\Transaction::status('PPDB-tka-CMH-20250813092804-1755052090');
-            // dd($transaction);
-        } else {
-            $data_pendaftaran = Pendaftaran::get_profile($no_registrasi);
-            $get_profile_ibu = PendaftaranIbu::get_profile($no_registrasi);
-            $get_profile_ayah = PendaftaranAyah::get_profile($no_registrasi);
-            $lokasi = 'Tidak ditemukan';
-            $biaya = 0;
-        }
+            // ——— LANGKAH INTI: cek status transaksi yang sudah ada ———
+            if (!empty($data_pendaftaran->order_id)) {
+                try {
+                    $status = \Midtrans\Transaction::status($data_pendaftaran->order_id);
 
-        
-        if($data_pendaftaran) {
-            if ($data_pendaftaran->order_id) {
-                $status = \Midtrans\Transaction::status($data_pendaftaran->order_id);            
-                // Ambil expiry_time
-                $expiryTime = $status->expiry_time ?? null;
-                // $total_harga = (int) $status->gross_amount;
+                    // Jika sukses, update expiry & total_harga
+                    $expiryTime  = $status->expiry_time ?? null;
+                    $total_harga = isset($status->gross_amount) ? (int) $status->gross_amount : 0;
 
-                if (is_object($status) && isset($status->gross_amount)) {
-                    $total_harga = (int) $status->gross_amount;
-                } else {
-                    $total_harga = 0; // Nilai default jika gagal
+                    Pendaftaran::where('id_anak', $no_registrasi)->update([
+                        'expire_time' => $expiryTime,
+                        'total_harga' => $total_harga,
+                    ]);
+                } catch (\Throwable $e) {
+                    // Deteksi 404: "Transaction doesn't exist."
+                    $msg = $e->getMessage();
+                    $is404 = str_contains($msg, '404') || str_contains($msg, "Transaction doesn't exist");
+
+                    if ($is404) {
+                        // 1) Bersihkan jejak lama
+                        Pendaftaran::where('id_anak', $no_registrasi)->update([
+                            'order_id'    => null,
+                            'snap_token'  => null,
+                            'expire_time' => null,
+                            'total_harga' => 0,
+                        ]);
+
+                        // 2) Generate order baru + Snap token baru
+                        $this->createNewMidtransOrder($no_registrasi, $data_pendaftaran, $biaya);
+                    } else {
+                        // Error lain: biarkan tampil tanpa memutus alur halaman
+                        report($e);
+                    }
                 }
-                Pendaftaran::where('id_anak', $no_registrasi)->update([
-                    'expire_time' => $expiryTime,
-                    'total_harga' => $total_harga,
-                ]);
+            } else {
+                // Tidak ada order_id sama sekali → buat baru
+                $this->createNewMidtransOrder($no_registrasi, $data_pendaftaran, $biaya);
             }
         }
+
+        // Refresh data untuk view
         $data_pendaftaran = Pendaftaran::where('id_anak', $no_registrasi)->first();
 
-        return view('pendaftaran.histori-detail', 
-            compact('data_pendaftaran','no_registrasi', 'get_profile_ibu', 'get_profile_ayah', 'lokasi', 'biaya')
+        return view('pendaftaran.histori-detail',
+            compact('data_pendaftaran','no_registrasi','get_profile_ibu','get_profile_ayah','lokasi','biaya')
         );
     }
 
