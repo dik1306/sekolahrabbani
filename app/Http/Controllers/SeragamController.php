@@ -1261,7 +1261,7 @@ Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$biaya_gross_amount*
 📌 No. Registrasi / Pendaftaran: *$data_anak->id_anak*
 📌 Nama Ananda: *$data_anak->nama_lengkap*
 
-Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
+Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani, silahkan melakukan pemenuhan data klik link berikut (https://sekolahrabbani.sch.id/pendaftaran/formulir/update?no_registrasi=$data_anak->id_anak) dan akan diproses ke tahap selanjutnya.
 
 📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di $contact_ccrs
 
@@ -1280,7 +1280,7 @@ Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$biaya_gross_amount*
 📌 No. Registrasi / Pendaftaran: *$data_anak->id_anak*
 📌 Nama Ananda: *$data_anak->nama_lengkap*
 
-Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
+Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani, silahkan melakukan pemenuhan data klik link berikut (https://sekolahrabbani.sch.id/pendaftaran/formulir/update?no_registrasi=$data_anak->id_anak) dan akan diproses ke tahap selanjutnya.
 
 📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di $contact_ccrs
 
@@ -1371,7 +1371,7 @@ Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$biaya_gross_amount*
 📌 No. Registrasi / Pendaftaran: *$data_anak->id_anak*
 📌 Nama Ananda: *$data_anak->nama_lengkap*
 
-Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
+Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani, silahkan melakukan pemenuhan data klik link berikut (https://sekolahrabbani.sch.id/pendaftaran/formulir/update?no_registrasi=$data_anak->id_anak) dan akan diproses ke tahap selanjutnya.
 
 📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di $contact_ccrs
 
@@ -1390,7 +1390,7 @@ Kami telah menerima pembayaran biaya pendaftaran sebesar *Rp$biaya_gross_amount*
 📌 No. Registrasi / Pendaftaran: *$data_anak->id_anak*
 📌 Nama Ananda: *$data_anak->nama_lengkap*
 
-Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani dan akan diproses ke tahap selanjutnya.
+Status pendaftaran Ananda kini resmi tercatat di sistem Sekolah Rabbani, silahkan melakukan pemenuhan data klik link berikut (https://sekolahrabbani.sch.id/pendaftaran/formulir/update?no_registrasi=$data_anak->id_anak) dan akan diproses ke tahap selanjutnya.
 
 📞 Untuk informasi lebih lanjut atau pertanyaan, silakan hubungi Customer Service kami di $contact_ccrs
 
