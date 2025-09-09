@@ -1462,10 +1462,10 @@ Sekolah Rabbani";
         $info_apakah_abk, $info_detail_saudara, $info_detail_tempat, $info_detail_khusus,
         // data ayah
         $email_ayah, $tptlahir_ayah, $tgllahir_ayah, 
-        $pengahasilan_ayah, $pekerjaan_ayah, $pendidikan_ayah, $tahun_nikah_ayah, $pernikahan_ke_ayah,
+        $penghasilan_ayah, $pekerjaan_ayah, $pendidikan_ayah, $tahun_nikah_ayah, $pernikahan_ke_ayah,
         // data ibu
         $email_ibu, $tptlahir_ibu, $tgllahir_ibu, 
-        $pengahasilan_ibu, $pekerjaan_ibu, $pendidikan_ibu, $tahun_nikah_ibu, $pernikahan_ke_ibu,
+        $penghasilan_ibu, $pekerjaan_ibu, $pendidikan_ibu, $tahun_nikah_ibu, $pernikahan_ke_ibu,
         // data wali
         $nama_wali, $tptlahir_wali, $tgllahir_wali, $pekerjaan_wali, $pendidikan_wali, $hubungan_wali
     )
@@ -1515,7 +1515,7 @@ Sekolah Rabbani";
             'email_ayah' => $email_ayah,
             'tptlahir_ayah' => $tptlahir_ayah,
             'tgllahir_ayah' => $tgllahir_ayah,
-            'pengahasilan_ayah' => $pengahasilan_ayah,
+            'penghasilan_ayah' => $penghasilan_ayah,
             'pekerjaan_ayah' => $pekerjaan_ayah,
             'pendidikan_ayah' => $pendidikan_ayah,
             'tahun_nikah_ayah' => $tahun_nikah_ayah,
@@ -1524,7 +1524,7 @@ Sekolah Rabbani";
             'email_ibu' => $email_ibu,
             'tptlahir_ibu' => $tptlahir_ibu,
             'tgllahir_ibu' => $tgllahir_ibu,
-            'pengahasilan_ibu' => $pengahasilan_ibu,
+            'penghasilan_ibu' => $penghasilan_ibu,
             'pekerjaan_ibu' => $pekerjaan_ibu,
             'pendidikan_ibu' => $pendidikan_ibu,
             'tahun_nikah_ibu' => $tahun_nikah_ibu,
