@@ -267,7 +267,7 @@
                         <h6 class="mt-1" style="color: #3152A4; width: 150px;"><b> Nama Siswa </b> </h6>
                         <select id="nama_siswa" name="nama_siswa" class="select form-control form-control-sm px-3" required>
                             @foreach ($profile as $item)
-                                <option value="{{ $item->nis }}" >{{ $item->nama_lengkap }} ({{ $item->nama_jenjang }})</option>
+                                <option value="{{ $item->nis }}" >{{ $item->nama_lengkap }} ({{ $item->id_inisial }})</option>
                             @endforeach
                         </select>
                     </div>
