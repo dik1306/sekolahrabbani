@@ -39,6 +39,11 @@ class Profile extends Model
 
     }
 
+    public function jenjang()
+    {
+        return $this->belongsTo(Jenjang::class, 'jenjang_id');
+    }
+
     public static function get_nis_byphone($phone) {
         $data = static::with(['user'])
             ->select('nis')
