@@ -160,7 +160,7 @@
                                 <div class="button-karya mt-1">
                                     <input class="form-check-input" type="radio" name="nama_siswa" id="nama_siswa_{{$item->nis}}" value="{{$item->nis}}">
                                     <label class="form-check-label" for="nama_siswa_{{$item->nis}}">
-                                    <span class="px-2" style="font-size: 10px"> {{$item->nama_lengkap}} </span>
+                                    <span class="px-2" style="font-size: 10px"> {{$item->nama_lengkap}} ({{ $item->id_inisial }})</span>
                                     </label>
                                 </div>
                                 @endforeach
