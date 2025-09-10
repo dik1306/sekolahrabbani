@@ -246,10 +246,7 @@ class SeragamController extends Controller
                         ->groupby('mus.id')
                         ->first();
 
-        $profile = DB::table('m_profile')
-              ->join('m_jenjang', 'm_jenjang.kode_jenjang', '=', 'm_profile.jenjang_id')
-              ->select('m_jenjang.nama_jenjang', 'm_profile.*')  // Ambil kolom nama_jenjang dan semua kolom dari m_profile
-              ->get();
+        $profile = Profile::get_user_profile_byphone($no_hp);
 
         $cart_detail = CartDetail::select('t_cart_detail.id', 'm_produk_seragam.id as id_produk','m_produk_seragam.nama_produk', 'm_produk_seragam.deskripsi', 'm_produk_seragam.image', 
                     'm_produk_seragam.material', 'mhs.harga', 'mhs.diskon', 'mjps.id as jenis_id', 'mp.nama_lengkap as nama_siswa', 'mp.nama_kelas as nama_kelas', 'mhs.kode_produk',
