@@ -1268,11 +1268,51 @@
             var hafalan = parseFloat($('#hafalan').val()) || 0;
 
             // Validasi input satu-satu
-            if (!provinsi) return alert('Mohon cek kembali inputan provinsi, Pastikan Semua Data Sudah Terisi');
-            if (!kota) return alert('Mohon cek kembali inputan kota, Pastikan Semua Data Sudah Terisi');
-            if (!kecamatan) return alert('Mohon cek kembali inputan kecamatan, Pastikan Semua Data Sudah Terisi');
-            if (!kelurahan) return alert('Mohon cek kembali inputan kelurahan, Pastikan Semua Data Sudah Terisi');
-            if (!status_tinggal) return alert('Mohon cek kembali inputan status tinggal, Pastikan Semua Data Sudah Terisi');
+            if (!provinsi) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Inputan Provinsi Tidak Lengkap',
+                    text: 'Mohon cek kembali inputan provinsi. Pastikan semua data sudah terisi.'
+                });
+                return;
+            }
+
+            if (!kota) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Inputan Kota Tidak Lengkap',
+                    text: 'Mohon cek kembali inputan kota. Pastikan semua data sudah terisi.'
+                });
+                return;
+            }
+
+            if (!kecamatan) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Inputan Kecamatan Tidak Lengkap',
+                    text: 'Mohon cek kembali inputan kecamatan. Pastikan semua data sudah terisi.'
+                });
+                return;
+            }
+
+            if (!kelurahan) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Inputan Kelurahan Tidak Lengkap',
+                    text: 'Mohon cek kembali inputan kelurahan. Pastikan semua data sudah terisi.'
+                });
+                return;
+            }
+
+            if (!status_tinggal) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Inputan Status Tinggal Tidak Lengkap',
+                    text: 'Mohon cek kembali inputan status tinggal. Pastikan semua data sudah terisi.'
+                });
+                return;
+            }
+
             // if (!bhs_digunakan) return alert('Mohon cek kembali inputan bahasa yang digunakan, Pastikan Semua Data Sudah Terisi');
             // if (!gol_darah) return alert('Mohon cek kembali inputan golongan darah, Pastikan Semua Data Sudah Terisi');
             // if (!pekerjaan_ibu) return alert('Mohon cek kembali inputan pekerjaan ibu, Pastikan Semua Data Sudah Terisi');
