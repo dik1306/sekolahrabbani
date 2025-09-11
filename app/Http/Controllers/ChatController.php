@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Profile;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 
@@ -89,8 +91,8 @@ https://sekolahrabbani.sch.id/login atau menggunakan QLP Mobile
         } catch (\Throwable $th) {
             // Menangani kesalahan
             return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan'
+                    'status' => 'error',
+                    'message' => 'Terjadi kesalahan'
             ], 500);
         }
     }
