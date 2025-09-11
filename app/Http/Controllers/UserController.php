@@ -34,6 +34,12 @@ class UserController extends Controller
         return view('admin.master.index', compact('list_user', 'list_role'));
     }
 
+    public function resetPasswordNew(Request $request)
+    {
+        $token = $request->query('token');  // Fetch the token from the URL query string
+        return view('auth.reset_password', compact('token'));
+    }
+
     public function add_user(Request $request)
     {
         $no_hp = $request->no_hp;
