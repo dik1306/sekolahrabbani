@@ -36,6 +36,65 @@ class ChatController extends Controller
         ]);
     }
 
+    // Fungsi untuk verifikasi
+    public function storeVerifikasi(Request $request)
+    {
+        try {
+            // Validasi input
+            $request->validate([
+                'no_hp' => 'required'
+            ]);
+
+            // Mencari data password berdasarkan no_hp ibu atau ayah
+            $get_pass = Profile::where('no_hp_ibu', $request->no_hp)
+                ->orWhere('no_hp_ayah', $request->no_hp)
+                ->whereNotNull('pass_akun')
+                ->first();
+
+            // Mencari user berdasarkan no_hp
+            $user = User::where('no_hp', $request->no_hp)
+                ->orWhere('no_hp_2', $request->no_hp)
+                ->first();
+
+            // Jika user ditemukan, kirim pesan
+            if ($user && $get_pass) {
+                $message = "
+Password anda adalah: 
+*$get_pass->pass_akun*
+
+Silahkan masuk ke 
+https://sekolahrabbani.sch.id/login atau menggunakan QLP Mobile
+
+*Mohon untuk tidak menyebarkan password ini kepada siapapun.* 
+*Terima kasih.*
+                ";
+
+                $no_wha = $request->no_hp;
+
+                // Fungsi untuk mengirim pesan
+                $this->sendNotifApi($message, $no_wha);
+
+                // Mengirimkan response sukses
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Kode verifikasi telah dikirim ke nomor whatsapp anda'
+                ]);
+            } else {
+                // Jika user tidak ditemukan
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Nomor whatsapp tidak terdaftar'
+                ], 400);
+            }
+        } catch (\Throwable $th) {
+            // Menangani kesalahan
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan'
+            ], 500);
+        }
+    }
+
     // Fungsi untuk mengirim pesan menggunakan curl
     private function sendNotifApi($message, $no_wa)
     {

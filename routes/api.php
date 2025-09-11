@@ -23,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('midtrans-callback', [SeragamController::class, 'callback'])->name('checkout.callback');
 
 Route::post('/send-notif-api', [ChatController::class, 'sendNotif']);
+Route::post('/verifikasi-pass-api', [ChatController::class, 'storeVerifikasi']);
