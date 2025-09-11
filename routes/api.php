@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SeragamController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('midtrans-callback', [SeragamController::class, 'callback'])->name('checkout.callback');
 
+Route::post('/send-notif-api', [ChatController::class, 'sendNotif']);
