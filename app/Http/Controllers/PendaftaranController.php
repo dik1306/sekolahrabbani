@@ -454,7 +454,7 @@ Sekolah Rabbani ✨
                     ->first()->biaya;
 
             if ($adminId == 'qris') {
-                $totalAmount = $biaya + ($biaya * 0.007);
+                $totalAmount = $biaya + (($biaya/0.993)* 0.007);
             } elseif ($adminId == 'va') {
                 $totalAmount = $biaya + 4000 + (4000 * 0.11);
             } elseif ($adminId == 'deeplink') {
@@ -530,6 +530,7 @@ Sekolah Rabbani ✨
                 'order_id'     => $order_id,
                 'gross_amount' => max(1, (int) $biaya), // gross_amount tidak boleh 0
             ],
+            'enabled_payments' => ['bca_va','bni_va','bri_va','mandiri_va','echannel','cimb_va','permata_va'],
             'customer_details' => [
                 'first_name' => $custName,
                 'email'      => $custEmail,
@@ -607,11 +608,12 @@ Sekolah Rabbani ✨
                     TahunAjaranAktif::where('id', $data_pendaftaran->tahun_ajaran)->first()
                 )->id;
 
-                $biaya = (int) optional(
-                    BiayaSPMB::where('tahun_ajaran_id', $ajaran_id)
-                        ->where('telp_id', $telp_id)
-                        ->first()
-                )->biaya ?? 0;
+                $biayaAwal = BiayaSPMB::where('tahun_ajaran_id', $ajaran_id)
+                    ->where('telp_id', $telp_id)
+                    ->first()->biaya;
+                
+                
+                $biaya = $biayaAwal + 4000 + (4000 * 0.11);
 
                 $lokasiModel = Lokasi::where('kode_sekolah', $data_pendaftaran->lokasi)->first();
                 $lokasi = $lokasiModel ? $lokasiModel->nama_sekolah : 'Tidak ditemukan';
